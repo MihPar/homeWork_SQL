@@ -7,26 +7,27 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
+ import { UsersService } from 'src/api/users/users.service';
+import { AuthRepository } from '../auth.repository';
+import { IPCollectionClass } from '../entities/auth.class.type';
 
 @Injectable()
 export class Ratelimits implements CanActivate {
   constructor(
     protected userService: UsersService,
-    @InjectDataSource() protected dataSource: DataSource
+    protected authRepository: AuthRepository
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req: Request = context.switchToHttp().getRequest();
-    console.log(req.headers.authorization);
-    console.log(this.userService);
-    const reqData: IPCollectionClass = {
-      _id: new ObjectId(),
-      IP: req.ip || '',
-      URL: req.originalUrl,
-      date: new Date(),
-    };
-    await this.ipCollectionModel.create(reqData);
+
+	const objCollection = {
+		IP: req.ip || '',
+		URL: req.originalUrl,
+		date: new Date(),
+	}
+    
+	const reqData: IPCollectionClass = this.authRepository.create(objCollection)
+
     const tenSecondsAgo = new Date(Date.now() - 10000);
     const filter = {
       $and: [

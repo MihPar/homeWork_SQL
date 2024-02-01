@@ -2,7 +2,13 @@ import { BadRequestException, Body, Controller, Get, Headers, HttpCode, HttpExce
 import { JwtService } from "@nestjs/jwt";
 import { Request, Response } from 'express';
 import { CommandBus } from '@nestjs/cqrs';
-import { AuthRepository } from "./auth.service";
+import { AuthRepository } from "./auth.repository";
+import { Ratelimits } from "src/api/auth/gards/rateLimits";
+import { UsersService } from "src/api/users/users.service";
+import { SecurityDevicesService } from "src/api/security-devices/security-devices.service";
+import { UsersQueryRepository } from "src/api/users/users.queryRepository";
+import { emailInputDataClass } from "./entities/auth.class.pipe";
+import { RecoveryPasswordCommand } from "./gards/recoveryPassowrdUseCase";
 
 
 @Controller('auth')
@@ -11,7 +17,7 @@ export class AuthController {
 		protected commandBus: CommandBus,
 		protected usersService: UsersService,
 		protected jwtService: JwtService,
-		protected deviceService: DeviceService,
+		protected deviceService: SecurityDevicesService,
 		protected usersQueryRepository: UsersQueryRepository,
 		protected authRepository: AuthRepository
 	) {}
