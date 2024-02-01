@@ -7,14 +7,12 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { Request } from 'express';
- import { UsersService } from 'src/api/users/users.service';
 import { AuthRepository } from '../auth.repository';
-import { IPCollectionClass } from '../entities/auth.class.type';
+import { IPCollectionClass } from '../dto/auth.class.type';
 
 @Injectable()
 export class Ratelimits implements CanActivate {
   constructor(
-    protected userService: UsersService,
     protected authRepository: AuthRepository
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -26,18 +24,9 @@ export class Ratelimits implements CanActivate {
 		date: new Date(),
 	}
     
-	const reqData: IPCollectionClass = this.authRepository.create(objCollection)
+	const reqData: any = this.authRepository.create(objCollection)
 
-    const tenSecondsAgo = new Date(Date.now() - 10000);
-    const filter = {
-      $and: [
-        { IP: reqData.IP },
-        { URL: reqData.URL },
-        { date: { $gte: tenSecondsAgo } },
-      ],
-    };
-
-    const count = await this.ipCollectionModel.countDocuments(filter);
+    const count = await  this.authRepository.getCount();
     if (count > 5) {
       throw new HttpException(
         'More than 5 attempts from one IP-address during 10 seconds',

@@ -4,18 +4,17 @@ import { Request, Response } from 'express';
 import { CommandBus } from '@nestjs/cqrs';
 import { AuthRepository } from "./auth.repository";
 import { Ratelimits } from "src/api/auth/gards/rateLimits";
-import { UsersService } from "src/api/users/users.service";
 import { SecurityDevicesService } from "src/api/security-devices/security-devices.service";
 import { UsersQueryRepository } from "src/api/users/users.queryRepository";
-import { emailInputDataClass } from "./entities/auth.class.pipe";
-import { RecoveryPasswordCommand } from "./gards/recoveryPassowrdUseCase";
+import { InputModelNewPasswordClass, emailInputDataClass } from "./dto/auth.class.pipe";
+import { RecoveryPasswordCommand } from "./useCase.ts/recoveryPassowrdUseCase";
+import { NewPasswordCommand } from "./useCase.ts/createNewPassword-use-case";
 
 
 @Controller('auth')
 export class AuthController {
 	constructor(
 		protected commandBus: CommandBus,
-		protected usersService: UsersService,
 		protected jwtService: JwtService,
 		protected deviceService: SecurityDevicesService,
 		protected usersQueryRepository: UsersQueryRepository,
@@ -77,7 +76,6 @@ export class AuthController {
 		const refreshToken: string = req.cookies.refreshToken;
 		const command = new RefreshTokenCommand(refreshToken, user)
 		const result: { newToken: string, newRefreshToken: string} = await this.commandBus.execute(command)
-		// console.log("result: ", result)
 		if(!userId) return null
 		const command2 = new UpdateDeviceCommand(userId, result.newRefreshToken)
 		await this.commandBus.execute(command2)
@@ -107,11 +105,9 @@ export class AuthController {
 	}
 
 	@HttpCode(204)
-	// @Throttle({default: {ttl: 10000, limit: 5}})
 	@Post("registration-email-resending")
 	@UseGuards(IsExistEmailUser)
 	@UseGuards(RatelimitsRegistration)
-	// @UseGuards(ThrottlerGuard)
 	async createRegistrationEmailResending(@Req() req: Request, @Body() inputDateReqEmailResending: emailInputDataClass) {
 		const command = new RegistrationEmailResendingCommand(inputDateReqEmailResending)
 		const confirmUser = await this.commandBus.execute(command)
@@ -124,18 +120,13 @@ export class AuthController {
 	@UseGuards(CheckRefreshToken)
 	async cretaeLogout(@Req() req: Request) {
 		const refreshToken: string = req.cookies.refreshToken;
-		// console.log("refreshToken: ", refreshToken)
 		const command = new LogoutCommand(refreshToken)
 		const isDeleteDevice = await this.commandBus.execute(command)
 		if (!isDeleteDevice) throw new UnauthorizedException('Not authorization 401')
-		// console.log('res.clearCookie("refreshToken"): ', res.clearCookie("refreshToken"))
-		// res.clearCookie("refreshToken")
 	}
 
 	@HttpCode(200)
 	@Get("me")
-	// @UseGuards(CheckRefreshTokenFindMe)
-	// @UseGuards(CheckRefreshTokenForGet)
 	@UseGuards(CheckRefreshTokenForComments)
 	async findMe(@Req() req: Request) {
 		if (!req.headers.authorization) throw new UnauthorizedException('Not authorization 401')

@@ -1,15 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
+import { Repository, DataSource } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './user.entity';
 
 @Injectable()
 export class UsersRepository {
   constructor(
-    @InjectRepository(User)
-    private readonly usersRepository: Repository<User>,
+    @InjectDataSource() protected dataSource: DataSource
   ) {}
+
+  async passwordRecovery(id: ObjectId, recoveryCode: string): Promise<boolean> {
+    const recoveryInfo = {
+      ["emailConfirmation.confirmationCode"]: recoveryCode,
+      ["emailConfirmation.expirationDate"]: add(new Date(), { minutes: 5 }),
+    };
+    const updateRes = await this.userModel.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: recoveryInfo }
+    );
+    return updateRes.matchedCount === 1;
+  }
 
   create(createUserDto: CreateUserDto): Promise<User> {
     const user = new User();

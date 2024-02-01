@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { DataSource } from 'typeorm';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { IPCollectionClass } from './entities/auth.class.type';
+import { IPCollectionClass } from './dto/auth.class.type';
 
 @Injectable()
 export class AuthRepository {
@@ -14,16 +14,19 @@ export class AuthRepository {
 		"IP", "URL", "Date")
 		VALUES ('objCollection.IP', 'objCollection.URL', 'objCollection.date');
 	`);
+		if(!createNewCollection) return false
+		return true
+  }
 
-	const tenSecondsAgo = new Date(Date.now() - 10000);
-	
+  async getCount() {
+	// const tenSecondsAgo = new Date(Date.now() - 10000);
 	const count = await this.dataSource.query(`
 	SELECT count(*)
-		FROM "IpCollection" as Ip
-		WHERE "Ip" = 
+		FROM "IpCollection"
+		WHERE "IP" = objCollection.IP
+		AND "Date" > CURRENT_TIMESTAMP -INTERVAL '10 seconds'
 	`)
-	
-	
+	return count
   }
 
   findAll() {
