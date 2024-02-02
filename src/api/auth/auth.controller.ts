@@ -13,6 +13,9 @@ import { CreateLoginCommand } from "./useCase.ts/createLogin-use-case";
 import { UserClass } from "../users/user.class";
 import { CreateDeviceCommand } from "./useCase.ts/createDevice-use-case";
 import { CheckRefreshToken } from "./gards/checkRefreshToken";
+import { UserDecorator, UserIdDecorator } from "src/infrastructura/decorators/decorator.user";
+import { RefreshTokenCommand } from "./useCase.ts/refreshToken-use-case";
+import { UpdateDeviceCommand } from "../security-devices/useCase/updateDevice-use-case";
 
 
 @Controller('auth')

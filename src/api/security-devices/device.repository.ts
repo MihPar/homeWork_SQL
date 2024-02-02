@@ -50,16 +50,17 @@ export class DeviceRepository {
 	}
   }
 
-//   async updateDeviceUser(
-//     userId: string,
-//     deviceId: string,
-//     newLastActiveDate: string
-//   ) {
-//     await this.deviceModel.updateOne(
-//       { userId, deviceId },
-//       { $set: { lastActiveDate: newLastActiveDate } },
-//     );
-//   }
+  async updateDeviceUser(
+    userId: string,
+    deviceId: string,
+    newLastActiveDate: string
+  ) {
+	const updateDevice = await this.dataSource.query(`
+		UPDATE public."Devices"
+			SET "LastActiveDate" = '${newLastActiveDate}'
+			WHERE d."DeviceId" = '${deviceId}' AND d."UserId" = '${userId}'
+	`)
+  }
 
 //   async logoutDevice(deviceId: string) {
 // 	const decayResult = await this.deviceModel.deleteOne({deviceId})
