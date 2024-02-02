@@ -6,9 +6,13 @@ import { AuthRepository } from "./auth.repository";
 import { Ratelimits } from "src/api/auth/gards/rateLimits";
 import { SecurityDevicesService } from "src/api/security-devices/security-devices.service";
 import { UsersQueryRepository } from "src/api/users/users.queryRepository";
-import { InputModelNewPasswordClass, emailInputDataClass } from "./dto/auth.class.pipe";
+import { InputDataModelClassAuth, InputModelNewPasswordClass, emailInputDataClass } from "./dto/auth.class.pipe";
 import { RecoveryPasswordCommand } from "./useCase.ts/recoveryPassowrdUseCase";
 import { NewPasswordCommand } from "./useCase.ts/createNewPassword-use-case";
+import { CreateLoginCommand } from "./useCase.ts/createLogin-use-case";
+import { UserClass } from "../users/user.class";
+import { CreateDeviceCommand } from "./useCase.ts/createDevice-use-case";
+import { CheckRefreshToken } from "./gards/checkRefreshToken";
 
 
 @Controller('auth')
@@ -40,7 +44,7 @@ export class AuthController {
 
 	@Post('login')
 	@HttpCode(200)
-	@UseGuards(RatelimitsRegistration)
+	@UseGuards(Ratelimits)
 	async createLogin(
 		@Body() inutDataModel: InputDataModelClassAuth,
 		@Ip() IP: string, 

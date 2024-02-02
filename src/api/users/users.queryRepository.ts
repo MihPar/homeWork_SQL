@@ -50,23 +50,28 @@ export class UsersQueryRepository {
 	// 	};
 	//   }
 
-	//   async findByLoginOrEmail(loginOrEmail: string): Promise<UserClass | null> {
-	// 	const user: UserClass | null = await this.userModel.findOne({
-	// 	  $or: [
-	// 		{ "accountData.email": loginOrEmail },
-	// 		{ "accountData.userName": loginOrEmail },
-	// 	  ],
-	// 	}).lean(); 
-	// 	return user;
-	//   }
+	  async findByLoginOrEmail(loginOrEmail: string): Promise<UserClass | null> {
+		const user: UserClass | null = await this.dateSource.query(`
+		SELECT u.*
+			FROM public."Users" as u
+			WHERE u."UserName" = '${loginOrEmail}' AND u."Email" = '${loginOrEmail}'
+		`)
+		return user;
+	  }
 
-	//   async findUserByEmail(email: string) {
-	// 	return this.userModel.findOne({ "accountData.email": email }).lean();
-	//   }
+	  async findUserByEmail(email: string) {
+		return this.dateSource.query(`
+			SELECT u.*
+				FROM public."Users" as u
+				WHERE u."Email" = '${email}'
+		`)
+	  }
 
 	  async findUserByCode(recoveryCode: string): Promise<WithId<UserClass> | null> {
 		return this.dateSource.query(`
-
+		SELECT e.*
+			FROM public."EmailConfirmation" as e
+			WHERE e."ComfirmationCode" = '${recoveryCode}'
 		`)
 	  }
 

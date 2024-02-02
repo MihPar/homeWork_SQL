@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { UserClass } from "src/api/users/user.entity";
+import { UserClass } from "src/api/users/user.class";
 import { UsersQueryRepository } from "src/api/users/users.queryRepository";
 import { UsersRepository } from "src/api/users/users.repository";
 import { EmailManager } from "src/infrastructura/email/email.manager";
