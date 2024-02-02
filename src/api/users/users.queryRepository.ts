@@ -9,7 +9,7 @@ import { UserClass } from "./user.class";
 @Injectable()
 export class UsersQueryRepository {
 	constructor(
-		@InjectDataSource() protected dateSource: DataSource
+		@InjectDataSource() protected dataSource: DataSource
 	) {}
 	// async getAllUsers(
 	// 	sortBy: string,
@@ -51,7 +51,7 @@ export class UsersQueryRepository {
 	//   }
 
 	  async findByLoginOrEmail(loginOrEmail: string): Promise<UserClass | null> {
-		const user: UserClass | null = await this.dateSource.query(`
+		const user: UserClass | null = await this.dataSource.query(`
 		SELECT u.*
 			FROM public."Users" as u
 			WHERE u."UserName" = '${loginOrEmail}' AND u."Email" = '${loginOrEmail}'
@@ -60,7 +60,7 @@ export class UsersQueryRepository {
 	  }
 
 	  async findUserByEmail(email: string) {
-		return this.dateSource.query(`
+		return this.dataSource.query(`
 			SELECT u.*
 				FROM public."Users" as u
 				WHERE u."Email" = '${email}'
@@ -68,7 +68,7 @@ export class UsersQueryRepository {
 	  }
 
 	  async findUserByCode(recoveryCode: string): Promise<WithId<UserClass> | null> {
-		return this.dateSource.query(`
+		return this.dataSource.query(`
 		SELECT e.*
 			FROM public."EmailConfirmation" as e
 			WHERE e."ComfirmationCode" = '${recoveryCode}'
@@ -82,8 +82,12 @@ export class UsersQueryRepository {
 	// 	return user;
 	//   }
 
-	//   async findUserById(userId: string): Promise<UserClass | null> {
-	// 	let user: UserClass | null = await this.userModel.findOne({ _id: new ObjectId(userId) }).lean();
-	// 	return user;
-	//   }
+	  async findUserById(userId: string): Promise<UserClass | null> {
+		let user: UserClass | null = await this.dataSource.query(`
+			SELECT "Id", "UserName", "Email", "CreatedAt", "PassswordHash"
+				FROM public."Users" as u
+				WHERE u."Id" = '${userId}'
+		`)
+		return user;
+	  }
 }
