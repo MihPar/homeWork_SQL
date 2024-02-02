@@ -75,12 +75,14 @@ export class UsersQueryRepository {
 		`)
 	  }
 
-	//   async findUserByConfirmation(code: string): Promise<UserClass | null> {
-	// 	const user: UserClass | null = await this.userModel.findOne({
-	// 	  "emailConfirmation.confirmationCode": code,
-	// 	}).lean();
-	// 	return user;
-	//   }
+	  async findUserByConfirmation(code: string): Promise<UserClass | null> {
+		const user: UserClass | null = await this.dataSource.query(`
+			SELECT e.*
+				FROM public."EmailConfirmation" as e
+					WHERE e."ConfirmationCode" = '${code}'
+		`)
+		return user
+	  }
 
 	  async findUserById(userId: string): Promise<UserClass | null> {
 		let user: UserClass | null = await this.dataSource.query(`

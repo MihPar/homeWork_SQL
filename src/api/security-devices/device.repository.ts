@@ -2,6 +2,7 @@ import { DataSource } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DeviceClass } from './dto/device.class';
+import { CollectionIP } from '../CollectionIP/collection.class';
 
 @Injectable()
 export class DeviceRepository {
@@ -67,10 +68,12 @@ export class DeviceRepository {
 // 	return decayResult.deletedCount === 1
 //   }
 
-//   async createCollectionIP(reqData: CollectionIP) {
-// 	await this.collectioinIPModel.insertMany(reqData);
-// 	return reqData;
-//   }
+  async createCollectionIP(reqData: CollectionIP) {
+	await this.dataSource.query(`
+	
+	`);
+	return reqData;
+  }
 
 
 //   async countDocs(filter: any) {

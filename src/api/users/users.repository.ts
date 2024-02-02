@@ -29,10 +29,19 @@ export class UsersRepository {
   async updatePassword(id: any, newPasswordHash: string) {
     const updatePassword = await this.dataSource.query(`
 		SELECT u.* FROM public."Users" as u 
-		UPDATE public."Users" SET "PassswordHash"='${newPasswordHash}'
-		WHERE u."Id" = '${id}'
+			UPDATE public."Users" SET "PassswordHash"='${newPasswordHash}'
+			WHERE u."Id" = '${id}'
 	`)
     if(!updatePassword) return false
 	return  true
+  }
+
+  async updateConfirmation(id: string) {
+    const result = await this.dataSource.query(`
+	UPDATE public."EmailConfirmation" as e
+		SET "IsConfirmed"='${true}'
+		WHERE e."UserId" = '${id}'
+	`)
+    return true
   }
 }

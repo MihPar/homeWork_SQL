@@ -6,7 +6,7 @@ import { AuthRepository } from "./auth.repository";
 import { Ratelimits } from "src/api/auth/gards/rateLimits";
 import { SecurityDevicesService } from "src/api/security-devices/security-devices.service";
 import { UsersQueryRepository } from "src/api/users/users.queryRepository";
-import { InputDataModelClassAuth, InputModelNewPasswordClass, emailInputDataClass } from "./dto/auth.class.pipe";
+import { InputDataModelClassAuth, InputDateReqConfirmClass, InputModelNewPasswordClass, emailInputDataClass } from "./dto/auth.class.pipe";
 import { RecoveryPasswordCommand } from "./useCase.ts/recoveryPassowrdUseCase";
 import { NewPasswordCommand } from "./useCase.ts/createNewPassword-use-case";
 import { CreateLoginCommand } from "./useCase.ts/createLogin-use-case";
@@ -16,6 +16,8 @@ import { CheckRefreshToken } from "./gards/checkRefreshToken";
 import { UserDecorator, UserIdDecorator } from "src/infrastructura/decorators/decorator.user";
 import { RefreshTokenCommand } from "./useCase.ts/refreshToken-use-case";
 import { UpdateDeviceCommand } from "../security-devices/useCase/updateDevice-use-case";
+import { IsConfirmed } from "./useCase.ts/isCodeConfirmed";
+import { RegistrationConfirmationCommand } from "../users/useCase/registratinConfirmation-use-case";
 
 
 @Controller('auth')
@@ -95,7 +97,7 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post("registration-confirmation")
-	@UseGuards(RatelimitsRegistration, IsConfirmed)
+	@UseGuards(Ratelimits, IsConfirmed)
 	async createRegistrationConfirmation(@Body() inputDateRegConfirm: InputDateReqConfirmClass) {
 		const command = new RegistrationConfirmationCommand(inputDateRegConfirm)
 		await this.commandBus.execute(command)

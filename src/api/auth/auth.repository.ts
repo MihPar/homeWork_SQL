@@ -12,7 +12,7 @@ export class AuthRepository {
     const createNewCollection = await this.dataSource.query(`
 	INSERT INTO public."IpCollection"(
 		"IP", "URL", "Date")
-		VALUES ('objCollection.IP', 'objCollection.URL', 'objCollection.date');
+		VALUES ('${objCollection.IP}', '${objCollection.URL}', '${objCollection.date}');
 	`);
 		if(!createNewCollection) return false
 		return true

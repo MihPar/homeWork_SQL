@@ -8,7 +8,6 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { AuthRepository } from '../auth.repository';
-import { IPCollectionClass } from '../dto/auth.class.type';
 
 @Injectable()
 export class Ratelimits implements CanActivate {
