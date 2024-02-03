@@ -26,7 +26,7 @@ export class NewPasswordUseCase implements ICommandHandler<NewPasswordCommand> {
 		if (!findUserByCode) {
 		  return false;
 		}
-		if (findUserByCode.emailConfirmation.expirationDate < new Date()) {
+		if (findUserByCode.expirationDate < new Date()) {
 		  return false;
 		}
 		const newPasswordHash = await this.generateHashAdapter._generateHash(command.inputDataNewPassword.newPassword);

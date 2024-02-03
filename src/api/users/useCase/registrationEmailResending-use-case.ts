@@ -26,7 +26,7 @@ export class RegistrationEmailResendingUseCase
         command.inputDateReqEmailResending.email,
       );
     if (!user) return false;
-    if (user.emailConfirmation.isConfirmed) {
+    if (user.isConfirmed) {
       return false;
     }
     const newConfirmationCode = uuidv4();
@@ -41,7 +41,7 @@ export class RegistrationEmailResendingUseCase
     );
     try {
       await this.emailManager.sendEamilConfirmationMessage(
-        user.accountData.email,
+        user.email,
         newConfirmationCode,
       );
     } catch (error) {

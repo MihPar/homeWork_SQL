@@ -21,30 +21,14 @@ export class DeviceRepository {
 
   async createDevice(device: DeviceClass): Promise<string | null> {
 	try {
-		const createDevice = await this.dataSource.query(`
-			CREATE TABLE Devices (
-				IP text,
-				Title text,
-				DeviceId uuid,
-				UserId uuid,
-				LastActiveDate date,
-				PRIMARY KEY (DeviceId)
-			)
+		const createDevice: DeviceClass = await this.dataSource.query(`
+		INSERT INTO public."Devices"(
+			"IP", "Title", "DeviceId", "UserId", "LastActiveDate")
+			VALUES (
+				'${device.ip}', '${device.title}', '${device.deviceId}', 
+				'${device.lastActiveDate}', '${device.userId}')
 		`)
-		const updateDevice = await this.dataSource.query(`
-			UPDATE public."Devices"
-				SET 
-					"IP"=device.ip, 
-					"Title"=device.title, 
-					"DeviceId"=device.deviceId, 
-					"UserId"=device.UserId, 
-					"LastActiveDate"=device.lastActiveDate
-			`)
-			const device = await this.dataSource.query(`
-				SELECT d.*
-					FROM public."Devices" as d
-			`)
-		return device
+		return createDevice.deviceId
 	} catch(error) {
 		console.log(error, 'error in create device')
 		return null

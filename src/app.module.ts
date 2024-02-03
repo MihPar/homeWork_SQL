@@ -28,6 +28,12 @@ import { DeviceRepository } from './api/security-devices/device.repository';
 import { DeviceQueryRepository } from './api/security-devices/deviceQuery.repository';
 import { UsersRepository } from './api/users/users.repository';
 import { UsersQueryRepository } from './api/users/users.queryRepository';
+import { DeleteAllDataController } from './api/delete/delete.allData';
+import { AuthBasic } from './api/users/gards/basic.auth';
+import { UsersController } from './api/users/users.controller';
+import { CreateNewUserUseCase } from './api/users/useCase/createNewUser-use-case';
+import { DeleteUserByIdUseCase } from './api/users/useCase/deleteUserById-use-case';
+import { DeleteAllUsersUseCase } from './api/users/useCase/deleteAllUsers-use-case';
 
 const userCases = [
   RecoveryPasswordUseCase,
@@ -41,6 +47,9 @@ const userCases = [
   RegistrationEmailResendingUseCase,
   LogoutUseCase,
   GetUserIdByTokenUseCase,
+  CreateNewUserUseCase,
+  DeleteUserByIdUseCase,
+  DeleteAllUsersUseCase
 ];
 
 const gards = [
@@ -50,6 +59,7 @@ const gards = [
   CheckLoginOrEmail,
   IsExistEmailUser,
   CheckRefreshTokenForComments,
+  AuthBasic
 ];
 
 const repositories = [AuthRepository, DeviceRepository, DeviceQueryRepository, UsersRepository, UsersQueryRepository];
@@ -74,7 +84,7 @@ const repositories = [AuthRepository, DeviceRepository, DeviceQueryRepository, U
     AuthModule,
     SecurityDevicesModule,
   ],
-  controllers: [AuthController, SecurityDevicesController],
+  controllers: [AuthController, SecurityDevicesController, DeleteAllDataController, UsersController],
   providers: [
     ...repositories,
     ...userCases,

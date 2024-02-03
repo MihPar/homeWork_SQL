@@ -16,12 +16,11 @@ export class UsersRepository {
 		expirationDate: add(new Date(), {minutes: 5}) 
 	}
 	const updateRes = await this.dataSource.query(`
-	SELECT e.* FROM public."EmailConfirmation" as e 
-		UPDATE public."EmailConfirmation"
-		SET 
-			"ExpirationDate"='${recoveryInfo.expirationDate}', 
-			"ConfirmationCode"='${recoveryInfo.recoveryCode}'
-		WHERE e."UserId" = '${id}'
+	UPDATE public."Users" as u
+			SET 
+				"ExpirationDate"='${recoveryInfo.expirationDate}', 
+				"ConfirmationCode"='${recoveryInfo.recoveryCode}'
+		WHERE u."Id" = '${id}'
 	`)
     if(!updateRes) return false
 	return true
@@ -29,9 +28,9 @@ export class UsersRepository {
 
   async updatePassword(id: any, newPasswordHash: string) {
     const updatePassword = await this.dataSource.query(`
-		SELECT u.* FROM public."Users" as u 
-			UPDATE public."Users" SET "PassswordHash"='${newPasswordHash}'
-			WHERE u."Id" = '${id}'
+			UPDATE public."Users" as u
+				SET "PassswordHash"='${newPasswordHash}'
+				WHERE u."Id" = '${id}'
 	`)
     if(!updatePassword) return false
 	return  true
@@ -68,5 +67,21 @@ export class UsersRepository {
 	`)
 	if(!result) return false
 	return true
+  }
+
+  async deleteById(userId: string) {
+	const deleted = await this.dataSource.query(`
+	DELETE FROM public."Users" as u
+		WHERE u."Id" = '${userId}'
+	`)
+	if(!deleted) return false
+	return true
+  }
+
+  async deleteAll() {
+	const deleteAllUsers = await this.dataSource.query(`
+		DELETE FROM public."Users"
+	`);
+    return true
   }
 }

@@ -25,7 +25,7 @@ export class Ratelimits implements CanActivate {
     
 	const reqData: any = this.authRepository.create(objCollection)
 
-    const count = await  this.authRepository.getCount();
+    const count = await  this.authRepository.getCount(objCollection);
     if (count > 5) {
       throw new HttpException(
         'More than 5 attempts from one IP-address during 10 seconds',
