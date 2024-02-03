@@ -17,6 +17,10 @@ export class UsersQueryRepository {
     searchLoginTerm: string,
     searchEmailTerm: string
   ): Promise<PaginationType<UserViewType>> {
+
+
+	
+
     const filter = {
       $or: [
         {

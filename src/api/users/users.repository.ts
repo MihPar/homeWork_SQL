@@ -47,8 +47,10 @@ export class UsersRepository {
 
   async createUser(newUser: UserClass) {
     	await this.dataSource.query(`
-		INSERT INTO public."Users"("UserName", "Email")
-			VALUES ('${newUser.userName}', '${newUser.passwordHash}', '${newUser.email}', '${newUser.createdAt}', '${newUser.confirmationCode}', '${newUser.expirationDate}', '${newUser.isConfirmed}')
+			INSERT INTO public."Users"("UserName", "Email", "CreatedAt", "PassswordHash", "ConfirmationCode", "ExpirationDate", "IsConfirmed")
+				VALUES ('${newUser.userName}', '${newUser.passwordHash}', '${newUser.email}', 
+				'${newUser.createdAt}', '${newUser.confirmationCode}', '${newUser.expirationDate}', 
+				'${newUser.isConfirmed}')
 	`)
     return newUser;
   }
@@ -69,8 +71,8 @@ export class UsersRepository {
 
   async deleteById(userId: string) {
 	const deleted = await this.dataSource.query(`
-	DELETE FROM public."Users" as u
-		WHERE u."Id" = '${userId}'
+		DELETE FROM public."Users" as u
+			WHERE u."Id" = '${userId}'
 	`)
 	if(!deleted) return false
 	return true

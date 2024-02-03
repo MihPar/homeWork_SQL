@@ -23,7 +23,8 @@ export class CreateNewUserUseCase implements ICommandHandler<CreateNewUserComman
       command.body.password,
     );
     const newUser = new UserClass();
-	// newUser.id = id
+	
+	newUser.id = uuidv4()
 	newUser.userName = command.body.login,
 	newUser.email = command.body.email,
 	newUser.passwordHash = passwordHash,
