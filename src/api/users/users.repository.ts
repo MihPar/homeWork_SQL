@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { add } from 'date-fns';
+import { UserClass } from './user.class';
 
 @Injectable()
 export class UsersRepository {
@@ -43,5 +44,13 @@ export class UsersRepository {
 		WHERE e."UserId" = '${id}'
 	`)
     return true
+  }
+
+  async createUser(newUser: UserClass) {
+    	await this.dataSource.query(`
+		INSERT INTO public."Users"("UserName", "Email")
+			VALUES ('${newUser.accountData.userName}', '${newUser.accountData.passwordHash}', '${newUser.accountData.email}', '${newUser.accountData.createdAt}', '${newUser.emailConfirmation.confirmationCode}', '${newUser.emailConfirmation.expirationDate}', '${newUser.emailConfirmation.isConfirmed}')
+	`)
+    return newUser;
   }
 }

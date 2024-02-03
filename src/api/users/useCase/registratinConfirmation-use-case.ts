@@ -19,7 +19,7 @@ export class RegistrationConfirmationUseCase
     const user = await this.usersQueryRepository.findUserByConfirmation(
       command.inputDateRegConfirm.code,
     );
-    const result = await this.usersRepository.updateConfirmation(user!.id);
+    const result = await this.usersRepository.updateConfirmation(user.id);
     return result;
   }
 }

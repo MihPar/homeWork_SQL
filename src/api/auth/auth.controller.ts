@@ -6,7 +6,7 @@ import { AuthRepository } from "./auth.repository";
 import { Ratelimits } from "src/api/auth/gards/rateLimits";
 import { SecurityDevicesService } from "src/api/security-devices/security-devices.service";
 import { UsersQueryRepository } from "src/api/users/users.queryRepository";
-import { InputDataModelClassAuth, InputDateReqConfirmClass, InputModelNewPasswordClass, emailInputDataClass } from "./dto/auth.class.pipe";
+import { InputDataModelClassAuth, InputDataReqClass, InputDateReqConfirmClass, InputModelNewPasswordClass, emailInputDataClass } from "./dto/auth.class.pipe";
 import { RecoveryPasswordCommand } from "./useCase.ts/recoveryPassowrdUseCase";
 import { NewPasswordCommand } from "./useCase.ts/createNewPassword-use-case";
 import { CreateLoginCommand } from "./useCase.ts/createLogin-use-case";
@@ -16,8 +16,10 @@ import { CheckRefreshToken } from "./gards/checkRefreshToken";
 import { UserDecorator, UserIdDecorator } from "src/infrastructura/decorators/decorator.user";
 import { RefreshTokenCommand } from "./useCase.ts/refreshToken-use-case";
 import { UpdateDeviceCommand } from "../security-devices/useCase/updateDevice-use-case";
-import { IsConfirmed } from "./useCase.ts/isCodeConfirmed";
+import { IsConfirmed } from "./gards/isCodeConfirmed";
 import { RegistrationConfirmationCommand } from "../users/useCase/registratinConfirmation-use-case";
+import { CheckLoginOrEmail } from "./gards/checkEmailOrLogin";
+import { RegistrationCommand } from "../users/useCase/registration-use-case";
 
 
 @Controller('auth')
@@ -105,7 +107,7 @@ export class AuthController {
 
 	@Post("registration")
 	@HttpCode(204)
-	@UseGuards(RatelimitsRegistration, CheckLoginOrEmail)
+	@UseGuards(Ratelimits, CheckLoginOrEmail)
 	async creteRegistration(@Req() req: Request, @Body() inputDataReq: InputDataReqClass) {
 		const command = new RegistrationCommand(inputDataReq)
 		const user = await this.commandBus.execute(command)
