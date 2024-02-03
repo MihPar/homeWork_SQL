@@ -17,8 +17,8 @@ import { UserClass } from 'src/api/users/user.class';
 	  const req = context.switchToHttp().getRequest();
 	  const code = req.body.code;
   
-	  const user: UserClass | null = await this.usersQueryRepository.findUserByConfirmation(code)
-	console.log(user)
+	const user: UserClass | null = await this.usersQueryRepository.findUserByConfirmation(code)
+	
 	if(!user) {
 		throw new BadRequestException([{message: 'Incorrect code!', field: 'code'}])
 	} 

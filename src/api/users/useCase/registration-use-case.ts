@@ -23,22 +23,25 @@ export class RegistrationUseCase implements ICommandHandler<RegistrationCommand>
     const passwordHash = await this.generateHashAdapter._generateHash(
       command.inputDataReq.password,
     );
-    const newUser: UserClass = new UserClass(
-      command.inputDataReq.login,
-      command.inputDataReq.email,
-      passwordHash,
-      uuidv4(),
-      add(new Date(), {
+    const newUser = new UserClass()
+	
+	newUser.id = uuidv4()
+	newUser.userName = command.inputDataReq.login
+	newUser.email = command.inputDataReq.email
+	newUser.passwordHash = passwordHash
+	newUser.confirmationCode = uuidv4()
+	newUser.expirationDate = add(new Date(), {
         hours: 1,
         minutes: 10,
-      }),
-      false,
-    );
+      })
+	newUser.isConfirmed = false
+	newUser.createdAt = new Date().toISOString()
+
     const user: UserClass = await this.usersRepository.createUser(newUser);
     try {
       await this.emailManager.sendEamilConfirmationMessage(
-        user.accountData.email,
-        user.emailConfirmation.confirmationCode,
+        user.email,
+        user.confirmationCode,
       );
     } catch (error) {
       console.log(error, 'error with send mail');

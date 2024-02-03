@@ -14,15 +14,6 @@ export class DeviceQueryRepository {
 				FROM public."Devices" as d
 				WHERE d."UserId" = '${userId}'
 		`)
-		// return getAllDevices.map(function (item) {
-		//   return {
-		// 	ip: item.Id,
-		// 	title: item.Title,
-		// 	lastActiveDate: item.LastActiveDate,
-		// 	deviceId: item.DeviceId,
-		//   };
-		// });
-
 		return getDevice
 	}
 

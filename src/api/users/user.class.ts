@@ -1,5 +1,6 @@
 import { Transform, TransformFnParams } from "class-transformer";
 import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength 	} from "class-validator";
+import { UserViewType } from "./user.type";
 
 const Trim = () => Transform(({value}: TransformFnParams) => {
 	return value?.trim()
@@ -36,6 +37,15 @@ export class UserClass {
   confirmationCode: string;
   expirationDate: Date;
   isConfirmed: boolean;
+  
+  getViewUser(): UserViewType {
+	return {
+		id: this.id.toString(),
+		login: this.userName,
+		email: this.email,
+		createdAt: this.createdAt
+	}
+}
 }
 
   

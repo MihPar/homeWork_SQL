@@ -20,14 +20,15 @@ import { UserClass } from 'src/api/users/user.class';
 		const req = context.switchToHttp().getRequest()
 		const login = req.body.login
 		const email = req.body.email
-		const userByLogin: UserClass | null = await this.usersQueryRepository.findByLoginOrEmail(login)
-		const userByEmail: UserClass | null = await this.usersQueryRepository.findByLoginOrEmail(email)
+		const userByLoginOrEmail: UserClass | null = await this.usersQueryRepository.findByLoginOrEmail(login)
+		// const userByLogin: UserClass | null = await this.usersQueryRepository.findByLoginOrEmail(login)
+		// const userByEmail: UserClass | null = await this.usersQueryRepository.findByLoginOrEmail(email)
 
-		if(userByLogin) {
+		if(userByLoginOrEmail) {
 			throw new BadRequestException([{message: 'Incorrect login!', field: 'login'}])
 		}
 
-		if(userByEmail){
+		if(userByLoginOrEmail){
 			throw new BadRequestException([{message: 'Incorrect email!', field: 'email'}])
 		}
 

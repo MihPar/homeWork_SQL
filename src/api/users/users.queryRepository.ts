@@ -88,9 +88,9 @@ export class UsersQueryRepository {
 
   async findUserByConfirmation(code: string): Promise<UserClass | null> {
     const user: UserClass | null = await this.dataSource.query(`
-			SELECT e.*
-				FROM public."EmailConfirmation" as e
-					WHERE e."ConfirmationCode" = '${code}'
+			SELECT u.*
+				FROM public."Users" as u
+					WHERE u."ConfirmationCode" = '${code}'
 		`);
     return user;
   }
