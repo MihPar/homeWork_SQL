@@ -21,9 +21,10 @@ import { RegistrationConfirmationCommand } from "../users/useCase/registratinCon
 import { CheckLoginOrEmail } from "./gards/checkEmailOrLogin";
 import { RegistrationCommand } from "../users/useCase/registration-use-case";
 import { IsExistEmailUser } from "./gards/isExixtEmailUser";
-import { RatelimitsRegistration } from "./gards/rateLimitsRegistration";
 import { RegistrationEmailResendingCommand } from "../users/useCase/registrationEmailResending-use-case";
 import { LogoutCommand } from "../security-devices/useCase/logout-use-case";
+import { CheckRefreshTokenForComments } from "../comments/bearer.authForComments";
+import { GetUserIdByTokenCommand } from "./useCase.ts/getUserIdByToken-use-case";
 
 
 @Controller('auth')
@@ -148,9 +149,9 @@ export class AuthController {
 		const command = new GetUserIdByTokenCommand(req)
 		const findUserById: UserClass = await this.commandBus.execute(command)
 		  return {
-			userId: findUserById._id.toString(),
-			email: findUserById.accountData.email,
-			login: findUserById.accountData.userName,
+			userId: findUserById.id.toString(),
+			email: findUserById.email,
+			login: findUserById.userName,
 		  }
 	}
 }

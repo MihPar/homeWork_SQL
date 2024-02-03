@@ -24,14 +24,14 @@ export class RecoveryPasswordCommand {
 		command: RecoveryPasswordCommand
 	) {
 		const recoveryCode = uuidv4();
-		const findUser: WithId<UserClass | null> | null =
+		const findUser: UserClass | null =
 		  await this.usersQueryRepository.findUserByEmail(command.email);
 		if (!findUser) {
 		  return false;
 		}
 		try {
 		  await this.emailManager.sendEamilRecoveryCode(command.email, recoveryCode);
-		  await this.usersRepository.passwordRecovery(findUser._id, recoveryCode);
+		  await this.usersRepository.passwordRecovery(findUser.id, recoveryCode);
 		  return true
 		} catch (e) {
 		  return false;

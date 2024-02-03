@@ -1,10 +1,8 @@
+import { UserClass } from 'src/api/users/user.class';
 import "reflect-metadata"
 import { Injectable } from '@nestjs/common';
 import { DataSource, WithId } from "typeorm";
 import { InjectDataSource } from "@nestjs/typeorm";
-import { PaginationType } from "src/types/pagination.types";
-import { UserViewType } from "./user.type";
-import { UserClass } from "./user.class";
 
 @Injectable()
 export class UsersQueryRepository {
@@ -59,12 +57,13 @@ export class UsersQueryRepository {
 		return user;
 	  }
 
-	  async findUserByEmail(email: string) {
-		return this.dataSource.query(`
+	  async findUserByEmail(email: string): Promise<UserClass>{
+		const user: UserClass = await this.dataSource.query(`
 			SELECT u.*
 				FROM public."Users" as u
 				WHERE u."Email" = '${email}'
 		`)
+		return user
 	  }
 
 	  async findUserByCode(recoveryCode: string): Promise<WithId<UserClass> | null> {
