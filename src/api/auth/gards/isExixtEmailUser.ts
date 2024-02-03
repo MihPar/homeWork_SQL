@@ -22,7 +22,7 @@ export class IsExistEmailUser implements CanActivate {
       throw new BadRequestException([
         { message: 'User does not exist in DB', field: 'email' }, 
       ]);
-    } else if(user.emailConfirmation.isConfirmed === true) {
+    } else if(user.isConfirmed === true) {
 		throw new BadRequestException([
 			{ message: 'Email is already exist in DB', field: 'email' },
 		  ]);

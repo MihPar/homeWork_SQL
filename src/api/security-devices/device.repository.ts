@@ -49,8 +49,8 @@ export class DeviceRepository {
 
   async logoutDevice(deviceId: string): Promise<boolean> {
 	const decayResult = await this.dataSource.query(`
-	DELETE FROM public."Devices" as d
-		WHERE d."DeviceId" = '${deviceId}'
+		DELETE FROM public."Devices" as d
+			WHERE d."DeviceId" = '${deviceId}'
 	`)
 	if(!decayResult) return false
 	return true

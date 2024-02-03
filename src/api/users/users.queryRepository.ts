@@ -97,7 +97,7 @@ export class UsersQueryRepository {
 
   async findUserById(userId: string): Promise<UserClass | null> {
     let user: UserClass | null = await this.dataSource.query(`
-			SELECT "Id", "UserName", "Email", "CreatedAt", "PassswordHash"
+			SELECT u.*
 				FROM public."Users" as u
 				WHERE u."Id" = '${userId}'
 		`);

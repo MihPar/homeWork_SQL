@@ -58,12 +58,10 @@ export class UsersRepository {
     confirmationCode: string,
     newExpirationDate: Date
   ): Promise<boolean> {
-    const result = await this.dataSource.query(`ff
-		SELECT u.*, e.*
-			FORM public."Users" as u AND "EmailConfirmation" as e
-			UPDATE public."EmailConfirmation"
-				SET "ExpirationDate"='${newExpirationDate}', "ConfirmationCode"='${confirmationCode}'
-			WHERE u."Id' = '${id}'
+    const result = await this.dataSource.query(`
+	UPDATE public."Users" as u
+		SET "ExpirationDate"='${newExpirationDate}', "ConfirmationCode"='${confirmationCode}'
+		WHERE u."Id' = '${id}'
 	`)
 	if(!result) return false
 	return true

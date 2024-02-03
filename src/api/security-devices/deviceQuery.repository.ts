@@ -19,7 +19,7 @@ export class DeviceQueryRepository {
 
 	async findDeviceByDeviceId(deviceId: string) {
 		return await this.dataSource.query(`
-			SELECT "IP", "Title", "DeviceId", "UserId", "LastActiveDate"
+			SELECT d.*
 				FROM public."Devices" as d
 				WHERE d."DeviceId" = '${deviceId}'
 		`)
