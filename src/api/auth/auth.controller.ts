@@ -4,7 +4,6 @@ import { Request, Response } from 'express';
 import { CommandBus } from '@nestjs/cqrs';
 import { AuthRepository } from "./auth.repository";
 import { Ratelimits } from "src/api/auth/gards/rateLimits";
-import { SecurityDevicesService } from "src/api/security-devices/security-devices.service";
 import { UsersQueryRepository } from "src/api/users/users.queryRepository";
 import { InputDataModelClassAuth, InputDataReqClass, InputDateReqConfirmClass, InputModelNewPasswordClass, emailInputDataClass } from "./dto/auth.class.pipe";
 import { RecoveryPasswordCommand } from "./useCase.ts/recoveryPassowrdUseCase";
@@ -32,7 +31,6 @@ export class AuthController {
 	constructor(
 		protected commandBus: CommandBus,
 		protected jwtService: JwtService,
-		protected deviceService: SecurityDevicesService,
 		protected usersQueryRepository: UsersQueryRepository,
 		protected authRepository: AuthRepository
 	) {}
@@ -122,8 +120,7 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post("registration-email-resending")
-	@UseGuards(IsExistEmailUser)
-	@UseGuards(Ratelimits)
+	@UseGuards(IsExistEmailUser, Ratelimits)
 	async createRegistrationEmailResending(@Req() req: Request, @Body() inputDateReqEmailResending: emailInputDataClass) {
 		const command = new RegistrationEmailResendingCommand(inputDateReqEmailResending)
 		const confirmUser = await this.commandBus.execute(command)

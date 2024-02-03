@@ -22,10 +22,10 @@ import { UserClass } from 'src/api/users/user.class';
 	if(!user) {
 		throw new BadRequestException([{message: 'Incorrect code!', field: 'code'}])
 	} 
-    if(user.emailConfirmation.expirationDate <= new Date()) {
+    if(user.expirationDate <= new Date()) {
 		throw new BadRequestException([{message: 'Incorrect code!', field: 'code'}])
 	} 
-	if(user.emailConfirmation.isConfirmed) {
+	if(user.isConfirmed) {
 		throw new BadRequestException([{message: 'Incorrect code!', field: 'code'}])
 	}
 	req.user = user

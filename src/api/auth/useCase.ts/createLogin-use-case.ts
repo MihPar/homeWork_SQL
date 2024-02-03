@@ -24,7 +24,7 @@ export class CreateLoginUseCase implements ICommandHandler<CreateLoginCommand> {
 		  if (!user) return null;
 		  const resultBcryptCompare: boolean = await bcrypt.compare(
 			  command.inutDataModel.password,
-			  user.accountData.passwordHash
+			  user.passwordHash
 		  );
 		  if (resultBcryptCompare !== true) return null;
 		  return user;
