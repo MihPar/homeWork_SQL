@@ -14,6 +14,7 @@ export class EmailConfirmationClass {
 }
 
 export class UserClass {
+	public id: string
   constructor(
     userName: string,
     email: string,

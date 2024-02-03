@@ -63,10 +63,15 @@ export class DeviceRepository {
 	`)
   }
 
-//   async logoutDevice(deviceId: string) {
-// 	const decayResult = await this.deviceModel.deleteOne({deviceId})
-// 	return decayResult.deletedCount === 1
-//   }
+  async logoutDevice(deviceId: string): Promise<boolean> {
+	const decayResult = await this.dataSource.query(`
+	DELETE FROM public."Devices" as d
+		WHERE d."DeviceId" = '${deviceId}'
+	`)
+	if(!decayResult) return false
+	return true
+  }
+
 
   async createCollectionIP(reqData: CollectionIP) {
 	await this.dataSource.query(`

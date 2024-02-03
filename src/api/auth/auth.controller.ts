@@ -20,6 +20,10 @@ import { IsConfirmed } from "./gards/isCodeConfirmed";
 import { RegistrationConfirmationCommand } from "../users/useCase/registratinConfirmation-use-case";
 import { CheckLoginOrEmail } from "./gards/checkEmailOrLogin";
 import { RegistrationCommand } from "../users/useCase/registration-use-case";
+import { IsExistEmailUser } from "./gards/isExixtEmailUser";
+import { RatelimitsRegistration } from "./gards/rateLimitsRegistration";
+import { RegistrationEmailResendingCommand } from "../users/useCase/registrationEmailResending-use-case";
+import { LogoutCommand } from "../security-devices/useCase/logout-use-case";
 
 
 @Controller('auth')
@@ -118,7 +122,7 @@ export class AuthController {
 	@HttpCode(204)
 	@Post("registration-email-resending")
 	@UseGuards(IsExistEmailUser)
-	@UseGuards(RatelimitsRegistration)
+	@UseGuards(Ratelimits)
 	async createRegistrationEmailResending(@Req() req: Request, @Body() inputDateReqEmailResending: emailInputDataClass) {
 		const command = new RegistrationEmailResendingCommand(inputDateReqEmailResending)
 		const confirmUser = await this.commandBus.execute(command)
