@@ -1,8 +1,8 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { UsersQueryRepository } from "../../../api/users/users.queryRepository";
 import { InputModelNewPasswordClass } from "../dto/auth.class.pipe";
-import { UsersRepository } from "../../../../src/api/users/users.repository";
 import { GenerateHashAdapter } from "../adapter/generateHashAdapter";
+import { UsersQueryRepository } from "../../users/users.queryRepository";
+import { UsersRepository } from "../../users/users.repository";
 
 export class NewPasswordCommand {
 	constructor(

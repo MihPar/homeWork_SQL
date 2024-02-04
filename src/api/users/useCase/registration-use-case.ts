@@ -2,11 +2,11 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { UserViewType } from '../user.type';
 import { v4 as uuidv4 } from 'uuid';
 import { add } from 'date-fns';
-import { InputDataReqClass } from './../../../../src/api/auth/dto/auth.class.pipe';
 import { UsersRepository } from '../users.repository';
-import { EmailManager } from './../../../../src/infrastructura/email/email.manager';
-import { GenerateHashAdapter } from './../../../../src/api/auth/adapter/generateHashAdapter';
 import { UserClass } from '../user.class';
+import { InputDataReqClass } from '../../auth/dto/auth.class.pipe';
+import { EmailManager } from '../../../infrastructura/email/email.manager';
+import { GenerateHashAdapter } from '../../auth/adapter/generateHashAdapter';
 
 export class RegistrationCommand {
   constructor(public inputDataReq: InputDataReqClass) {}

@@ -3,9 +3,9 @@ import { UserViewType } from '../user.type';
 import { InputModelClassCreateBody, UserClass } from '../user.class';
 import { add } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
-import { GenerateHashAdapter } from '../../../../src/api/auth/adapter/generateHashAdapter';
 import { UsersRepository } from '../users.repository';
-import { EmailManager } from '../../../../src/infrastructura/email/email.manager';
+import { GenerateHashAdapter } from '../../auth/adapter/generateHashAdapter';
+import { EmailManager } from '../../../infrastructura/email/email.manager';
 
 export class CreateNewUserCommand {
   constructor(public body: InputModelClassCreateBody) {}

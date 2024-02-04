@@ -4,7 +4,6 @@ import { Request, Response } from 'express';
 import { CommandBus } from '@nestjs/cqrs';
 import { AuthRepository } from "./auth.repository";
 import { Ratelimits } from "../../../src/api/auth/gards/rateLimits";
-import { UsersQueryRepository } from "../../../src/api/users/users.queryRepository";
 import { InputDataModelClassAuth, InputDataReqClass, InputDateReqConfirmClass, InputModelNewPasswordClass, emailInputDataClass } from "./dto/auth.class.pipe";
 import { RecoveryPasswordCommand } from "./useCase.ts/recoveryPassowrdUseCase";
 import { NewPasswordCommand } from "./useCase.ts/createNewPassword-use-case";
@@ -12,7 +11,6 @@ import { CreateLoginCommand } from "./useCase.ts/createLogin-use-case";
 import { UserClass } from "../users/user.class";
 import { CreateDeviceCommand } from "./useCase.ts/createDevice-use-case";
 import { CheckRefreshToken } from "./gards/checkRefreshToken";
-import { UserDecorator, UserIdDecorator } from "../../../src/infrastructura/decorators/decorator.user";
 import { RefreshTokenCommand } from "./useCase.ts/refreshToken-use-case";
 import { UpdateDeviceCommand } from "../security-devices/useCase/updateDevice-use-case";
 import { IsConfirmed } from "./gards/isCodeConfirmed";
@@ -24,6 +22,8 @@ import { RegistrationEmailResendingCommand } from "../users/useCase/registration
 import { LogoutCommand } from "../security-devices/useCase/logout-use-case";
 import { CheckRefreshTokenForComments } from "../comments/bearer.authForComments";
 import { GetUserIdByTokenCommand } from "./useCase.ts/getUserIdByToken-use-case";
+import { UsersQueryRepository } from "../users/users.queryRepository";
+import { UserDecorator, UserIdDecorator } from "../../infrastructura/decorators/decorator.user";
 
 
 @Controller('auth')

@@ -1,5 +1,4 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { JwtService } from '@nestjs/jwt';
 import { DeviceRepository } from '../device.repository';
 import { HttpException } from '@nestjs/common';
 import { PayloadAdapter } from '../../auth/adapter/payload.adapter';
