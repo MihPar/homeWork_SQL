@@ -18,40 +18,52 @@ export class UsersQueryRepository {
     searchEmailTerm: string
   ): Promise<PaginationType<UserViewType>> {
 
+	if (sortBy === "login") {
+		sortBy = "userName";
+	  }
 
-	
+	const queryFilter = `
+		SELECT ru.*
+			FROM (
+				select u.*
+					from "Users" as u
+						order by "CreatedAt" asc
+						limit $1 offset $2
+			) as ru
+			WHERE ru."UserName" LIKE $3 AND ru."Email" LIKE $4
+	`
 
-    const filter = {
-      $or: [
-        {
-          "accountData.userName": {
-            $regex: searchLoginTerm || "",
-            $options: "i",
-          },
-        },
-        {
-          "accountData.email": { $regex: searchEmailTerm ?? "", $options: "i" },
-        },
-      ],
-    };
-    if (sortBy === "login") {
-      sortBy = "userName";
-    }
-    const getAllUsers: UserClass[] = await this.userModel
-      .find(filter)
-      .sort({ [`accountData.${sortBy}`]: sortDirection === "asc" ? 1 : -1 })
-      .skip((+pageNumber - 1) * +pageSize)
-      .limit(+pageSize)
-      .lean();
+const findAllUsers = await this.dataSource.query(queryFilter, [
+  `%${(+pageNumber - 1) * +pageSize}%`,
+  `%${+pageSize}%`,
+  `%${searchLoginTerm}%`,
+  `%${searchEmailTerm}%`,
+]);
 
-    const totalCount: number = await this.userModel.countDocuments(filter);
+    // const getAllUsers: UserClass[] = await this.userModel
+    //   .find(filter)
+    //   .sort({ [`accountData.${sortBy}`]: sortDirection === "asc" ? 1 : -1 })
+    //   .skip((+pageNumber - 1) * +pageSize)
+    //   .limit(+pageSize)
+    //   .lean();
+
+    const totalCount: number = await this.dataSource.query(`
+		SELECT count(ru.*)
+				FROM (
+					select u.*
+						from "Users" as u
+							order by "CreatedAt" asc
+							limit $1 offset $2
+				) as ru
+				WHERE ru."UserName" LIKE $3 AND ru."Email" LIKE $4
+	`);
     const pagesCount: number = await Math.ceil(totalCount / +pageSize);
     return {
       pagesCount: pagesCount,
       page: +pageNumber,
       pageSize: +pageSize,
       totalCount: totalCount,
-      items: getAllUsers.map(
+      items: findAllUsers.map(
         (user: UserClass): UserViewType => ({
           id: user.id.toString(),
           login: user.userName,
