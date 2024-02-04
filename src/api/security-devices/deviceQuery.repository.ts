@@ -18,11 +18,20 @@ export class DeviceQueryRepository {
 	}
 
 	async findDeviceByDeviceId(deviceId: string) {
-		return await this.dataSource.query(`
+		const deviceByDeviceId = await this.dataSource.query(`
 			SELECT d.*
 				FROM public."Devices" as d
 				WHERE d."DeviceId" = '${deviceId}'
 		`)
+		return deviceByDeviceId.map(function(item) {
+			return {
+				ip: item.IP,
+				title: item.title,
+				deviceId: item.DeviceId,
+				userId: item.UserId,
+				lastActiveDate: item.LastActiveDate
+			}
+		})
 	  }
 
 	async getAllDevicesUser(userId: string) {
