@@ -3,7 +3,6 @@ import { JwtService } from "@nestjs/jwt";
 import { Request, Response } from 'express';
 import { CommandBus } from '@nestjs/cqrs';
 import { AuthRepository } from "./auth.repository";
-import { Ratelimits } from "../../../src/api/auth/gards/rateLimits";
 import { InputDataModelClassAuth, InputDataReqClass, InputDateReqConfirmClass, InputModelNewPasswordClass, emailInputDataClass } from "./dto/auth.class.pipe";
 import { RecoveryPasswordCommand } from "./useCase.ts/recoveryPassowrdUseCase";
 import { NewPasswordCommand } from "./useCase.ts/createNewPassword-use-case";
@@ -24,6 +23,7 @@ import { CheckRefreshTokenForComments } from "../comments/bearer.authForComments
 import { GetUserIdByTokenCommand } from "./useCase.ts/getUserIdByToken-use-case";
 import { UsersQueryRepository } from "../users/users.queryRepository";
 import { UserDecorator, UserIdDecorator } from "../../infrastructura/decorators/decorator.user";
+import { Ratelimits } from "./gards/rateLimits";
 
 
 @Controller('auth')

@@ -53,10 +53,10 @@ const findAllUsers = await this.dataSource.query(queryFilter, [
 				FROM (
 					select u.*
 						from "Users" as u
-							order by "CreatedAt" asc
-							limit $1 offset $2
+							order by "CreatedAt" $1
+							limit $2 offset $3
 				) as ru
-				WHERE ru."UserName" LIKE $3 AND ru."Email" LIKE $4
+				WHERE ru."UserName" LIKE $4 AND ru."Email" LIKE $5
 	`);
     const pagesCount: number = await Math.ceil(totalCount / +pageSize);
     return {
