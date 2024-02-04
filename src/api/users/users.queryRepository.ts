@@ -1,10 +1,10 @@
-import { UserClass } from 'src/api/users/user.class';
 import "reflect-metadata"
 import { Injectable } from '@nestjs/common';
 import { DataSource, WithId } from "typeorm";
 import { InjectDataSource } from "@nestjs/typeorm";
-import { PaginationType } from 'src/types/pagination.types';
 import { UserViewType } from './user.type';
+import { PaginationType } from "../../types/pagination.types";
+import { UserClass } from "./user.class";
 
 @Injectable()
 export class UsersQueryRepository {

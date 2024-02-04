@@ -1,7 +1,7 @@
 import { HttpException } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { DeviceRepository } from "../device.repository";
-import { PayloadAdapter } from "src/api/auth/adapter/payload.adapter";
+import { PayloadAdapter } from "../../auth/adapter/payload.adapter";
 
 	export class LogoutCommand {
 		constructor(
@@ -12,7 +12,7 @@ import { PayloadAdapter } from "src/api/auth/adapter/payload.adapter";
 	@CommandHandler(LogoutCommand)
   export class LogoutUseCase implements ICommandHandler<LogoutCommand> {
     constructor(
-		protected readonly payloadAdapter: PayloadAdapter,
+		protected readonly payloadAdapter: PayloadAdapter ,
 		protected readonly deviceRepository: DeviceRepository
 	) {}
     async execute(command: LogoutCommand): Promise<boolean> {

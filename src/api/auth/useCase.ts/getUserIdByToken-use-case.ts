@@ -3,8 +3,8 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { JwtService } from "@nestjs/jwt";
 import { UsersQueryRepository } from "../../../api/users/users.queryRepository";
 import { Request } from "express";
-import { ApiConfigService } from "src/infrastructura/config/configService";
-import { UserClass } from "src/api/users/user.class";
+import { ApiConfigService } from "../../../infrastructura/config/configService";
+import { UserClass } from "../../users/user.class";
 export class GetUserIdByTokenCommand {
 	constructor(
 		public req: Request

@@ -7,7 +7,7 @@ import {
 	BadRequestException,
   } from '@nestjs/common';
   import { UsersQueryRepository } from '../../users/users.queryRepository';
-import { UserClass } from 'src/api/users/user.class';
+import { UserClass } from '../../../../src/api/users/user.class';
   
   @Injectable()
   export class IsConfirmed implements CanActivate {
@@ -22,7 +22,7 @@ import { UserClass } from 'src/api/users/user.class';
 	if(!user) {
 		throw new BadRequestException([{message: 'Incorrect code!', field: 'code'}])
 	} 
-    if(user.expirationDate <= new Date()) {
+    if(new Date(user.expirationDate) <= new Date()) {
 		throw new BadRequestException([{message: 'Incorrect code!', field: 'code'}])
 	} 
 	if(user.isConfirmed) {

@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { UsersQueryRepository } from '../users.queryRepository';
-import { InputDateReqConfirmClass } from 'src/api/auth/dto/auth.class.pipe';
 import { UsersRepository } from '../users.repository';
+import { InputDateReqConfirmClass } from '../../auth/dto/auth.class.pipe';
 
 export class RegistrationConfirmationCommand {
   constructor(public inputDateRegConfirm: InputDateReqConfirmClass) {}

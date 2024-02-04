@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { UsersQueryRepository } from "../../../api/users/users.queryRepository";
 import { InputModelNewPasswordClass } from "../dto/auth.class.pipe";
-import { UsersRepository } from "src/api/users/users.repository";
+import { UsersRepository } from "../../../../src/api/users/users.repository";
 import { GenerateHashAdapter } from "../adapter/generateHashAdapter";
 
 export class NewPasswordCommand {
@@ -26,7 +26,7 @@ export class NewPasswordUseCase implements ICommandHandler<NewPasswordCommand> {
 		if (!findUserByCode) {
 		  return false;
 		}
-		if (findUserByCode.expirationDate < new Date()) {
+		if (new Date(findUserByCode.expirationDate) < new Date()) {
 		  return false;
 		}
 		const newPasswordHash = await this.generateHashAdapter._generateHash(command.inputDataNewPassword.newPassword);

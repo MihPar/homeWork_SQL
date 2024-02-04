@@ -36,7 +36,7 @@ export class UserClass {
   passwordHash: string;
   createdAt: string;
   confirmationCode: string;
-  expirationDate: Date;
+  expirationDate: string
   isConfirmed: boolean;
   
   getViewUser(): UserViewType {

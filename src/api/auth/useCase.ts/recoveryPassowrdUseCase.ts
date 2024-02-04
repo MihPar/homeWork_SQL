@@ -1,10 +1,10 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { UserClass } from "src/api/users/user.class";
-import { UsersQueryRepository } from "src/api/users/users.queryRepository";
-import { UsersRepository } from "src/api/users/users.repository";
-import { EmailManager } from "src/infrastructura/email/email.manager";
 import { WithId } from "typeorm";
 import {v4 as uuidv4} from "uuid"
+import { UsersQueryRepository } from "../../users/users.queryRepository";
+import { EmailManager } from "../../../infrastructura/email/email.manager";
+import { UsersRepository } from "../../users/users.repository";
+import { UserClass } from "../../users/user.class";
 
 
 export class RecoveryPasswordCommand {

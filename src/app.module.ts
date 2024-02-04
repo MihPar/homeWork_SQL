@@ -23,7 +23,6 @@ import { CheckRefreshTokenForComments } from './api/comments/bearer.authForComme
 import { DeviceRepository } from './api/security-devices/device.repository';
 import { DeviceQueryRepository } from './api/security-devices/deviceQuery.repository';
 import { UsersRepository } from './api/users/users.repository';
-import { UsersQueryRepository } from './api/users/users.queryRepository';
 import { DeleteAllDataController } from './api/delete/delete.allData';
 import { AuthBasic } from './api/users/gards/basic.auth';
 import { UsersController } from './api/users/users.controller';
@@ -37,10 +36,11 @@ import { ApiJwtService } from './infrastructura/jwt/jwt.service';
 import { PayloadAdapter } from './api/auth/adapter/payload.adapter';
 import { ApiConfigService } from './infrastructura/config/configService';
 import { EmailAdapter } from './infrastructura/email/email.adapter';
-import { CommandBus, CqrsModule } from '@nestjs/cqrs';
+import { CqrsModule } from '@nestjs/cqrs';
 import { DeleteAllDevicesUseCase } from './api/security-devices/useCase/deleteAllDevices-use-case';
 import { SecurityDeviceController } from './api/security-devices/device.controller';
 import { TerminateAllCurrentSessionUseCase } from './api/security-devices/useCase/terminateAllCurrentSeccion-use-case';
+import { UsersQueryRepository } from './api/users/users.queryRepository';
 
 const userCases = [
   RecoveryPasswordUseCase,

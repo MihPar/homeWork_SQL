@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post
 import { UsersQueryRepository } from './users.queryRepository';
 import { CommandBus } from '@nestjs/cqrs';
 import { AuthBasic } from './gards/basic.auth';
-import { HttpExceptionFilter } from 'src/infrastructura/exceptionFilters.ts/exceptionFilter';
+import { HttpExceptionFilter } from '../../../src/infrastructura/exceptionFilters.ts/exceptionFilter';
 import { InputModelClassCreateBody } from './user.class';
 import { CreateNewUserCommand } from './useCase/createNewUser-use-case';
 import { DeleteUserByIdCommnad } from './useCase/deleteUserById-use-case';

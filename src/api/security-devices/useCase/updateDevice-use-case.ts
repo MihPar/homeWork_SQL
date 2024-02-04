@@ -2,7 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
 import { DeviceRepository } from '../device.repository';
 import { HttpException } from '@nestjs/common';
-import { PayloadAdapter } from 'src/api/auth/adapter/payload.adapter';
+import { PayloadAdapter } from '../../auth/adapter/payload.adapter';
 
 export class UpdateDeviceCommand {
   constructor(public userId: string | null, public newRefreshToken: string) {}

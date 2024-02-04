@@ -4,8 +4,8 @@ import { JwtService } from '@nestjs/jwt';
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 import { UsersQueryRepository } from '../../../api/users/users.queryRepository';
-import { DeviceQueryRepository } from 'src/api/security-devices/deviceQuery.repository';
-import { ApiJwtService } from 'src/infrastructura/jwt/jwt.service';
+import { DeviceQueryRepository } from '../../security-devices/deviceQuery.repository';
+import { ApiJwtService } from '../../../infrastructura/jwt/jwt.service';
 
 @Injectable()
 export class CheckRefreshToken implements CanActivate {

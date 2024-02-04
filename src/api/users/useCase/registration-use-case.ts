@@ -2,10 +2,10 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { UserViewType } from '../user.type';
 import { v4 as uuidv4 } from 'uuid';
 import { add } from 'date-fns';
-import { InputDataReqClass } from 'src/api/auth/dto/auth.class.pipe';
+import { InputDataReqClass } from './../../../../src/api/auth/dto/auth.class.pipe';
 import { UsersRepository } from '../users.repository';
-import { EmailManager } from 'src/infrastructura/email/email.manager';
-import { GenerateHashAdapter } from 'src/api/auth/adapter/generateHashAdapter';
+import { EmailManager } from './../../../../src/infrastructura/email/email.manager';
+import { GenerateHashAdapter } from './../../../../src/api/auth/adapter/generateHashAdapter';
 import { UserClass } from '../user.class';
 
 export class RegistrationCommand {
@@ -33,7 +33,7 @@ export class RegistrationUseCase implements ICommandHandler<RegistrationCommand>
 	newUser.expirationDate = add(new Date(), {
         hours: 1,
         minutes: 10,
-      })
+      }).toISOString()
 	newUser.isConfirmed = false
 	newUser.createdAt = new Date().toISOString()
 

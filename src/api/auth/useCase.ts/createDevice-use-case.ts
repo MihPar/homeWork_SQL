@@ -1,10 +1,10 @@
 import { JwtService } from '@nestjs/jwt';
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs"
 import { randomUUID } from 'crypto';
-import { UserClass } from 'src/api/users/user.class';
-import { ApiJwtService } from 'src/infrastructura/jwt/jwt.service';
-import { DeviceRepository } from 'src/api/security-devices/device.repository';
-import { DeviceClass } from 'src/api/security-devices/dto/device.class';
+import { UserClass } from '../../users/user.class';
+import { DeviceRepository } from '../../security-devices/device.repository';
+import { ApiJwtService } from '../../../infrastructura/jwt/jwt.service';
+import { DeviceClass } from '../../security-devices/dto/device.class';
 
 export class CreateDeviceCommand {
 	constructor(
