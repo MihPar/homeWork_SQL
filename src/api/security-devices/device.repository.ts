@@ -65,12 +65,12 @@ export class DeviceRepository {
   }
 
 
-  async createCollectionIP(reqData: CollectionIP) {
-	await this.dataSource.query(`
+//   async createCollectionIP(reqData: CollectionIP) {
+// 	await this.dataSource.query(`
 	
-	`);
-	return reqData;
-  }
+// 	`);
+// 	return reqData;
+//   }
 
 
 //   async countDocs(filter: any) {
