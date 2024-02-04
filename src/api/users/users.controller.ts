@@ -8,7 +8,7 @@ import { CreateNewUserCommand } from './useCase/createNewUser-use-case';
 import { DeleteUserByIdCommnad } from './useCase/deleteUserById-use-case';
 
 // @UseGuards(AuthGuard)
-@Controller('users')
+@Controller('sa/users')
 @UseGuards(AuthBasic)
 export class UsersController {
   constructor(

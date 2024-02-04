@@ -27,6 +27,7 @@ import { GetUserIdByTokenCommand } from "./useCase.ts/getUserIdByToken-use-case"
 
 
 @Controller('auth')
+// @UseGuards(Ratelimits)
 export class AuthController {
 	constructor(
 		protected commandBus: CommandBus,
@@ -37,7 +38,6 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post("password-recovery")
-	@UseGuards(Ratelimits)
 	async createPasswordRecovery(@Body() emailInputData: emailInputDataClass) {
 		const command = new RecoveryPasswordCommand(emailInputData.email)
 		const passwordRecovery = await this.commandBus.execute(command)
@@ -45,7 +45,6 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post("new-password")
-	@UseGuards(Ratelimits)
 	async createNewPassword(@Body() inputDataNewPassword: InputModelNewPasswordClass) {
 		const command = new NewPasswordCommand(inputDataNewPassword)
 		const resultUpdatePassword = await this.commandBus.execute(command)
@@ -54,7 +53,6 @@ export class AuthController {
 
 	@Post('login')
 	@HttpCode(200)
-	@UseGuards(Ratelimits)
 	async createLogin(
 		@Body() inutDataModel: InputDataModelClassAuth,
 		@Ip() IP: string, 
@@ -102,7 +100,7 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post("registration-confirmation")
-	@UseGuards(Ratelimits, IsConfirmed)
+	@UseGuards(IsConfirmed)
 	async createRegistrationConfirmation(@Body() inputDateRegConfirm: InputDateReqConfirmClass) {
 		const command = new RegistrationConfirmationCommand(inputDateRegConfirm)
 		await this.commandBus.execute(command)
@@ -110,7 +108,7 @@ export class AuthController {
 
 	@Post("registration")
 	@HttpCode(204)
-	@UseGuards(Ratelimits, CheckLoginOrEmail)
+	@UseGuards(CheckLoginOrEmail)
 	async creteRegistration(@Req() req: Request, @Body() inputDataReq: InputDataReqClass) {
 		const command = new RegistrationCommand(inputDataReq)
 		const user = await this.commandBus.execute(command)
@@ -120,7 +118,7 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post("registration-email-resending")
-	@UseGuards(IsExistEmailUser, Ratelimits)
+	@UseGuards(IsExistEmailUser)
 	async createRegistrationEmailResending(@Req() req: Request, @Body() inputDateReqEmailResending: emailInputDataClass) {
 		const command = new RegistrationEmailResendingCommand(inputDateReqEmailResending)
 		const confirmUser = await this.commandBus.execute(command)
