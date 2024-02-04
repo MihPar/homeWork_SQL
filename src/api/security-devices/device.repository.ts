@@ -9,24 +9,32 @@ export class DeviceRepository {
 	constructor(
 		@InjectDataSource() protected dataSource: DataSource 
 	) {}
-//   async terminateSession(deviceId: string) {
-//     const deletedOne = this.deviceModel.deleteOne({ deviceId });
-// 	return deletedOne.deleteOne()
-//   }
 
-//   async deleteAllDevices() {
-//     const deletedAll = this.deviceModel.deleteMany({});
-// 	return deletedAll.deleteMany()
-//   }
+  async terminateSession(deviceId: string) {
+    const deletedOne = this.dataSource.query(`
+		DELETE FROM public."Devices"
+			WHERE "Devices"."Id" = '${deviceId}'
+	`);
+	if(!deletedOne) return false
+	return true
+  }
+
+
+  async deleteAllDevices() {
+    const deletedAll = this.dataSource.query(`
+		DELETE FROM public."Devices"
+	`);
+	return true
+  }
 
   async createDevice(device: DeviceClass): Promise<string | null> {
 	try {
 		const createDevice: DeviceClass = await this.dataSource.query(`
-		INSERT INTO public."Devices"(
-			"IP", "Title", "DeviceId", "UserId", "LastActiveDate")
-			VALUES (
-				'${device.ip}', '${device.title}', '${device.deviceId}', 
-				'${device.lastActiveDate}', '${device.userId}')
+			INSERT INTO public."Devices"(
+				"IP", "Title", "DeviceId", "UserId", "LastActiveDate")
+				VALUES (
+					'${device.ip}', '${device.title}', '${device.deviceId}', 
+					'${device.lastActiveDate}', '${device.userId}')
 		`)
 		return createDevice.deviceId
 	} catch(error) {

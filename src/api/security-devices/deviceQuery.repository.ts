@@ -24,4 +24,20 @@ export class DeviceQueryRepository {
 				WHERE d."DeviceId" = '${deviceId}'
 		`)
 	  }
+
+	async getAllDevicesUser(userId: string) {
+		const getAllDevices = await this.dataSource.query(`
+			SELECT "IP", "Title", "DeviceId", "UserId", "LastActiveDate"
+				FROM public."Devices" as d
+				where d."UserId" = '${userId}'
+		`)
+		return getAllDevices.map(function (item) {
+		  return {
+			ip: item.IP,
+			title: item.Title,
+			lastActiveDate: item.LastActiveDate,
+			deviceId: item.DeviceId,
+		  };
+		});
+	}
 }

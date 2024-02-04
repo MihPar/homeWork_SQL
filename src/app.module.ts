@@ -38,6 +38,9 @@ import { PayloadAdapter } from './api/auth/adapter/payload.adapter';
 import { ApiConfigService } from './infrastructura/config/configService';
 import { EmailAdapter } from './infrastructura/email/email.adapter';
 import { CommandBus, CqrsModule } from '@nestjs/cqrs';
+import { DeleteAllDevicesUseCase } from './api/security-devices/useCase/deleteAllDevices-use-case';
+import { SecurityDeviceController } from './api/security-devices/device.controller';
+import { TerminateAllCurrentSessionUseCase } from './api/security-devices/useCase/terminateAllCurrentSeccion-use-case';
 
 const userCases = [
   RecoveryPasswordUseCase,
@@ -53,7 +56,9 @@ const userCases = [
   GetUserIdByTokenUseCase,
   CreateNewUserUseCase,
   DeleteUserByIdUseCase,
-  DeleteAllUsersUseCase
+  DeleteAllUsersUseCase,
+  DeleteAllDevicesUseCase,
+  TerminateAllCurrentSessionUseCase
 ];
 
 const gards = [
@@ -91,7 +96,7 @@ const repositories = [AuthRepository, DeviceRepository, DeviceQueryRepository, U
       synchronize: false,
     }),
   ],
-  controllers: [AuthController, DeleteAllDataController, UsersController],
+  controllers: [AuthController, DeleteAllDataController, UsersController, SecurityDeviceController],
   providers: [
     ...repositories,
     ...userCases,
