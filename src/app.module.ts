@@ -1,11 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from './api/users/users.module';
-import { AuthModule } from './api/auth/auth.module';
-import { SecurityDevicesModule } from './api/security-devices/security-devices.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthController } from './api/auth/auth.controller';
-import { SecurityDevicesController } from './api/security-devices/security-devices.controller';
 import { AuthRepository } from './api/auth/auth.repository';
 import { RecoveryPasswordUseCase } from './api/auth/useCase.ts/recoveryPassowrdUseCase';
 import { NewPasswordUseCase } from './api/auth/useCase.ts/createNewPassword-use-case';
@@ -34,6 +30,14 @@ import { UsersController } from './api/users/users.controller';
 import { CreateNewUserUseCase } from './api/users/useCase/createNewUser-use-case';
 import { DeleteUserByIdUseCase } from './api/users/useCase/deleteUserById-use-case';
 import { DeleteAllUsersUseCase } from './api/users/useCase/deleteAllUsers-use-case';
+import { EmailManager } from './infrastructura/email/email.manager';
+import { GenerateHashAdapter } from './api/auth/adapter/generateHashAdapter';
+import { JwtService } from '@nestjs/jwt';
+import { ApiJwtService } from './infrastructura/jwt/jwt.service';
+import { PayloadAdapter } from './api/auth/adapter/payload.adapter';
+import { ApiConfigService } from './infrastructura/config/configService';
+import { EmailAdapter } from './infrastructura/email/email.adapter';
+import { CommandBus, CqrsModule } from '@nestjs/cqrs';
 
 const userCases = [
   RecoveryPasswordUseCase,
@@ -62,10 +66,16 @@ const gards = [
   AuthBasic
 ];
 
+const manager = [EmailManager]
+const adapter = [GenerateHashAdapter, PayloadAdapter, EmailAdapter]
+const services = [JwtService, ApiJwtService]
+const configs = [ApiConfigService]
+
 const repositories = [AuthRepository, DeviceRepository, DeviceQueryRepository, UsersRepository, UsersQueryRepository];
 
 @Module({
   imports: [
+	CqrsModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ".env",
@@ -80,16 +90,17 @@ const repositories = [AuthRepository, DeviceRepository, DeviceQueryRepository, U
       autoLoadEntities: false,
       synchronize: false,
     }),
-    UsersModule,
-    AuthModule,
-    SecurityDevicesModule,
   ],
-  controllers: [AuthController, SecurityDevicesController, DeleteAllDataController, UsersController],
+  controllers: [AuthController, DeleteAllDataController, UsersController],
   providers: [
     ...repositories,
     ...userCases,
 	...gards,
-	...repositories
+	...repositories,
+	...manager,
+	...adapter,
+	...services,
+	...configs
   ],
 })
 export class AppModule {}
