@@ -31,7 +31,7 @@ export class NewPasswordUseCase implements ICommandHandler<NewPasswordCommand> {
 		}
 		const newPasswordHash = await this.generateHashAdapter._generateHash(command.inputDataNewPassword.newPassword);
 		const resultUpdatePassword = await this.usersRepository.updatePassword(
-		  findUserByCode._id,
+		  findUserByCode.id,
 		  newPasswordHash
 		);
 		if (!resultUpdatePassword) {

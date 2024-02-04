@@ -22,9 +22,10 @@ export class InputModelClassCreateBody {
 	@IsNotEmpty()
 	password: string
 
-	@IsEmail({}, {
-		message: "incorrect email"
-	})
+	@IsEmail()
+	@IsString()
+	@Trim() 
+	@IsNotEmpty()
 	email: string
  }
 

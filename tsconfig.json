@@ -16,4 +16,4 @@
 	  "esModuleInterop": true
 	},
 	"include": ["src/**/*"]
-  }
+}

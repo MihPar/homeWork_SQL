@@ -1,6 +1,6 @@
 import { applyDecorators } from "@nestjs/common"
 import { Transform, TransformFnParams } from "class-transformer"
-import { IsEmail, IsNotEmpty, IsString, IsUUID, Length, Matches, MaxLength, MinLength } from "class-validator"
+import { IsEmail, IsNotEmpty, IsString, IsUUID, MaxLength, MinLength } from "class-validator"
 
 const UUID_VERSION = '4' 
 

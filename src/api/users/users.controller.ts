@@ -6,6 +6,7 @@ import { HttpExceptionFilter } from 'src/infrastructura/exceptionFilters.ts/exce
 import { InputModelClassCreateBody } from './user.class';
 import { CreateNewUserCommand } from './useCase/createNewUser-use-case';
 import { DeleteUserByIdCommnad } from './useCase/deleteUserById-use-case';
+import { InputDataReqClass } from '../auth/dto/auth.class.pipe';
 
 // @UseGuards(AuthGuard)
 @Controller('sa/users')
@@ -50,7 +51,8 @@ export class UsersController {
   @HttpCode(201)
   @Post()
   @UseFilters(new HttpExceptionFilter())
-  async createUser(@Body() body: InputModelClassCreateBody) {
+  async createUser(@Body() body: InputDataReqClass) {
+	console.log("body: ", body)
 	const command = new CreateNewUserCommand(body)
 	const createUser = await this.commandBus.execute(command)
 	return createUser

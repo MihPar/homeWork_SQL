@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { IPCollectionClass } from './dto/auth.class.type';
+import { IPCollectionClass } from '../CollectionIP/auth.class.type';
 
 @Injectable()
 export class AuthRepository {
