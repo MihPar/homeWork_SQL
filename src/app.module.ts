@@ -93,7 +93,7 @@ const repositories = [AuthRepository, DeviceRepository, DeviceQueryRepository, U
       password: process.env.PASSWORD,
       database: "BankSystem",
       autoLoadEntities: false,
-      synchronize: false,
+      synchronize: true,
     }),
   ],
   controllers: [AuthController, DeleteAllDataController, UsersController, SecurityDeviceController],

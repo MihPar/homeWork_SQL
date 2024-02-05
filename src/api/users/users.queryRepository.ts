@@ -34,9 +34,9 @@ export class UsersQueryRepository {
 	`
 
 const findAllUsers = await this.dataSource.query(queryFilter, [
-  `${sortDirection}`,
-  `${(+pageNumber - 1) * +pageSize}`,
-  `${+pageSize}`,
+  sortDirection,
+  (+pageNumber - 1) * +pageSize,
+  +pageSize,
   `%${searchLoginTerm}%`,
   `%${searchEmailTerm}%`,
 ]);

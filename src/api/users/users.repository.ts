@@ -86,7 +86,6 @@ export class UsersRepository {
   async deleteAll() {
 	const deleteAllUsers = await this.dataSource.query(`
 		DELETE FROM public."Users"
-		RETURNING *
 	`);
     return true
   }
