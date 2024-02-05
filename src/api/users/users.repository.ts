@@ -32,6 +32,7 @@ export class UsersRepository {
 			UPDATE public."Users" as u
 				SET "passswordHash"='${newPasswordHash}'
 				WHERE u."id" = '${id}'
+				RETURNING *
 	`)
     if(!updatePassword) return false
 	return  true
@@ -42,6 +43,7 @@ export class UsersRepository {
 	UPDATE public."Users" as u
 		SET "isConfirmed"='${true}'
 		WHERE u."userId" = '${id}'
+		RETURNING *
 	`)
     return true
   }
@@ -65,6 +67,7 @@ export class UsersRepository {
 	UPDATE public."Users" as u
 		SET "expirationDate"='${newExpirationDate}', "confirmationCode"='${confirmationCode}'
 		WHERE u."id' = '${id}'
+		RETURNING *
 	`)
 	if(!result) return false
 	return true
@@ -74,6 +77,7 @@ export class UsersRepository {
 	const deleted = await this.dataSource.query(`
 		DELETE FROM public."Users" as u
 			WHERE u."id" = '${userId}'
+			RETURNING *
 	`)
 	if(!deleted) return false
 	return true
@@ -82,6 +86,7 @@ export class UsersRepository {
   async deleteAll() {
 	const deleteAllUsers = await this.dataSource.query(`
 		DELETE FROM public."Users"
+		RETURNING *
 	`);
     return true
   }

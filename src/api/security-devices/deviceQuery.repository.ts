@@ -13,7 +13,7 @@ export class DeviceQueryRepository {
 			SELECT d.*
 				FROM public."Devices" as d
 				WHERE d."userId" = '${userId}'
-		`)
+		`)[0]
 		return getDevice
 	}
 
@@ -25,11 +25,11 @@ export class DeviceQueryRepository {
 		`)
 		return deviceByDeviceId.map(function(item) {
 			return {
-				ip: item.IP,
+				ip: item.ip,
 				title: item.title,
-				deviceId: item.DeviceId,
-				userId: item.UserId,
-				lastActiveDate: item.LastActiveDate
+				deviceId: item.deviceId,
+				userId: item.userId,
+				lastActiveDate: item.lastActiveDate
 			}
 		})
 	  }

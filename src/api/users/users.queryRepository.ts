@@ -96,11 +96,14 @@ const findAllUsers = await this.dataSource.query(queryFilter, [
   async findUserByCode(
     recoveryCode: string
   ): Promise<WithId<UserClass> | null> {
-    return this.dataSource.query(`
+    const result = this.dataSource.query(`
 		SELECT u.*
 			FROM public."Users" as u
-			WHERE u."comfirmationCode" = '${recoveryCode}'
-		`);
+			WHERE u."confirmationCode" = '${recoveryCode}'
+		`)[0]
+		console.log("result: ", result)
+		return result
+
   }
 
   async findUserByConfirmation(code: string): Promise<UserClass | null> {
@@ -108,7 +111,7 @@ const findAllUsers = await this.dataSource.query(queryFilter, [
 			SELECT u.*
 				FROM public."Users" as u
 					WHERE u."confirmationCode" = '${code}'
-		`);
+		`)[0]
     return user;
   }
 
@@ -117,7 +120,7 @@ const findAllUsers = await this.dataSource.query(queryFilter, [
 			SELECT u.*
 				FROM public."Users" as u
 				WHERE u."id" = '${userId}'
-		`);
+		`)[0]
     return user;
   }
 }

@@ -14,6 +14,7 @@ export class DeviceRepository {
     const deletedOne = this.dataSource.query(`
 		DELETE FROM public."Devices"
 			WHERE "Devices"."id" = '${deviceId}'
+			RETURNING *
 	`);
 	if(!deletedOne) return false
 	return true
@@ -23,6 +24,7 @@ export class DeviceRepository {
   async deleteAllDevices() {
     const deletedAll = this.dataSource.query(`
 		DELETE FROM public."Devices"
+		RETURNING *
 	`);
 	return true
   }
@@ -65,6 +67,7 @@ export class DeviceRepository {
 	const decayResult = await this.dataSource.query(`
 		DELETE FROM public."Devices" as d
 			WHERE d."deviceId" = '${deviceId}'
+			RETURNING *
 	`)
 	if(!decayResult) return false
 	return true
