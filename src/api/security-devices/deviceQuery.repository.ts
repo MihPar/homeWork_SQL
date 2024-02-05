@@ -12,7 +12,7 @@ export class DeviceQueryRepository {
 		const getDevice = await this.dataSource.query(`
 			SELECT d.*
 				FROM public."Devices" as d
-				WHERE d."UserId" = '${userId}'
+				WHERE d."userId" = '${userId}'
 		`)
 		return getDevice
 	}
@@ -21,7 +21,7 @@ export class DeviceQueryRepository {
 		const deviceByDeviceId = await this.dataSource.query(`
 			SELECT d.*
 				FROM public."Devices" as d
-				WHERE d."DeviceId" = '${deviceId}'
+				WHERE d."deviceId" = '${deviceId}'
 		`)
 		return deviceByDeviceId.map(function(item) {
 			return {
@@ -36,9 +36,9 @@ export class DeviceQueryRepository {
 
 	async getAllDevicesUser(userId: string) {
 		const getAllDevices = await this.dataSource.query(`
-			SELECT "IP", "Title", "DeviceId", "UserId", "LastActiveDate"
+			SELECT "ip", "title", "deviceId", "userId", "lastActiveDate"
 				FROM public."Devices" as d
-				where d."UserId" = '${userId}'
+				where d."userId" = '${userId}'
 		`)
 		return getAllDevices.map(function (item) {
 		  return {

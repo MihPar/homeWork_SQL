@@ -18,9 +18,10 @@ export class UsersRepository {
 	const updateRes = await this.dataSource.query(`
 	UPDATE public."Users" as u
 			SET 
-				"ExpirationDate"='${recoveryInfo.expirationDate}', 
-				"ConfirmationCode"='${recoveryInfo.recoveryCode}'
-		WHERE u."Id" = '${id}'
+				"expirationDate"='${recoveryInfo.expirationDate}', 
+				"confirmationCode"='${recoveryInfo.recoveryCode}'
+		WHERE u."id" = '${id}'
+		RETURNING *
 	`)
     if(!updateRes) return false
 	return true
@@ -29,8 +30,8 @@ export class UsersRepository {
   async updatePassword(id: any, newPasswordHash: string) {
     const updatePassword = await this.dataSource.query(`
 			UPDATE public."Users" as u
-				SET "PassswordHash"='${newPasswordHash}'
-				WHERE u."Id" = '${id}'
+				SET "passswordHash"='${newPasswordHash}'
+				WHERE u."id" = '${id}'
 	`)
     if(!updatePassword) return false
 	return  true
@@ -39,8 +40,8 @@ export class UsersRepository {
   async updateConfirmation(id: string) {
     const result = await this.dataSource.query(`
 	UPDATE public."Users" as u
-		SET "IsConfirmed"='${true}'
-		WHERE u."UserId" = '${id}'
+		SET "isConfirmed"='${true}'
+		WHERE u."userId" = '${id}'
 	`)
     return true
   }
@@ -62,8 +63,8 @@ export class UsersRepository {
   ): Promise<boolean> {
     const result = await this.dataSource.query(`
 	UPDATE public."Users" as u
-		SET "ExpirationDate"='${newExpirationDate}', "ConfirmationCode"='${confirmationCode}'
-		WHERE u."Id' = '${id}'
+		SET "expirationDate"='${newExpirationDate}', "confirmationCode"='${confirmationCode}'
+		WHERE u."id' = '${id}'
 	`)
 	if(!result) return false
 	return true
@@ -72,7 +73,7 @@ export class UsersRepository {
   async deleteById(userId: string) {
 	const deleted = await this.dataSource.query(`
 		DELETE FROM public."Users" as u
-			WHERE u."Id" = '${userId}'
+			WHERE u."id" = '${userId}'
 	`)
 	if(!deleted) return false
 	return true

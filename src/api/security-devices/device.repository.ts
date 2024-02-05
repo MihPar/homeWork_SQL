@@ -13,7 +13,7 @@ export class DeviceRepository {
   async terminateSession(deviceId: string) {
     const deletedOne = this.dataSource.query(`
 		DELETE FROM public."Devices"
-			WHERE "Devices"."Id" = '${deviceId}'
+			WHERE "Devices"."id" = '${deviceId}'
 	`);
 	if(!deletedOne) return false
 	return true
@@ -56,15 +56,15 @@ export class DeviceRepository {
   ) {
 	const updateDevice = await this.dataSource.query(`
 		UPDATE public."Devices"
-			SET "LastActiveDate" = '${newLastActiveDate}'
-			WHERE d."DeviceId" = '${deviceId}' AND d."UserId" = '${userId}'
+			SET "lastActiveDate" = '${newLastActiveDate}'
+			WHERE d."deviceId" = '${deviceId}' AND d."userId" = '${userId}'
 	`)
   }
 
   async logoutDevice(deviceId: string): Promise<boolean> {
 	const decayResult = await this.dataSource.query(`
 		DELETE FROM public."Devices" as d
-			WHERE d."DeviceId" = '${deviceId}'
+			WHERE d."deviceId" = '${deviceId}'
 	`)
 	if(!decayResult) return false
 	return true

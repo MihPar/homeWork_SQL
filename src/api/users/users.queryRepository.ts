@@ -27,10 +27,10 @@ export class UsersQueryRepository {
 			FROM (
 				select u.*
 					from "Users" as u
-						order by "CreatedAt" $1
+						order by "createdAt" $1
 						limit $2 offset $3
 			) as ru
-			WHERE ru."UserName" LIKE $4 AND ru."Email" LIKE $5
+			WHERE ru."userName" LIKE $4 AND ru."email" LIKE $5
 	`
 
 const findAllUsers = await this.dataSource.query(queryFilter, [
@@ -53,10 +53,10 @@ const findAllUsers = await this.dataSource.query(queryFilter, [
 				FROM (
 					select u.*
 						from "Users" as u
-							order by "CreatedAt" $1
+							order by "createdAt" $1
 							limit $2 offset $3
 				) as ru
-				WHERE ru."UserName" LIKE $4 AND ru."Email" LIKE $5
+				WHERE ru."userName" LIKE $4 AND ru."email" LIKE $5
 	`);
     const pagesCount: number = await Math.ceil(totalCount / +pageSize);
     return {
@@ -88,8 +88,8 @@ const findAllUsers = await this.dataSource.query(queryFilter, [
     const user: UserClass = await this.dataSource.query(`
 			SELECT u.*
 				FROM public."Users" as u
-				WHERE u."Email" = '${email}'
-		`);
+				WHERE u."email" = '${email}'
+		`)[0]
     return user;
   }
 
@@ -99,7 +99,7 @@ const findAllUsers = await this.dataSource.query(queryFilter, [
     return this.dataSource.query(`
 		SELECT u.*
 			FROM public."Users" as u
-			WHERE u."ComfirmationCode" = '${recoveryCode}'
+			WHERE u."comfirmationCode" = '${recoveryCode}'
 		`);
   }
 
@@ -107,7 +107,7 @@ const findAllUsers = await this.dataSource.query(queryFilter, [
     const user: UserClass | null = await this.dataSource.query(`
 			SELECT u.*
 				FROM public."Users" as u
-					WHERE u."ConfirmationCode" = '${code}'
+					WHERE u."confirmationCode" = '${code}'
 		`);
     return user;
   }
@@ -116,7 +116,7 @@ const findAllUsers = await this.dataSource.query(queryFilter, [
     let user: UserClass | null = await this.dataSource.query(`
 			SELECT u.*
 				FROM public."Users" as u
-				WHERE u."Id" = '${userId}'
+				WHERE u."id" = '${userId}'
 		`);
     return user;
   }
