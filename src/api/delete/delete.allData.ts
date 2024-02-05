@@ -17,7 +17,7 @@ export class DeleteAllDataController {
 	async deleteAllData() {
 		// await this.commandBus.execute(new DeleteAllPostsComand())
 		// await this.commandBus.execute(new DeleteAllBlogsCommnad())
-		// await this.commandBus.execute(new DeleteAllUsersCommnad())
+		await this.commandBus.execute(new DeleteAllUsersCommnad())
 		await this.commandBus.execute(new DeleteAllDevicesCommnad())
 		// await this.commandBus.execute(new DeleteAllCommentsCommand())
 		// await this.commandBus.execute(new DeleteAllLikesCommnad())
