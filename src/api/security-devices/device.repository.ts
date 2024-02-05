@@ -31,12 +31,18 @@ export class DeviceRepository {
 	try {
 		const createDevice: DeviceClass = await this.dataSource.query(`
 			INSERT INTO public."Devices"(
-				"IP", "Title", "DeviceId", "UserId", "LastActiveDate")
+				"ip", "title", "deviceId", "userId", "lastActiveDate")
 				VALUES (
 					'${device.ip}', '${device.title}', '${device.deviceId}', 
-					'${device.lastActiveDate}', '${device.userId}')
+					'${device.userId}', '${device.lastActiveDate}')
 		`)
-		return createDevice.deviceId
+
+		const select  = await this.dataSource.query(`
+			select d.*
+				from public."Devices" as d
+				where d."deviceId" = '${device.deviceId}'
+		`)
+		return select
 	} catch(error) {
 		console.log(error, 'error in create device')
 		return null

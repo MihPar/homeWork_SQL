@@ -47,9 +47,10 @@ export class UsersRepository {
 
   async createUser(newUser: UserClass) {
     	await this.dataSource.query(`
-			INSERT INTO public."Users"("UserName", "Email", "CreatedAt", "PasswordHash", "ConfirmationCode", "ExpirationDate", "IsConfirmed")
+			INSERT INTO public."Users"("userName", "email", "createdAt", "passwordHash", "confirmationCode", "expirationDate", "isConfirmed")
 				VALUES ('${newUser.userName}', '${newUser.email}', 
-				'${newUser.createdAt}', '${newUser.passwordHash}', '${newUser.confirmationCode}', '${newUser.expirationDate}', '${newUser.isConfirmed}')
+				'${newUser.createdAt}', '${newUser.passwordHash}', '${newUser.confirmationCode}', 
+				'${newUser.expirationDate}', '${newUser.isConfirmed}')
 	`)
     return newUser;
   }

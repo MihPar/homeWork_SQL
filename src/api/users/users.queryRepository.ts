@@ -76,12 +76,12 @@ const findAllUsers = await this.dataSource.query(queryFilter, [
   }
 
   async findByLoginOrEmail(loginOrEmail: string): Promise<UserClass | null> {
-    const user: UserClass | null = await this.dataSource.query(`
+    const user: UserClass | null = (await this.dataSource.query(`
 		SELECT u.*
 			FROM public."Users" as u
-			WHERE u."UserName" = '${loginOrEmail}' OR u."Email" = '${loginOrEmail}'
-		`);
-    return user;
+			WHERE u."userName" = '${loginOrEmail}' OR u."email" = '${loginOrEmail}'
+		`))[0]
+    return user
   }
 
   async findUserByEmail(email: string): Promise<UserClass> {
