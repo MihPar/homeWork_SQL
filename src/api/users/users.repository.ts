@@ -40,11 +40,10 @@ export class UsersRepository {
 
   async updateConfirmation(id: string) {
     const result = await this.dataSource.query(`
-	UPDATE public."Users" as u
-		SET "isConfirmed"='${true}'
-		WHERE u."userId" = '${id}'
-		RETURNING *
-	`)
+		UPDATE public."Users"
+			SET "isConfirmed"=true
+			WHERE "id" = $1
+	`, [id])
     return true
   }
 

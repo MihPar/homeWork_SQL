@@ -108,10 +108,11 @@ const findAllUsers = await this.dataSource.query(queryFilter, [
 
   async findUserByConfirmation(code: string): Promise<UserClass | null> {
     const user: UserClass | null = await this.dataSource.query(`
-			SELECT u.*
-				FROM public."Users" as u
-					WHERE u."confirmationCode" = '${code}'
-		`)[0]
+			SELECT *
+				FROM public."Users"
+					WHERE "confirmationCode" = $1
+		`, [code])
+		console.log("user: ", user)
     return user;
   }
 
