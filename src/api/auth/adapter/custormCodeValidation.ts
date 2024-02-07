@@ -8,7 +8,7 @@ import {
 import { UsersQueryRepository } from "../../users/users.queryRepository";
 import { UserClass } from "../../users/user.class";
 
-@ValidatorConstraint({ name: "login", async: true })
+@ValidatorConstraint({ name: "code", async: true })
 @Injectable()
 export class CustomCodealidation implements ValidatorConstraintInterface {
   constructor(
