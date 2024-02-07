@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   Injectable,
-  UnprocessableEntityException,
 } from "@nestjs/common";
 
 import {
@@ -17,7 +16,7 @@ export class CustomEmailvalidation implements ValidatorConstraintInterface {
   async validate(value: string): Promise<boolean> {
     const user = await this.usersQueryRepository.findUserByEmail(value);
     if (user) {
-      throw new BadRequestException("email already exists");
+      throw new BadRequestException({ message: "email already exists", field: "email" });
     } else {
       return true;
     }
