@@ -103,6 +103,7 @@ export class AuthController {
 	@UseGuards(IsConfirmed)
 	async createRegistrationConfirmation(@Body() inputDateRegConfirm: InputDateReqConfirmClass) {
 		console.log("registration-confirmation")
+		if(!inputDateRegConfirm.code) throw new BadRequestException("400")
 		const command = new RegistrationConfirmationCommand(inputDateRegConfirm)
 		await this.commandBus.execute(command)
 	}
