@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Query, UseFilters, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Query, UseFilters, UseGuards } from '@nestjs/common';
 import { UsersQueryRepository } from './users.queryRepository';
 import { CommandBus } from '@nestjs/cqrs';
 import { AuthBasic } from './gards/basic.auth';
@@ -57,6 +57,7 @@ export class UsersController {
 	// return findUser
 	const command = new CreateNewUserCommand(inputDataReq)
 	const createUser = await this.commandBus.execute(command)
+	if(!createUser) throw new BadRequestException("400")
 	console.log("createUser: ", createUser)
 	return createUser
   }
@@ -64,6 +65,7 @@ export class UsersController {
   @Delete(':id')
   @HttpCode(204)
   async deleteUserById(@Param('id') id: string) {
+	console.log("sdjfldsfjsadjfladsjfdlsjfdslfjsdlfjsd;fjdsi;fjdsijdsfiojdsf;desj")
 	const command = new DeleteUserByIdCommnad(id)
 	const deleteUserById = await this.commandBus.execute(command)
 	if (!deleteUserById) throw new NotFoundException("Blogs by id not found 404")
