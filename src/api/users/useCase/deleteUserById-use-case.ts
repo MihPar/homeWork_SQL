@@ -11,6 +11,6 @@ export class DeleteUserByIdUseCase implements ICommandHandler<DeleteUserByIdComm
     const deleteId: boolean = await this.usersRepository.deleteById(
       command.userId,
     );
-    return true;
+    return deleteId;
   }
 }

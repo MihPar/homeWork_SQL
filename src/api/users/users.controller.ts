@@ -69,5 +69,6 @@ export class UsersController {
 	const command = new DeleteUserByIdCommnad(id)
 	const deleteUserById = await this.commandBus.execute(command)
 	if (!deleteUserById) throw new NotFoundException("Blogs by id not found 404")
+	return deleteUserById
   }
 }
