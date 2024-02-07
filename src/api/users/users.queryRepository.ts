@@ -23,14 +23,11 @@ export class UsersQueryRepository {
 	  }
 
 	const queryFilter = `
-		SELECT ru.*
-			FROM (
 				select *
 					from "Users"
-						order by "createdAt"
+					WHERE "userName" ILIKE $4 OR "email" ILIKE $5
+						order by $1
 						limit $2 offset $3
-			) as ru
-			WHERE ru."userName" LIKE $4 AND ru."email" LIKE $5
 	`
 
 const findAllUsers = await this.dataSource.query(queryFilter, [
@@ -41,6 +38,7 @@ const findAllUsers = await this.dataSource.query(queryFilter, [
   `%${searchEmailTerm}%`
 ]);
 
+console.log("findAllUsers: ", findAllUsers)
     // const getAllUsers: UserClass[] = await this.userModel
     //   .find(filter)
     //   .sort({ [`accountData.${sortBy}`]: sortDirection === "asc" ? 1 : -1 })
@@ -49,23 +47,19 @@ const findAllUsers = await this.dataSource.query(queryFilter, [
     //   .lean();
 
     const countTotalCount = `
-		SELECT count(ru.*)
-				FROM (
-					select *
-						from "Users"
-							order by "createdAt" $1
-							limit $2 offset $3
-				) as ru
-				WHERE ru."userName" LIKE $4 AND ru."email" LIKE $5
+		SELECT count(*)
+			from "Users"
+				WHERE "userName" ILIKE $1 OR "email" ILIKE $2
 	`
 
-	const totalCount = await this.dataSource.query(countTotalCount, [
-		sortDirection,
-		(+pageNumber - 1) * +pageSize,
-		+pageSize,
+	const resultCount = await this.dataSource.query(countTotalCount, [
 		`%${searchLoginTerm}%`,
 		`%${searchEmailTerm}%`
 	])
+	const totalCount = resultCount[0].count
+
+
+	console.log("totalCount: ", totalCount[0].count)
 
     const pagesCount: number = await Math.ceil(totalCount / +pageSize);
     return {
