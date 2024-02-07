@@ -7,6 +7,7 @@ import {
   ValidatorConstraintInterface,
 } from "class-validator";
 import { UsersQueryRepository } from "../../users/users.queryRepository";
+import { UserClass } from "../../users/user.class";
 
 @ValidatorConstraint({ name: "login", async: true })
 @Injectable()
@@ -18,7 +19,7 @@ export class CustomLoginvalidation implements ValidatorConstraintInterface {
 	if(value === "login") {
 		value = "userName"
 	}
-    const user = await this.usersQueryRepository.findUserByLogin(value);
+    const user: UserClass | null = await this.usersQueryRepository.findUserByLogin(value);
     if (user) {
       throw new BadRequestException("login already exists");
     } else {
