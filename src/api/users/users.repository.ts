@@ -67,13 +67,6 @@ export class UsersRepository {
 				'${newUser.confirmationCode}', '${newUser.expirationDate}', '${newUser.isConfirmed}')
 				returning id
 	`);
-	// return newUser
-	// const selectUser = `
-	// 	select *
-	// 		from "Users"
-	// 			where "passwordHash" = $1
-	// `
-	// const getNewUser = await this.dataSource.query(selectUser, [newUser.passwordHash])
 	console.log('userId[0].id', userId[0].id)
     return userId[0].id
   }
