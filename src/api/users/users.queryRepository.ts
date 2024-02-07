@@ -113,7 +113,7 @@ export class UsersQueryRepository {
 		SELECT *
 			FROM public."Users"
 			WHERE "confirmationCode" = '${recoveryCode}'
-		`)[0];
+		`);
     console.log("result: ", result);
     return result;
   }
