@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { appSettings } from './setting';
 // import { appSettings } from './setting';
 dotenv.config();
 
