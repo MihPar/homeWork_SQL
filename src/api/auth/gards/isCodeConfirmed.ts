@@ -16,6 +16,7 @@ import { UserClass } from '../../../../src/api/users/user.class';
 	async canActivate(context: ExecutionContext): Promise<boolean> {
 	  const req = context.switchToHttp().getRequest();
 	  const code = req.body.code;
+	  if(!code) throw new BadRequestException("400")
   
 	const user: UserClass | null = await this.usersQueryRepository.findUserByConfirmation(code)
 	
