@@ -34,20 +34,16 @@ export class CreateNewUserUseCase implements ICommandHandler<CreateNewUserComman
 	newUser.isConfirmed = false
 
 
-    const user: UserClass = await this.usersRepository.createUser(newUser);
+    const userId: string = await this.usersRepository.createUser(newUser);
     try {
       await this.emailManager.sendEamilConfirmationMessage(
-        user.email,
-        user.confirmationCode,
+        newUser.email,
+        newUser.confirmationCode,
       );
     } catch (error) {
       console.log(error, 'error with send mail');
     }
-    return {
-		id: user.id,
-		login: newUser.userName,
-		email: newUser.email,
-		createdAt: newUser.createdAt
-	}
+	newUser.id = userId
+	return newUser.getViewUser()
   }
 }

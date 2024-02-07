@@ -24,7 +24,7 @@ export class RegistrationUseCase implements ICommandHandler<RegistrationCommand>
       command.inputDataReq.password,
     );
     const newUser = new UserClass()
-	newUser.id = uuidv4()
+	//newUser.id = uuidv4()
 	newUser.userName = command.inputDataReq.login
 	newUser.email = command.inputDataReq.email
 	newUser.passwordHash = passwordHash
@@ -36,15 +36,18 @@ export class RegistrationUseCase implements ICommandHandler<RegistrationCommand>
 	newUser.isConfirmed = false
 	newUser.createdAt = new Date().toISOString()
 
-    const user: UserClass = await this.usersRepository.createUser(newUser);
+    const userId: string = await this.usersRepository.createUser(newUser);
+	console.log("userId: ", userId)
     try {
       await this.emailManager.sendEamilConfirmationMessage(
-        user.email,
-        user.confirmationCode,
+        newUser.email,
+        newUser.confirmationCode,
       );
     } catch (error) {
       console.log(error, 'error with send mail');
     }
-    return user.getViewUser();
+	console.log("newUser: ", newUser)
+	newUser.id = userId
+    return newUser.getViewUser();
   }
 }

@@ -54,20 +54,22 @@ export class UsersRepository {
   }
 
   async createUser(newUser: UserClass) {
-    await this.dataSource.query(`
+    const userId = await this.dataSource.query(`
 			INSERT INTO public."Users"("userName", "email", "passwordHash", "createdAt",  "confirmationCode", "expirationDate", "isConfirmed")
 				VALUES ('${newUser.userName}', '${newUser.email}', 
 				'${newUser.passwordHash}', '${newUser.createdAt}', 
 				'${newUser.confirmationCode}', '${newUser.expirationDate}', '${newUser.isConfirmed}')
+				returning id
 	`);
 	// return newUser
-	const selectUser = `
-		select *
-			from "Users"
-				where "passwordHash" = $1
-	`
-	const getNewUser = await this.dataSource.query(selectUser, [newUser.passwordHash])
-    return getNewUser[0]
+	// const selectUser = `
+	// 	select *
+	// 		from "Users"
+	// 			where "passwordHash" = $1
+	// `
+	// const getNewUser = await this.dataSource.query(selectUser, [newUser.passwordHash])
+	console.log('userId[0].id', userId[0].id)
+    return userId[0].id
   }
 
   async updateUserConfirmation(

@@ -112,6 +112,7 @@ export class AuthController {
 	async creteRegistration(@Req() req: Request, @Body() inputDataReq: InputDataReqClass) {
 		const command = new RegistrationCommand(inputDataReq)
 		const user = await this.commandBus.execute(command)
+		console.log("user: ", user)
 		  if (!user) throw new BadRequestException("400")
 		  return
 	}

@@ -2,11 +2,11 @@ import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post
 import { UsersQueryRepository } from './users.queryRepository';
 import { CommandBus } from '@nestjs/cqrs';
 import { AuthBasic } from './gards/basic.auth';
-import { InputModelClassCreateBody } from './user.class';
-import { CreateNewUserCommand } from './useCase/createNewUser-use-case';
 import { DeleteUserByIdCommnad } from './useCase/deleteUserById-use-case';
 import { InputDataReqClass } from '../auth/dto/auth.class.pipe';
 import { HttpExceptionFilter } from '../../infrastructura/exceptionFilters.ts/exceptionFilter';
+import { RegistrationCommand } from './useCase/registration-use-case';
+import { CreateNewUserCommand } from './useCase/createNewUser-use-case';
 
 // @UseGuards(AuthGuard)
 @Controller('sa/users')
@@ -51,10 +51,12 @@ export class UsersController {
   @HttpCode(201)
   @Post()
   @UseFilters(new HttpExceptionFilter())
-  async createUser(@Body() body: InputDataReqClass) {
-	console.log("body: ", body)
-	const command = new CreateNewUserCommand(body)
+  async createUser(@Body() inputDataReq: InputDataReqClass) {
+	// console.log("body: ", body)
+	const command = new CreateNewUserCommand(inputDataReq)
 	const createUser = await this.commandBus.execute(command)
+	// const command = new RegistrationCommand(inputDataReq)
+	// const createUser = await this.commandBus.execute(command)
 	console.log("createUser: ", createUser)
 	return createUser
   }

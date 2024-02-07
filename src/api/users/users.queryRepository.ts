@@ -24,18 +24,17 @@ export class UsersQueryRepository {
 
 	const queryFilter = `
 				select *
-					from "Users"
-					WHERE "userName" ILIKE $4 OR "email" ILIKE $5
-						order by $1
-						limit $2 offset $3
+					from public."Users"
+						WHERE "userName" ILIKE $1 OR "email" ILIKE $2
+						order by "${sortBy}" ${sortDirection}
+						limit $3 offset $4
 	`
 
 const findAllUsers = await this.dataSource.query(queryFilter, [
-  sortDirection,
-  (+pageNumber - 1) * +pageSize,
-  +pageSize,
-  `%${searchLoginTerm}%`,
-  `%${searchEmailTerm}%`
+ `%${searchLoginTerm}%`,
+  `%${searchEmailTerm}%`,
+  +pageSize, 
+  (+pageNumber - 1) * +pageSize,   
 ]);
 
 console.log("findAllUsers: ", findAllUsers)
@@ -57,9 +56,7 @@ console.log("findAllUsers: ", findAllUsers)
 		`%${searchEmailTerm}%`
 	])
 	const totalCount = resultCount[0].count
-
-
-	console.log("totalCount: ", totalCount[0].count)
+	console.log("totalCount: ", totalCount)
 
     const pagesCount: number = await Math.ceil(totalCount / +pageSize);
     return {

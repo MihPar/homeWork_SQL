@@ -26,7 +26,6 @@ import { UsersRepository } from './api/users/users.repository';
 import { DeleteAllDataController } from './api/delete/delete.allData';
 import { AuthBasic } from './api/users/gards/basic.auth';
 import { UsersController } from './api/users/users.controller';
-import { CreateNewUserUseCase } from './api/users/useCase/createNewUser-use-case';
 import { DeleteUserByIdUseCase } from './api/users/useCase/deleteUserById-use-case';
 import { DeleteAllUsersUseCase } from './api/users/useCase/deleteAllUsers-use-case';
 import { EmailManager } from './infrastructura/email/email.manager';
@@ -41,6 +40,7 @@ import { DeleteAllDevicesUseCase } from './api/security-devices/useCase/deleteAl
 import { SecurityDeviceController } from './api/security-devices/device.controller';
 import { TerminateAllCurrentSessionUseCase } from './api/security-devices/useCase/terminateAllCurrentSeccion-use-case';
 import { UsersQueryRepository } from './api/users/users.queryRepository';
+import { CreateNewUserUseCase } from './api/users/useCase/createNewUser-use-case';
 
 const userCases = [
   RecoveryPasswordUseCase,
@@ -54,11 +54,11 @@ const userCases = [
   RegistrationEmailResendingUseCase,
   LogoutUseCase,
   GetUserIdByTokenUseCase,
-  CreateNewUserUseCase,
   DeleteUserByIdUseCase,
   DeleteAllUsersUseCase,
   DeleteAllDevicesUseCase,
-  TerminateAllCurrentSessionUseCase
+  TerminateAllCurrentSessionUseCase,
+  CreateNewUserUseCase
 ];
 
 const gards = [
