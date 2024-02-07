@@ -27,7 +27,7 @@ export class UsersQueryRepository {
 			FROM (
 				select *
 					from "Users"
-						order by "createdAt" $1
+						order by "createdAt"
 						limit $2 offset $3
 			) as ru
 			WHERE ru."userName" LIKE $4 AND ru."email" LIKE $5
