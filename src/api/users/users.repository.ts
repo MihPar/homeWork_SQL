@@ -60,7 +60,14 @@ export class UsersRepository {
 				'${newUser.passwordHash}', '${newUser.createdAt}', 
 				'${newUser.confirmationCode}', '${newUser.expirationDate}', '${newUser.isConfirmed}')
 	`);
-    return newUser;
+	const selectUser = `
+		select *
+			from "Users"
+				where "passwordHash" = $1
+	`
+	const getNewUser = await this.dataSource.query(selectUser, [newUser.passwordHash])
+	// console.log("getNewUser: ", getNewUser[0])
+    return getNewUser[0]
   }
 
   async updateUserConfirmation(

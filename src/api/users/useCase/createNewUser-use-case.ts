@@ -45,9 +45,9 @@ export class CreateNewUserUseCase implements ICommandHandler<CreateNewUserComman
     }
     return {
 		id: user.id,
-		login: user.userName,
-		email: user.email,
-		createdAt: user.createdAt
+		login: newUser.userName,
+		email: newUser.email,
+		createdAt: newUser.createdAt
 	}
   }
 }

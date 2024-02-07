@@ -52,10 +52,10 @@ export class UsersController {
   @Post()
   @UseFilters(new HttpExceptionFilter())
   async createUser(@Body() body: InputDataReqClass) {
-	// console.log("body: ", body)
+	console.log("body: ", body)
 	const command = new CreateNewUserCommand(body)
 	const createUser = await this.commandBus.execute(command)
-	// console.log("createUser: ", createUser)
+	console.log("createUser: ", createUser)
 	return createUser
   }
 
