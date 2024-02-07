@@ -27,7 +27,7 @@ import { Ratelimits } from "./gards/rateLimits";
 
 
 @Controller('auth')
-@UseGuards(Ratelimits)
+// @UseGuards(Ratelimits)
 export class AuthController {
 	constructor(
 		protected commandBus: CommandBus,
