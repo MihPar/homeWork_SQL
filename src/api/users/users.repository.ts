@@ -3,10 +3,14 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { add } from 'date-fns';
 import { UserClass } from './user.class';
+import { UsersQueryRepository } from './users.queryRepository';
 
 @Injectable()
 export class UsersRepository {
-  constructor(@InjectDataSource() protected dataSource: DataSource) {}
+  constructor(
+	@InjectDataSource() protected dataSource: DataSource,
+    protected readonly usersQueryRepository: UsersQueryRepository
+  ) {}
 
   async passwordRecovery(id: any, recoveryCode: string): Promise<boolean> {
     const recoveryInfo = {
@@ -54,6 +58,8 @@ export class UsersRepository {
   }
 
   async createUser(newUser: UserClass) {
+	const findUserByEmailOrLogin = await this.usersQueryRepository.findByLoginOrEmail(newUser.userName)
+	if(findUserByEmailOrLogin) return false
     const userId = await this.dataSource.query(`
 			INSERT INTO public."Users"("userName", "email", "passwordHash", "createdAt",  "confirmationCode", "expirationDate", "isConfirmed")
 				VALUES ('${newUser.userName}', '${newUser.email}', 
