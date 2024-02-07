@@ -22,18 +22,10 @@ export class RegistrationUseCase implements ICommandHandler<RegistrationCommand>
 	protected readonly usersQueryRepository: UsersQueryRepository
   ) {}
   async execute(command: RegistrationCommand): Promise<UserViewType | null> {
-
-	// const findUserByEmail = await this.usersQueryRepository.findByLoginOrEmail(command.inputDataReq.email)
-	// const findUserByLogin = await this.usersQueryRepository.findByLoginOrEmail(command.inputDataReq.login)
-
-	// if(findUserByEmail || findUserByLogin) return null
-
     const passwordHash = await this.generateHashAdapter._generateHash(
       command.inputDataReq.password,
     );
-	
     const newUser = new UserClass()
-	//newUser.id = uuidv4()
 	newUser.userName = command.inputDataReq.login
 	newUser.email = command.inputDataReq.email
 	newUser.passwordHash = passwordHash
@@ -48,7 +40,7 @@ export class RegistrationUseCase implements ICommandHandler<RegistrationCommand>
 	
 
     const userId: string = await this.usersRepository.createUser(newUser);
-	console.log("userId: ", userId)
+	// console.log("userId: ", userId)
     try {
       await this.emailManager.sendEamilConfirmationMessage(
         newUser.email,
@@ -57,7 +49,7 @@ export class RegistrationUseCase implements ICommandHandler<RegistrationCommand>
     } catch (error) {
       console.log(error, 'error with send mail');
     }
-	console.log("newUser: ", newUser)
+	// console.log("newUser: ", newUser)
 	newUser.id = userId
     return newUser.getViewUser();
   }

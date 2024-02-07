@@ -37,14 +37,7 @@ export class UsersQueryRepository {
       (+pageNumber - 1) * +pageSize,
     ]);
 
-    console.log("findAllUsers: ", findAllUsers);
-    // const getAllUsers: UserClass[] = await this.userModel
-    //   .find(filter)
-    //   .sort({ [`accountData.${sortBy}`]: sortDirection === "asc" ? 1 : -1 })
-    //   .skip((+pageNumber - 1) * +pageSize)
-    //   .limit(+pageSize)
-    //   .lean();
-
+    // console.log("findAllUsers: ", findAllUsers);
     const countTotalCount = `
 		SELECT count(*)
 			from "Users"
@@ -93,7 +86,7 @@ export class UsersQueryRepository {
 				FROM public."Users"
 				WHERE "email" = '${email}'
 		`))[0];
-		console.log("user by email: ", user)
+		// console.log("user by email: ", user)
     return user;
   }
 

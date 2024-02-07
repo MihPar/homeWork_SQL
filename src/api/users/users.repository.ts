@@ -78,8 +78,7 @@ export class UsersRepository {
     const query = `
 		UPDATE public."Users"
 			SET "expirationDate"=$1, "confirmationCode"=$2
-			WHERE "id' = $3
-			RETURNING *
+			WHERE "id" = $3
 	`;
     const result = await this.dataSource.query(query, [
       newExpirationDate,

@@ -53,6 +53,7 @@ export class UsersController {
   @Post()
   @UseFilters(new HttpExceptionFilter())
   async createUser(@Body() inputDataReq: InputDataReqClass) {
+	console.log("createUser")
 	const command = new CreateNewUserCommand(inputDataReq)
 	const createUser = await this.commandBus.execute(command)
 	if(!createUser) throw new BadRequestException("400")
