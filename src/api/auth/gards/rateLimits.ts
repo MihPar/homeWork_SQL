@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { AuthRepository } from '../auth.repository';
+import { CollectionIP } from '../../CollectionIP/collection.class';
 
 @Injectable()
 export class Ratelimits implements CanActivate {
@@ -17,9 +18,9 @@ export class Ratelimits implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req: Request = context.switchToHttp().getRequest();
 
-	const objCollection = {
-		IP: req.ip || '',
-		URL: req.originalUrl,
+	const objCollection: CollectionIP = {
+		ip: req.ip || '',
+		url: req.originalUrl,
 		date: new Date(),
 	}
     
