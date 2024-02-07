@@ -9,8 +9,8 @@ import { RegistrationCommand } from './useCase/registration-use-case';
 import { CreateNewUserCommand } from './useCase/createNewUser-use-case';
 
 // @UseGuards(AuthGuard)
-@Controller('sa/users')
 @UseGuards(AuthBasic)
+@Controller('sa/users')
 export class UsersController {
   constructor(
 	protected usersQueryRepository: UsersQueryRepository,
@@ -65,7 +65,7 @@ export class UsersController {
   @Delete(':id')
   @HttpCode(204)
   async deleteUserById(@Param('id') id: string) {
-	console.log("sdjfldsfjsadjfladsjfdlsjfdslfjsdlfjsd;fjdsi;fjdsijdsfiojdsf;desj")
+	if(!id) throw new NotFoundException("Blogs by id not found 404")
 	const command = new DeleteUserByIdCommnad(id)
 	const deleteUserById = await this.commandBus.execute(command)
 	if (!deleteUserById) throw new NotFoundException("Blogs by id not found 404")
