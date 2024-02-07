@@ -124,4 +124,21 @@ console.log("findAllUsers: ", findAllUsers)
 		`)[0]
     return user;
   }
+
+  async findCreateUser(loginOrEmail: string): Promise<UserViewType> {
+    const user: UserViewType = (await this.dataSource.query(`
+		SELECT *
+			FROM public."Users"
+			WHERE "userName" = '${loginOrEmail}' OR "email" = '${loginOrEmail}'
+		`))[0]
+		console.log("user: ", user)
+
+    return {
+		id: user.id,
+		login: user.login || user.email,
+      	email: user.email,
+      	createdAt: user.createdAt,
+	}
+  }
+
 }

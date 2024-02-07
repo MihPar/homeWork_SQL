@@ -96,7 +96,6 @@ export class UsersRepository {
 	const query = `
 		DELETE FROM public."Users"
 			WHERE "id" = $1
-			RETURNING *
 	`
     const deleted = await this.dataSource.query(query, [userId]);
     if (!deleted) return false;
