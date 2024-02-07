@@ -27,7 +27,7 @@ import { Ratelimits } from "./gards/rateLimits";
 
 
 @Controller('auth')
-// @UseGuards(Ratelimits)
+@UseGuards(Ratelimits)
 export class AuthController {
 	constructor(
 		protected commandBus: CommandBus,
@@ -102,8 +102,6 @@ export class AuthController {
 	@Post("registration-confirmation")
 	@UseGuards(IsConfirmed)
 	async createRegistrationConfirmation(@Body() inputDateRegConfirm: InputDateReqConfirmClass) {
-		console.log("registration-confirmation")
-		if(!inputDateRegConfirm.code) throw new BadRequestException("400")
 		const command = new RegistrationConfirmationCommand(inputDateRegConfirm)
 		await this.commandBus.execute(command)
 	}
