@@ -84,8 +84,8 @@ console.log("findAllUsers: ", findAllUsers)
     return user
   }
 
-  async findUserByEmail(email: string): Promise<UserClass> {
-    const user: UserClass = await this.dataSource.query(`
+  async findUserByEmail(email: string): Promise<UserClass | null> {
+    const user: UserClass | null= await this.dataSource.query(`
 			SELECT *
 				FROM public."Users"
 				WHERE "email" = '${email}'
@@ -93,8 +93,8 @@ console.log("findAllUsers: ", findAllUsers)
     return user;
   }
 
-  async findUserByLogin(login: string): Promise<UserClass> {
-    const user: UserClass = await this.dataSource.query(`
+  async findUserByLogin(login: string): Promise<UserClass | null> {
+    const user: UserClass | null = await this.dataSource.query(`
 			SELECT *
 				FROM public."Users"
 				WHERE "email" = '${login}'

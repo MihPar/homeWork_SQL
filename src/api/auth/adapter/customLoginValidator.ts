@@ -14,6 +14,9 @@ export class CustomLoginvalidation implements ValidatorConstraintInterface {
   constructor(protected readonly usersQueryRepository: UsersQueryRepository) {}
 
   async validate(value: string): Promise<boolean> {
+	if(value === "userName") {
+		value = "userName"
+	}
     const user = await this.usersQueryRepository.findUserByLogin(value);
     if (user) {
       throw new BadRequestException("login already exists");

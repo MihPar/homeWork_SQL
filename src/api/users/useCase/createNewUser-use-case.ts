@@ -23,8 +23,6 @@ export class CreateNewUserUseCase implements ICommandHandler<CreateNewUserComman
       command.body.password,
     );
     const newUser = new UserClass();
-	
-	// newUser.id = uuidv4()
 	newUser.userName = command.body.login,
 	newUser.email = command.body.email,
 	newUser.passwordHash = passwordHash,
@@ -32,8 +30,6 @@ export class CreateNewUserUseCase implements ICommandHandler<CreateNewUserComman
 	newUser.confirmationCode = uuidv4(),
 	newUser.expirationDate = add(new Date(), { hours: 1, minutes: 10 }).toISOString()
 	newUser.isConfirmed = false
-
-
     const userId: string = await this.usersRepository.createUser(newUser);
     try {
       await this.emailManager.sendEamilConfirmationMessage(
