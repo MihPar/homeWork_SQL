@@ -52,13 +52,13 @@ export class UsersController {
   @Post()
   @UseFilters(new HttpExceptionFilter())
   async createUser(@Body() inputDataReq: InputDataReqClass) {
-	const findUser = await this.usersQueryRepository.findCreateUser(inputDataReq.email)
-	console.log("findUser: ", findUser)
-	return findUser
-	// const command = new CreateNewUserCommand(inputDataReq)
-	// const createUser = await this.commandBus.execute(command)
-	// console.log("createUser: ", createUser)
-	// return createUser
+	// const findUser = await this.usersQueryRepository.findCreateUser(inputDataReq.email)
+	// console.log("findUser: ", findUser)
+	// return findUser
+	const command = new CreateNewUserCommand(inputDataReq)
+	const createUser = await this.commandBus.execute(command)
+	console.log("createUser: ", createUser)
+	return createUser
   }
 
   @Delete(':id')
