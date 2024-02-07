@@ -66,7 +66,7 @@ export class UsersRepository {
 				'${newUser.confirmationCode}', '${newUser.expirationDate}', '${newUser.isConfirmed}')
 				returning id
 	`);
-	console.log('userId[0].id', userId[0].id)
+	// console.log('userId[0].id', userId[0].id)
     return userId[0].id
   }
 

@@ -22,7 +22,7 @@ export class RegistrationEmailResendingUseCase
   ) {}
   async execute(command: RegistrationEmailResendingCommand): Promise<any> {
     const user: UserClass | null =
-      await this.usersQueryRepository.findByLoginOrEmail(
+      await this.usersQueryRepository.findUserByEmail(
         command.inputDateReqEmailResending.email,
       );
     if (!user) return false;

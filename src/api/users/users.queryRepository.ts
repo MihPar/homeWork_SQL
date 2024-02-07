@@ -17,6 +17,7 @@ export class UsersQueryRepository {
     searchLoginTerm: string,
     searchEmailTerm: string
   ): Promise<PaginationType<UserViewType>> {
+
     if (sortBy === "login") {
       sortBy = "userName";
     }
@@ -62,7 +63,7 @@ export class UsersQueryRepository {
       pagesCount: pagesCount,
       page: +pageNumber,
       pageSize: +pageSize,
-      totalCount: totalCount,
+      totalCount: +totalCount,
       items: findAllUsers.map(
         (user: UserClass): UserViewType => ({
           id: user.id.toString(),
@@ -82,27 +83,26 @@ export class UsersQueryRepository {
 			WHERE "userName" = '${loginOrEmail}' OR "email" = '${loginOrEmail}'
 		`)
     )[0];
+	// console.log("user: ", user)
     return user;
   }
 
   async findUserByEmail(email: string): Promise<UserClass | null> {
-    const user: UserClass | null = await this.dataSource.query(`
+    const user: UserClass | null = (await this.dataSource.query(`
 			SELECT *
 				FROM public."Users"
 				WHERE "email" = '${email}'
-		`)[0];
+		`))[0];
+		console.log("user by email: ", user)
     return user;
   }
 
   async findUserByLogin(login: string): Promise<UserClass | null> {
-    // if (login === login) {
-    //   login = userName;
-    // }
-    const user: UserClass | null = await this.dataSource.query(`
+    const user: UserClass | null = (await this.dataSource.query(`
 			SELECT *
 				FROM public."Users"
-				WHERE "email" = '${login}'
-		`)[0];
+				WHERE "userName" = '${login}'
+		`))[0];
     return user;
   }
 
@@ -113,50 +113,30 @@ export class UsersQueryRepository {
 		SELECT *
 			FROM public."Users"
 			WHERE "confirmationCode" = '${recoveryCode}'
-		`)[0];
-    console.log("result: ", result);
-    return result;
+		`);
+    // console.log("result: ", result);
+    return result[0];
   }
 
   async findUserByConfirmation(code: string): Promise<UserClass | null> {
-    const user: UserClass | null = await this.dataSource.query(
+    const user: UserClass | null = (await this.dataSource.query(
       `
 			SELECT *
 				FROM public."Users"
 					WHERE "confirmationCode" = $1
 		`,
       [code]
-    )[0];
-    console.log("user: ", user);
+    ))[0];
+    // console.log("user: ", user);
     return user;
   }
 
   async findUserById(userId: string): Promise<UserClass | null> {
-    let user: UserClass | null = (
-      await this.dataSource.query(`
+    let user: UserClass | null = (await this.dataSource.query(`
 			SELECT *
 				FROM public."Users"
 				WHERE "id" = '${userId}'
-		`)
-    )[0];
+		`))[0];
     return user;
-  }
-
-  async findCreateUser(loginOrEmail: string): Promise<UserViewType> {
-    const user: UserViewType = (
-      await this.dataSource.query(`
-		SELECT *
-			FROM public."Users"
-			WHERE "userName" = '${loginOrEmail}' OR "email" = '${loginOrEmail}'
-		`)
-    )[0];
-    console.log("user: ", user);
-
-    return {
-      id: user.id,
-      login: user.login || user.email,
-      email: user.email,
-      createdAt: user.createdAt,
-    };
   }
 }

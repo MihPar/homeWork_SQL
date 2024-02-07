@@ -14,6 +14,7 @@ import { UsersQueryRepository } from "../../users/users.queryRepository";
 export class CustomEmailvalidation implements ValidatorConstraintInterface {
   constructor(protected readonly usersQueryRepository: UsersQueryRepository) {}
   async validate(value: string): Promise<boolean> {
+	console.log("email")
     const user = await this.usersQueryRepository.findUserByEmail(value);
     if (user) {
       throw new BadRequestException([{ message: "email already exists", field: "email" }]);
