@@ -14,7 +14,8 @@ export class CustomLoginvalidation implements ValidatorConstraintInterface {
   constructor(protected readonly usersQueryRepository: UsersQueryRepository) {}
 
   async validate(value: string): Promise<boolean> {
-	if(value === "userName") {
+
+	if(value === "login") {
 		value = "userName"
 	}
     const user = await this.usersQueryRepository.findUserByLogin(value);
