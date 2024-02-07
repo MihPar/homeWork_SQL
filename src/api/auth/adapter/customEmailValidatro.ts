@@ -16,7 +16,7 @@ export class CustomEmailvalidation implements ValidatorConstraintInterface {
   async validate(value: string): Promise<boolean> {
     const user = await this.usersQueryRepository.findUserByEmail(value);
     if (user) {
-      throw new BadRequestException({ message: "email already exists", field: "email" });
+      throw new BadRequestException([{ message: "email already exists", field: "email" }]);
     } else {
       return true;
     }
