@@ -54,7 +54,6 @@ export class InputDataReqClass {
 	@MinLength(3)
 	@MaxLength(10)
 	@ApiProperty()
-	@IsEmail()
 	@Validate(CustomLoginvalidation)
 	login: string
 	

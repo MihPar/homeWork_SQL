@@ -41,6 +41,8 @@ import { SecurityDeviceController } from './api/security-devices/device.controll
 import { TerminateAllCurrentSessionUseCase } from './api/security-devices/useCase/terminateAllCurrentSeccion-use-case';
 import { UsersQueryRepository } from './api/users/users.queryRepository';
 import { CreateNewUserUseCase } from './api/users/useCase/createNewUser-use-case';
+import { CustomLoginvalidation } from './api/auth/adapter/customLoginValidator';
+import { CustomEmailvalidation } from './api/auth/adapter/customEmailValidatro';
 
 const userCases = [
   RecoveryPasswordUseCase,
@@ -71,6 +73,7 @@ const gards = [
   AuthBasic
 ];
 
+const validation = [CustomLoginvalidation, CustomEmailvalidation]
 const manager = [EmailManager]
 const adapter = [GenerateHashAdapter, PayloadAdapter, EmailAdapter]
 const services = [JwtService, ApiJwtService]
@@ -116,7 +119,8 @@ const repositories = [AuthRepository, DeviceRepository, DeviceQueryRepository, U
 	...manager,
 	...adapter,
 	...services,
-	...configs
+	...configs,
+	...validation
   ],
 })
 export class AppModule {}
