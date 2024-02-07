@@ -126,7 +126,7 @@ export class UsersQueryRepository {
 					WHERE "confirmationCode" = $1
 		`,
       [code]
-    );
+    )[0];
     console.log("user: ", user);
     return user;
   }
