@@ -6,54 +6,60 @@ import { UserClass } from './user.class';
 
 @Injectable()
 export class UsersRepository {
-  constructor(
-    @InjectDataSource() protected dataSource: DataSource
-  ) {}
+  constructor(@InjectDataSource() protected dataSource: DataSource) {}
 
   async passwordRecovery(id: any, recoveryCode: string): Promise<boolean> {
-	const recoveryInfo = {
-		recoveryCode,
-		expirationDate: add(new Date(), {minutes: 5}) 
-	}
-	const updateRes = await this.dataSource.query(`
-	UPDATE public."Users" as u
-			SET 
-				"expirationDate"='${recoveryInfo.expirationDate}', 
-				"confirmationCode"='${recoveryInfo.recoveryCode}'
-		WHERE u."id" = '${id}'
-		RETURNING *
-	`)
-    if(!updateRes) return false
-	return true
+    const recoveryInfo = {
+      recoveryCode,
+      expirationDate: add(new Date(), { minutes: 5 }),
+    };
+    const query = `
+		UPDATE public."Users"
+				SET 
+					"expirationDate"='${recoveryInfo.expirationDate}', 
+					"confirmationCode"='${recoveryInfo.recoveryCode}'
+			WHERE "id" = $1
+			RETURNING *
+	`;
+    const updateRes = await this.dataSource.query(query, [id]);
+    if (!updateRes) return false;
+    return true;
   }
 
   async updatePassword(id: any, newPasswordHash: string) {
-    const updatePassword = await this.dataSource.query(`
-			UPDATE public."Users" as u
-				SET "passswordHash"='${newPasswordHash}'
-				WHERE u."id" = '${id}'
-				RETURNING *
-	`)
-    if(!updatePassword) return false
-	return  true
+    const query = `
+		UPDATE public."Users"
+			SET "passswordHash"= $1
+			WHERE "id" = $2
+			RETURNING *
+`;
+    const updatePassword = await this.dataSource.query(query, [
+      newPasswordHash,
+      id,
+    ]);
+    if (!updatePassword) return false;
+    return true;
   }
 
   async updateConfirmation(id: string) {
-    const result = await this.dataSource.query(`
+    const result = await this.dataSource.query(
+      `
 		UPDATE public."Users"
 			SET "isConfirmed"=true
 			WHERE "id" = $1
-	`, [id])
-    return true
+	`,
+      [id]
+    );
+    return true;
   }
 
   async createUser(newUser: UserClass) {
-    	await this.dataSource.query(`
-			INSERT INTO public."Users"("userName", "email", "createdAt", "passwordHash", "confirmationCode", "expirationDate", "isConfirmed")
+    await this.dataSource.query(`
+			INSERT INTO public."Users"("userName", "email", "passwordHash", "createdAt",  "confirmationCode", "expirationDate", "isConfirmed")
 				VALUES ('${newUser.userName}', '${newUser.email}', 
-				'${newUser.createdAt}', '${newUser.passwordHash}', '${newUser.confirmationCode}', 
-				'${newUser.expirationDate}', '${newUser.isConfirmed}')
-	`)
+				'${newUser.passwordHash}', '${newUser.createdAt}', 
+				'${newUser.confirmationCode}', '${newUser.expirationDate}', '${newUser.isConfirmed}')
+	`);
     return newUser;
   }
 
@@ -62,30 +68,36 @@ export class UsersRepository {
     confirmationCode: string,
     newExpirationDate: Date
   ): Promise<boolean> {
-    const result = await this.dataSource.query(`
-	UPDATE public."Users" as u
-		SET "expirationDate"='${newExpirationDate}', "confirmationCode"='${confirmationCode}'
-		WHERE u."id' = '${id}'
-		RETURNING *
-	`)
-	if(!result) return false
-	return true
+    const query = `
+		UPDATE public."Users"
+			SET "expirationDate"=$1, "confirmationCode"=$2
+			WHERE "id' = $3
+			RETURNING *
+	`;
+    const result = await this.dataSource.query(query, [
+      newExpirationDate,
+      confirmationCode,
+      id,
+    ]);
+    if (!result) return false;
+    return true;
   }
 
   async deleteById(userId: string) {
-	const deleted = await this.dataSource.query(`
-		DELETE FROM public."Users" as u
-			WHERE u."id" = '${userId}'
+	const query = `
+		DELETE FROM public."Users"
+			WHERE "id" = $1
 			RETURNING *
-	`)
-	if(!deleted) return false
-	return true
+	`
+    const deleted = await this.dataSource.query(query, [userId]);
+    if (!deleted) return false;
+    return true;
   }
 
   async deleteAll() {
-	const deleteAllUsers = await this.dataSource.query(`
+    const deleteAllUsers = await this.dataSource.query(`
 		DELETE FROM public."Users"
 	`);
-    return true
+    return true;
   }
 }

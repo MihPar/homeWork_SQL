@@ -9,20 +9,22 @@ export class DeviceQueryRepository {
 		@InjectDataSource() protected dataSource: DataSource
 	) {}
 	async getDevicesUser(userId: string) {
-		const getDevice = await this.dataSource.query(`
-			SELECT d.*
-				FROM public."Devices" as d
-				WHERE d."userId" = '${userId}'
-		`)[0]
+		const query = `
+			SELECT *
+				FROM public."Devices"
+				WHERE "userId" = $1
+	`
+		const getDevice = await this.dataSource.query(query, [userId])[0]
 		return getDevice
 	}
 
 	async findDeviceByDeviceId(deviceId: string) {
-		const deviceByDeviceId = await this.dataSource.query(`
-			SELECT d.*
-				FROM public."Devices" as d
-				WHERE d."deviceId" = '${deviceId}'
-		`)
+		const query = `
+			SELECT *
+				FROM public."Devices"
+				WHERE "deviceId" = $1
+	`
+		const deviceByDeviceId = await this.dataSource.query(query, [deviceId])
 		return deviceByDeviceId.map(function(item) {
 			return {
 				ip: item.ip,
@@ -35,11 +37,12 @@ export class DeviceQueryRepository {
 	  }
 
 	async getAllDevicesUser(userId: string) {
-		const getAllDevices = await this.dataSource.query(`
-			SELECT "ip", "title", "deviceId", "userId", "lastActiveDate"
-				FROM public."Devices" as d
-				where d."userId" = '${userId}'
-		`)
+		const query = `
+			SELECT *
+				FROM public."Devices"
+				where "userId" = $1
+	`
+		const getAllDevices = await this.dataSource.query(query, [userId])
 		return getAllDevices.map(function (item) {
 		  return {
 			ip: item.IP,

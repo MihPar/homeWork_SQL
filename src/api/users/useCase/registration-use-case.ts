@@ -24,7 +24,6 @@ export class RegistrationUseCase implements ICommandHandler<RegistrationCommand>
       command.inputDataReq.password,
     );
     const newUser = new UserClass()
-	
 	newUser.id = uuidv4()
 	newUser.userName = command.inputDataReq.login
 	newUser.email = command.inputDataReq.email

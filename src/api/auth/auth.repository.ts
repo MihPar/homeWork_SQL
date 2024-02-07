@@ -10,8 +10,8 @@ export class AuthRepository {
   async create(objCollection: IPCollectionClass) {
     const createNewCollection = await this.dataSource.query(`
 	INSERT INTO public."IpCollection"(
-		"IP", "URL", "Date")
-		VALUES ('${objCollection.IP}', '${objCollection.URL}', '${objCollection.date}');
+		"ip", "url", "date")
+		VALUES ('${objCollection.ip}', '${objCollection.url}', '${objCollection.date}');
 	`);
 		if(!createNewCollection) return false
 		return true
@@ -22,8 +22,8 @@ export class AuthRepository {
 	const count = await this.dataSource.query(`
 	SELECT count(*)
 		FROM "IpCollection"
-		WHERE "IP" = '${objCollection.IP}'
-		AND "Date" > CURRENT_TIMESTAMP -INTERVAL '10 seconds'
+		WHERE "ip" = '${objCollection.ip}'
+		AND "date" > CURRENT_TIMESTAMP -INTERVAL '10 seconds'
 	`)
 	return count
   }

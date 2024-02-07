@@ -6,48 +6,47 @@ import { CollectionIP } from '../CollectionIP/collection.class';
 
 @Injectable()
 export class DeviceRepository {
-	constructor(
-		@InjectDataSource() protected dataSource: DataSource 
-	) {}
+  constructor(@InjectDataSource() protected dataSource: DataSource) {}
 
   async terminateSession(deviceId: string) {
-    const deletedOne = this.dataSource.query(`
+    const query = `
 		DELETE FROM public."Devices"
-			WHERE "Devices"."id" = '${deviceId}'
+			WHERE "Devices"."id" = $1
 			RETURNING *
-	`);
-	if(!deletedOne) return false
-	return true
+`;
+    const deletedOne = this.dataSource.query(query, [deviceId]);
+    if (!deletedOne) return false;
+    return true;
   }
-
 
   async deleteAllDevices() {
     const deletedAll = this.dataSource.query(`
 		DELETE FROM public."Devices"
 	`);
-	return true
+    return true;
   }
 
   async createDevice(device: DeviceClass): Promise<string | null> {
-	try {
-		const createDevice: DeviceClass = await this.dataSource.query(`
+    try {
+      const createDevice: DeviceClass = await this.dataSource.query(`
 			INSERT INTO public."Devices"(
 				"ip", "title", "deviceId", "userId", "lastActiveDate")
 				VALUES (
 					'${device.ip}', '${device.title}', '${device.deviceId}', 
 					'${device.userId}', '${device.lastActiveDate}')
-		`)
+		`);
 
-		const select  = await this.dataSource.query(`
-			select d.*
-				from public."Devices" as d
-				where d."deviceId" = '${device.deviceId}'
-		`)
-		return select
-	} catch(error) {
-		console.log(error, 'error in create device')
-		return null
-	}
+      const query = `
+			select *
+				from public."Devices"
+				where "deviceId" = $1
+	`;
+      const select = await this.dataSource.query(query, [device.deviceId]);
+      return select;
+    } catch (error) {
+      console.log(error, "error in create device");
+      return null;
+    }
   }
 
   async updateDeviceUser(
@@ -55,33 +54,37 @@ export class DeviceRepository {
     deviceId: string,
     newLastActiveDate: string
   ) {
-	const updateDevice = await this.dataSource.query(`
+    const query = `
 		UPDATE public."Devices"
-			SET "lastActiveDate" = '${newLastActiveDate}'
-			WHERE d."deviceId" = '${deviceId}' AND d."userId" = '${userId}'
-	`)
+			SET "lastActiveDate" = $1
+			WHERE d."deviceId" = $2 AND d."userId" = $3
+`;
+    await this.dataSource.query(query, [
+      newLastActiveDate,
+      deviceId,
+      userId,
+    ]);
   }
 
   async logoutDevice(deviceId: string): Promise<boolean> {
-	const decayResult = await this.dataSource.query(`
-		DELETE FROM public."Devices" as d
-			WHERE d."deviceId" = '${deviceId}'
-	`)
-	if(!decayResult) return false
-	return true
+	const query = `
+		DELETE FROM public."Devices"
+			WHERE "deviceId" = $1
+`
+    const decayResult = await this.dataSource.query(query, [deviceId]);
+    if (!decayResult) return false;
+    return true;
   }
 
+  //   async createCollectionIP(reqData: CollectionIP) {
+  // 	await this.dataSource.query(`
 
-//   async createCollectionIP(reqData: CollectionIP) {
-// 	await this.dataSource.query(`
-	
-// 	`);
-// 	return reqData;
-//   }
+  // 	`);
+  // 	return reqData;
+  //   }
 
-
-//   async countDocs(filter: any) {
-// 	const result = await this.collectioinIPModel.countDocuments(filter);
-// 	return result
-//   }
+  //   async countDocs(filter: any) {
+  // 	const result = await this.collectioinIPModel.countDocuments(filter);
+  // 	return result
+  //   }
 }

@@ -1,6 +1,6 @@
 export class CollectionIP {
-	  public URL: string
-	  public date: Date
-	  public IP?: string
+	public ip: string;
+	public url: string;
+	public date: Date;
   }
   

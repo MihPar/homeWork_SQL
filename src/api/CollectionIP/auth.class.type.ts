@@ -1,5 +1,5 @@
 export class IPCollectionClass {
-	IP: string;
-	URL: string;
+	ip: string;
+	url: string;
 	date: Date;
 }
