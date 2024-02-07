@@ -43,7 +43,7 @@ export class InputModelClassCreateBody {
 export class dtoType {
 	@IsString()
 	@Trim()
-	@UUID()
+	@IsUUID()
 	id: string
 }
 

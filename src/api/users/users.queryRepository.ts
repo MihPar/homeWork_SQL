@@ -93,6 +93,15 @@ console.log("findAllUsers: ", findAllUsers)
     return user;
   }
 
+  async findUserByLogin(login: string): Promise<UserClass> {
+    const user: UserClass = await this.dataSource.query(`
+			SELECT *
+				FROM public."Users"
+				WHERE "email" = '${login}'
+		`)[0]
+    return user;
+  }
+
   async findUserByCode(
     recoveryCode: string
   ): Promise<WithId<UserClass> | null> {
@@ -117,11 +126,11 @@ console.log("findAllUsers: ", findAllUsers)
   }
 
   async findUserById(userId: string): Promise<UserClass | null> {
-    let user: UserClass | null = await this.dataSource.query(`
+    let user: UserClass | null = (await this.dataSource.query(`
 			SELECT *
 				FROM public."Users"
 				WHERE "id" = '${userId}'
-		`)[0]
+		`))[0]
     return user;
   }
 

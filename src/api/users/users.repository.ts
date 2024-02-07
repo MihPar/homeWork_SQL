@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { add } from 'date-fns';
@@ -58,8 +58,7 @@ export class UsersRepository {
   }
 
   async createUser(newUser: UserClass) {
-	const findUserByEmailOrLogin = await this.usersQueryRepository.findByLoginOrEmail(newUser.userName)
-	if(findUserByEmailOrLogin) return false
+	
     const userId = await this.dataSource.query(`
 			INSERT INTO public."Users"("userName", "email", "passwordHash", "createdAt",  "confirmationCode", "expirationDate", "isConfirmed")
 				VALUES ('${newUser.userName}', '${newUser.email}', 
@@ -92,6 +91,9 @@ export class UsersRepository {
   }
 
   async deleteById(userId: string) {
+	const findUserById: UserClass | null = await this.usersQueryRepository.findUserById(userId)
+	if(!findUserById) return false
+		
 	const query = `
 		DELETE FROM public."Users"
 			WHERE "id" = $1

@@ -1,9 +1,12 @@
 import { applyDecorators } from "@nestjs/common"
+import { ApiProperty } from "@nestjs/swagger"
 import { Transform, TransformFnParams } from "class-transformer"
-import { IsEmail, IsNotEmpty, IsString, IsUUID, MaxLength, MinLength } from "class-validator"
+import { IsEmail, IsNotEmpty, IsString, IsUUID, MaxLength, MinLength, Validate } from "class-validator"
+import { CustomLoginvalidation } from "../adapter/customLoginValidator"
+import { CustomEmailvalidation } from "../adapter/customEmailValidatro"
 
-const UUID_VERSION = '4' 
-const UUID = () => IsUUID(UUID_VERSION)
+// const UUID_VERSION = '4' 
+// const UUID = () => IsUUID(UUID_VERSION)
 
 export class InputDataModelClassAuth {
 	@IsString()
@@ -40,7 +43,7 @@ export class InputModelNewPasswordClass {
 export class InputDateReqConfirmClass {
 	@IsString()
 	@Trim()
-	@UUID()
+	@IsUUID()
 	code: string
 }
 
@@ -50,6 +53,9 @@ export class InputDataReqClass {
 	@IsNotEmpty()
 	@MinLength(3)
 	@MaxLength(10)
+	@ApiProperty()
+	@IsEmail()
+	@Validate(CustomLoginvalidation)
 	login: string
 	
 	@IsString()
@@ -63,5 +69,8 @@ export class InputDataReqClass {
 	@IsString()
 	@Trim() 
 	@IsNotEmpty()
+	@ApiProperty()
+	@IsEmail()
+	@Validate(CustomEmailvalidation)
 	email: string
 }
