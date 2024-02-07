@@ -3,7 +3,6 @@ import { Transform, TransformFnParams } from "class-transformer"
 import { IsEmail, IsNotEmpty, IsString, IsUUID, MaxLength, MinLength } from "class-validator"
 
 const UUID_VERSION = '4' 
-
 const UUID = () => IsUUID(UUID_VERSION)
 
 export class InputDataModelClassAuth {

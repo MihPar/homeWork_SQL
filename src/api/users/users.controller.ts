@@ -7,6 +7,7 @@ import { InputDataReqClass } from '../auth/dto/auth.class.pipe';
 import { HttpExceptionFilter } from '../../infrastructura/exceptionFilters.ts/exceptionFilter';
 import { RegistrationCommand } from './useCase/registration-use-case';
 import { CreateNewUserCommand } from './useCase/createNewUser-use-case';
+import { dtoType } from './user.class';
 
 // @UseGuards(AuthGuard)
 @UseGuards(AuthBasic)
@@ -64,9 +65,9 @@ export class UsersController {
 
   @Delete(':id')
   @HttpCode(204)
-  async deleteUserById(@Param('id') id: string) {
-	if(!id) throw new NotFoundException("Blogs by id not found 404")
-	const command = new DeleteUserByIdCommnad(id)
+  async deleteUserById(@Param() dto: dtoType) {
+	if(!dto.id) throw new NotFoundException("Blogs by id not found 404")
+	const command = new DeleteUserByIdCommnad(dto.id)
 	const deleteUserById = await this.commandBus.execute(command)
 	if (!deleteUserById) throw new NotFoundException("Blogs by id not found 404")
 	return deleteUserById

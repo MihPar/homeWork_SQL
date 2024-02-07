@@ -4,9 +4,13 @@ import {
   IsNotEmpty,
   IsString,
   MaxLength,
+  IsUUID,
   MinLength,
 } from "class-validator";
 import { UserViewType } from "./user.type";
+
+const UUID_VERSION = '4' 
+const UUID = () => IsUUID(UUID_VERSION)
 
 const Trim = () =>
   Transform(({ value }: TransformFnParams) => {
@@ -34,6 +38,13 @@ export class InputModelClassCreateBody {
   @Trim()
   @IsNotEmpty()
   email: string;
+}
+
+export class dtoType {
+	@IsString()
+	@Trim()
+	@UUID()
+	id: string
 }
 
 export class UserClass {

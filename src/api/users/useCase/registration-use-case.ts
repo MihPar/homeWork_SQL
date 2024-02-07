@@ -47,6 +47,7 @@ export class RegistrationUseCase implements ICommandHandler<RegistrationCommand>
       console.log(error, 'error with send mail');
     }
 	console.log("newUser: ", newUser)
+	if(newUser.id === userId) return null
 	newUser.id = userId
     return newUser.getViewUser();
   }
