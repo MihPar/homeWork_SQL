@@ -17,7 +17,6 @@ export class UsersQueryRepository {
     searchLoginTerm: string,
     searchEmailTerm: string
   ): Promise<PaginationType<UserViewType>> {
-
     if (sortBy === "login") {
       sortBy = "userName";
     }
@@ -76,33 +75,37 @@ export class UsersQueryRepository {
 			WHERE "userName" = '${loginOrEmail}' OR "email" = '${loginOrEmail}'
 		`)
     )[0];
-	// console.log("user: ", user)
+    // console.log("user: ", user)
     return user;
   }
 
   async findUserByEmail(email: string): Promise<UserClass | null> {
-    const user: UserClass | null = (await this.dataSource.query(`
+    const user: UserClass | null = (
+      await this.dataSource.query(`
 			SELECT *
 				FROM public."Users"
 				WHERE "email" = '${email}'
-		`))[0];
-		// console.log("user by email: ", user)
+		`)
+    )[0];
+    // console.log("user by email: ", user)
     return user;
   }
 
   async findUserByLogin(login: string): Promise<UserClass | null> {
-    const user: UserClass | null = (await this.dataSource.query(`
+    const user: UserClass | null = (
+      await this.dataSource.query(`
 			SELECT *
 				FROM public."Users"
 				WHERE "userName" = '${login}'
-		`))[0];
+		`)
+    )[0];
     return user;
   }
 
   async findUserByCode(
     recoveryCode: string
   ): Promise<WithId<UserClass> | null> {
-    const result = this.dataSource.query(`
+    const result = await this.dataSource.query(`
 		SELECT *
 			FROM public."Users"
 			WHERE "confirmationCode" = '${recoveryCode}'
@@ -112,24 +115,27 @@ export class UsersQueryRepository {
   }
 
   async findUserByConfirmation(code: string): Promise<UserClass | null> {
-    const user: UserClass | null = (await this.dataSource.query(
-      `
-			SELECT *
-				FROM public."Users"
-					WHERE "confirmationCode" = $1
-		`,
-      [code]
-    ))[0];
+    const user: UserClass | null = (
+      await this.dataSource.query(`
+		SELECT *
+			FROM public."Users"
+			WHERE "confirmationCode" = $1
+	`,
+        [code]
+      )
+    )[0];
     // console.log("user: ", user);
     return user;
   }
 
   async findUserById(userId: string): Promise<UserClass | null> {
-    let user: UserClass | null = (await this.dataSource.query(`
+    let user: UserClass | null = (
+      await this.dataSource.query(`
 			SELECT *
 				FROM public."Users"
 				WHERE "id" = '${userId}'
-		`))[0];
+		`)
+    )[0];
     return user;
   }
 }

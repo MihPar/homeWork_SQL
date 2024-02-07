@@ -4,7 +4,7 @@ import { Transform, TransformFnParams } from "class-transformer"
 import { IsEmail, IsNotEmpty, IsString, IsUUID, MaxLength, MinLength, Validate } from "class-validator"
 import { CustomLoginvalidation } from "../adapter/customLoginValidator"
 import { CustomEmailvalidation } from "../adapter/customEmailValidatro"
-import { CustomCodealidation } from "../adapter/custormCodeValidation"
+import { CustomCodeValidation } from "../adapter/custormCodeValidation"
 
 // const UUID_VERSION = '4' 
 // const UUID = () => IsUUID(UUID_VERSION)
@@ -45,8 +45,8 @@ export class InputDateReqConfirmClass {
 	@IsString()
 	@Trim()
 	@IsUUID()
-	@ApiProperty()
-	@Validate(CustomCodealidation)
+	// @ApiProperty()
+	// @Validate(CustomCodeValidation)
 	code: string
 }
 

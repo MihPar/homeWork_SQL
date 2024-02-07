@@ -10,12 +10,12 @@ import { UserClass } from "../../users/user.class";
 
 @ValidatorConstraint({ name: "code", async: true })
 @Injectable()
-export class CustomCodealidation implements ValidatorConstraintInterface {
+export class CustomCodeValidation implements ValidatorConstraintInterface {
   constructor(
 	protected readonly usersQueryRepository: UsersQueryRepository
 	) {}
   async validate(value: string): Promise<boolean> {
-    const user: UserClass | null = await this.usersQueryRepository.findUserByCode(value);
+    const user: UserClass | null = await this.usersQueryRepository.findUserByConfirmation(value);
     if (user) {
       throw new BadRequestException([{ message: "code already exists", field: "code" }]);
     } else {
