@@ -12,10 +12,10 @@ export class DeviceRepository {
 	console.log("deviceId: ", deviceId)
     const query = `
 		DELETE FROM public."Devices"
-			WHERE "id" = $1
+			WHERE "deviceId" = $1
 `;
-    const deletedOne = await this.dataSource.query(query, [deviceId]);
-    if (!deletedOne[0]) return false;
+    const deletedOne = (await this.dataSource.query(query, [deviceId]))[0]
+    if (!deletedOne) return false;
     return true;
   }
 
