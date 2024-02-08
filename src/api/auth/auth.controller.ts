@@ -39,7 +39,6 @@ export class AuthController {
 
 	@HttpCode(204)
 	@SkipThrottle({ default: false })
-	// @Throttle({default: {ttl: 10000, limit: 5}})
 	@Post("password-recovery")
 	// @UseGuards(Ratelimits)
 	async createPasswordRecovery(@Body() emailInputData: emailInputDataClass) {
@@ -49,7 +48,6 @@ export class AuthController {
 
 	@HttpCode(204)
 	@SkipThrottle({ default: false })
-	// @Throttle({default: {ttl: 10000, limit: 5}})
 	@Post("new-password")
 	// @UseGuards(Ratelimits)
 	async createNewPassword(@Body() inputDataNewPassword: InputModelNewPasswordClass) {
@@ -60,7 +58,6 @@ export class AuthController {
 
 	@HttpCode(200)
 	@SkipThrottle({ default: false })
-	// @Throttle({default: {ttl: 10000, limit: 5}})
 	@Post('login')
 	// @UseGuards(Ratelimits)
 	async createLogin(
@@ -111,7 +108,6 @@ export class AuthController {
 
 	@HttpCode(204)
 	@SkipThrottle({ default: false })
-	// @Throttle({default: {ttl: 10000, limit: 5}})
 	@Post("registration-confirmation")
 	// @UseGuards(Ratelimits)
 	async createRegistrationConfirmation(@Body() inputDateRegConfirm: InputDateReqConfirmClass) {
@@ -123,7 +119,6 @@ export class AuthController {
 
 	@Post("registration")
 	@SkipThrottle({ default: false })
-	// @Throttle({default: {ttl: 10000, limit: 5}})
 	@HttpCode(204)
 	// @UseGuards(Ratelimits)
 	@UseGuards(CheckLoginOrEmail)
@@ -137,7 +132,6 @@ export class AuthController {
 
 	@HttpCode(204)
 	@SkipThrottle({ default: false })
-	// @Throttle({default: {ttl: 10000, limit: 5}})
 	@Post("registration-email-resending")
 	// @UseGuards(Ratelimits)
 	@UseGuards(IsExistEmailUser)
