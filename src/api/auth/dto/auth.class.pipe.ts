@@ -45,8 +45,8 @@ export class InputDateReqConfirmClass {
 	@IsString()
 	@Trim()
 	@IsUUID()
-	// @ApiProperty()
-	// @Validate(CustomCodeValidation)
+	@ApiProperty()
+	@Validate(CustomCodeValidation)
 	code: string
 }
 
