@@ -100,8 +100,9 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post("registration-confirmation")
-	@UseGuards(IsConfirmed)
+	// @UseGuards(IsConfirmed)
 	async createRegistrationConfirmation(@Body() inputDateRegConfirm: InputDateReqConfirmClass) {
+		console.log("registration-confirmation")
 		const command = new RegistrationConfirmationCommand(inputDateRegConfirm)
 		await this.commandBus.execute(command)
 	}

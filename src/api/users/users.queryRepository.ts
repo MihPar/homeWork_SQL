@@ -115,6 +115,7 @@ export class UsersQueryRepository {
   }
 
   async findUserByConfirmation(code: string): Promise<UserClass | null> {
+	// console.log("findUserByConfirmation: ")
     const user: UserClass | null = (
       await this.dataSource.query(`
 		SELECT *
@@ -124,7 +125,7 @@ export class UsersQueryRepository {
         [code]
       )
     )[0];
-    // console.log("user: ", user);
+	// console.log("user: ", user)
     return user;
   }
 
