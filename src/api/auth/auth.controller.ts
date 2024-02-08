@@ -28,7 +28,7 @@ import { Throttle } from '@nestjs/throttler';
 
 
 @Controller('auth')
-@UseGuards(Ratelimits)
+
 export class AuthController {
 	constructor(
 		protected commandBus: CommandBus,
@@ -39,6 +39,7 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post("password-recovery")
+	@UseGuards(Ratelimits)
 	// @Throttle({default: {ttl: 10000, limit: 5}})
 	async createPasswordRecovery(@Body() emailInputData: emailInputDataClass) {
 		const command = new RecoveryPasswordCommand(emailInputData.email)
@@ -47,6 +48,7 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post("new-password")
+	@UseGuards(Ratelimits)
 	// @Throttle({default: {ttl: 10000, limit: 5}})
 	async createNewPassword(@Body() inputDataNewPassword: InputModelNewPasswordClass) {
 		const command = new NewPasswordCommand(inputDataNewPassword)
@@ -56,6 +58,8 @@ export class AuthController {
 
 	@HttpCode(200)
 	@Post('login')
+	@UseGuards(Ratelimits)
+	@UseGuards(Ratelimits)
 	// @Throttle({default: {ttl: 10000, limit: 5}})
 	async createLogin(
 		@Body() inutDataModel: InputDataModelClassAuth,
@@ -105,6 +109,7 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post("registration-confirmation")
+	@UseGuards(Ratelimits)
 	// @Throttle({default: {ttl: 10000, limit: 5}})
 	async createRegistrationConfirmation(@Body() inputDateRegConfirm: InputDateReqConfirmClass) {
 		console.log("registration-confirmation")
@@ -115,6 +120,7 @@ export class AuthController {
 
 	@Post("registration")
 	@HttpCode(204)
+	@UseGuards(Ratelimits)
 	// @Throttle({default: {ttl: 10000, limit: 5}})
 	@UseGuards(CheckLoginOrEmail)
 	async creteRegistration(@Req() req: Request, @Body() inputDataReq: InputDataReqClass) {
@@ -127,6 +133,7 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post("registration-email-resending")
+	@UseGuards(Ratelimits)
 	// @Throttle({default: {ttl: 10000, limit: 5}})
 	@UseGuards(IsExistEmailUser)
 	async createRegistrationEmailResending(@Req() req: Request, @Body() inputDateReqEmailResending: emailInputDataClass) {
