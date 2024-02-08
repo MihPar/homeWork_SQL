@@ -28,7 +28,6 @@ import { Throttle } from '@nestjs/throttler';
 
 
 @Controller('auth')
-
 export class AuthController {
 	constructor(
 		protected commandBus: CommandBus,
@@ -58,7 +57,6 @@ export class AuthController {
 
 	@HttpCode(200)
 	@Post('login')
-	@UseGuards(Ratelimits)
 	@UseGuards(Ratelimits)
 	// @Throttle({default: {ttl: 10000, limit: 5}})
 	async createLogin(
