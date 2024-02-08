@@ -36,7 +36,6 @@ export class DeviceQueryRepository {
   }
 
 	async getAllDevicesUser(userId: string) {
-		console.log("userId: ", userId)
 		const query = `
 			SELECT *
 				FROM public."Devices"

@@ -54,7 +54,6 @@ export class SecurityDeviceController {
   @UseGuards(CheckRefreshToken, ForbiddenCalss)
 //   @UseGuards(ForbiddenCalss)
   async terminateSessionById(@Param('deviceId') deviceId: string) {
-	// console.log("deviceId: ", deviceId)
 	const deleteDeviceById = await this.deviceRepository.terminateSession(deviceId);
 	if (!deleteDeviceById) throw new NotFoundException("404")
 	return

@@ -9,7 +9,6 @@ export class DeviceRepository {
   constructor(@InjectDataSource() protected dataSource: DataSource) {}
 
   async terminateSession(deviceId: string) {
-	console.log("deviceId: ", deviceId)
     const query = `
 		DELETE FROM public."Devices"
 			WHERE "deviceId" = $1
