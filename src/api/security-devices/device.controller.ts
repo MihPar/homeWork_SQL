@@ -11,7 +11,7 @@ import { ForbiddenCalss } from "./gards/forbidden";
 import { UserDecorator, UserIdDecorator } from "../../infrastructura/decorators/decorator.user";
 import { SkipThrottle } from "@nestjs/throttler";
 
-// @SkipThrottle()
+@SkipThrottle()
 @Controller('security/devices')
 export class SecurityDeviceController {
   constructor(
