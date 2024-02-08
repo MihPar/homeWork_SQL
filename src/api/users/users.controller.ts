@@ -8,8 +8,9 @@ import { HttpExceptionFilter } from '../../infrastructura/exceptionFilters.ts/ex
 import { RegistrationCommand } from './useCase/registration-use-case';
 import { CreateNewUserCommand } from './useCase/createNewUser-use-case';
 import { dtoType } from './user.class';
+import { SkipThrottle } from '@nestjs/throttler';
 
-// @UseGuards(AuthGuard)
+@SkipThrottle()
 @UseGuards(AuthBasic)
 @Controller('sa/users')
 export class UsersController {
