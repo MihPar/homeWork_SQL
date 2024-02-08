@@ -20,7 +20,9 @@ export class CustomCodeValidation implements ValidatorConstraintInterface {
 	console.log("user: ", user)
     if (user) {
       throw new BadRequestException([{ message: "code already exists", field: "code" }]);
-    } else {
+    } if(user!.isConfirmed) {
+		throw new BadRequestException([{message: 'Incorrect code!', field: 'code'}])
+	} else {
       return true;
     }
   }
