@@ -2,7 +2,9 @@ import { Controller, Delete, HttpCode } from "@nestjs/common";
 import { CommandBus } from '@nestjs/cqrs';
 import { DeleteAllUsersCommnad } from "../users/useCase/deleteAllUsers-use-case";
 import { DeleteAllDevicesCommnad } from "../security-devices/useCase/deleteAllDevices-use-case";
+import { SkipThrottle } from "@nestjs/throttler";
 
+@SkipThrottle()
 @Controller('testing/all-data')
 export class DeleteAllDataController {
 	constructor(

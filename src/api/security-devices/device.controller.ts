@@ -9,7 +9,9 @@ import { UserClass } from "../users/user.class";
 import { TerminateAllCurrentSessionCommand } from "./useCase/terminateAllCurrentSeccion-use-case";
 import { ForbiddenCalss } from "./gards/forbidden";
 import { UserDecorator, UserIdDecorator } from "../../infrastructura/decorators/decorator.user";
+import { SkipThrottle } from "@nestjs/throttler";
 
+@SkipThrottle()
 @Controller('security/devices')
 export class SecurityDeviceController {
   constructor(

@@ -24,9 +24,10 @@ import { GetUserIdByTokenCommand } from "./useCase.ts/getUserIdByToken-use-case"
 import { UsersQueryRepository } from "../users/users.queryRepository";
 import { UserDecorator, UserIdDecorator } from "../../infrastructura/decorators/decorator.user";
 import { Ratelimits } from "./gards/rateLimits";
-import { Throttle } from '@nestjs/throttler';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 
 
+@SkipThrottle()
 @Controller('auth')
 export class AuthController {
 	constructor(
@@ -37,7 +38,8 @@ export class AuthController {
 	) {}
 
 	@HttpCode(204)
-	@Throttle({default: {ttl: 10000, limit: 5}})
+	@SkipThrottle({ default: false })
+	// @Throttle({default: {ttl: 10000, limit: 5}})
 	@Post("password-recovery")
 	// @UseGuards(Ratelimits)
 	async createPasswordRecovery(@Body() emailInputData: emailInputDataClass) {
@@ -46,7 +48,8 @@ export class AuthController {
 	}
 
 	@HttpCode(204)
-	@Throttle({default: {ttl: 10000, limit: 5}})
+	@SkipThrottle({ default: false })
+	// @Throttle({default: {ttl: 10000, limit: 5}})
 	@Post("new-password")
 	// @UseGuards(Ratelimits)
 	async createNewPassword(@Body() inputDataNewPassword: InputModelNewPasswordClass) {
@@ -56,7 +59,8 @@ export class AuthController {
 	}
 
 	@HttpCode(200)
-	@Throttle({default: {ttl: 10000, limit: 5}})
+	@SkipThrottle({ default: false })
+	// @Throttle({default: {ttl: 10000, limit: 5}})
 	@Post('login')
 	// @UseGuards(Ratelimits)
 	async createLogin(
@@ -106,7 +110,8 @@ export class AuthController {
 		}
 
 	@HttpCode(204)
-	@Throttle({default: {ttl: 10000, limit: 5}})
+	@SkipThrottle({ default: false })
+	// @Throttle({default: {ttl: 10000, limit: 5}})
 	@Post("registration-confirmation")
 	// @UseGuards(Ratelimits)
 	async createRegistrationConfirmation(@Body() inputDateRegConfirm: InputDateReqConfirmClass) {
@@ -117,7 +122,8 @@ export class AuthController {
 	}
 
 	@Post("registration")
-	@Throttle({default: {ttl: 10000, limit: 5}})
+	@SkipThrottle({ default: false })
+	// @Throttle({default: {ttl: 10000, limit: 5}})
 	@HttpCode(204)
 	// @UseGuards(Ratelimits)
 	@UseGuards(CheckLoginOrEmail)
@@ -130,7 +136,8 @@ export class AuthController {
 	}
 
 	@HttpCode(204)
-	@Throttle({default: {ttl: 10000, limit: 5}})
+	@SkipThrottle({ default: false })
+	// @Throttle({default: {ttl: 10000, limit: 5}})
 	@Post("registration-email-resending")
 	// @UseGuards(Ratelimits)
 	@UseGuards(IsExistEmailUser)

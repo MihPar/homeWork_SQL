@@ -43,6 +43,7 @@ import { UsersQueryRepository } from './api/users/users.queryRepository';
 import { CreateNewUserUseCase } from './api/users/useCase/createNewUser-use-case';
 import { CustomLoginvalidation } from './api/auth/adapter/customLoginValidator';
 import { CustomEmailvalidation } from './api/auth/adapter/customEmailValidatro';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 const userCases = [
   RecoveryPasswordUseCase,
@@ -88,6 +89,10 @@ const repositories = [AuthRepository, DeviceRepository, DeviceQueryRepository, U
       isGlobal: true,
       envFilePath: ".env",
     }),
+	ThrottlerModule.forRoot([{
+		ttl: 10000,
+		limit: 5,
+	  }]),
     TypeOrmModule.forRoot({
       type: "postgres",
       host: "ep-weathered-mouse-a5h47925.us-east-2.aws.neon.tech",
