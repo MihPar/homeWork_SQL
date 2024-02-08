@@ -24,10 +24,12 @@ import { GetUserIdByTokenCommand } from "./useCase.ts/getUserIdByToken-use-case"
 import { UsersQueryRepository } from "../users/users.queryRepository";
 import { UserDecorator, UserIdDecorator } from "../../infrastructura/decorators/decorator.user";
 import { Ratelimits } from "./gards/rateLimits";
-import { SkipThrottle, Throttle } from '@nestjs/throttler';
+import { SkipThrottle, Throttle, ThrottlerGuard } from '@nestjs/throttler';
 
 
-@SkipThrottle()
+// @SkipThrottle()
+@UseGuards(ThrottlerGuard)
+@Throttle({default: {ttl: 10000, limit: 5}})
 @Controller('auth')
 export class AuthController {
 	constructor(
@@ -39,7 +41,7 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post("password-recovery")
-	@SkipThrottle({ default: false })
+	// @SkipThrottle({ default: false })
 	// @UseGuards(Ratelimits)
 	async createPasswordRecovery(@Body() emailInputData: emailInputDataClass) {
 		const command = new RecoveryPasswordCommand(emailInputData.email)
@@ -48,7 +50,7 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post("new-password")
-	@SkipThrottle({ default: false })
+	// @SkipThrottle({ default: false })
 	// @UseGuards(Ratelimits)
 	async createNewPassword(@Body() inputDataNewPassword: InputModelNewPasswordClass) {
 		const command = new NewPasswordCommand(inputDataNewPassword)
@@ -58,7 +60,7 @@ export class AuthController {
 
 	@HttpCode(200)
 	@Post('login')
-	@SkipThrottle({ default: false })
+	// @SkipThrottle({ default: false })
 	// @UseGuards(Ratelimits)
 	async createLogin(
 		@Body() inutDataModel: InputDataModelClassAuth,
@@ -85,6 +87,7 @@ export class AuthController {
 	
 	@HttpCode(200)
 	@Post("refresh-token")
+	@SkipThrottle({default: true})
 	@UseGuards(CheckRefreshToken)
 	async cretaeRefreshToken(
 		@Req() req: Request,
@@ -108,7 +111,7 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post("registration-confirmation")
-	@SkipThrottle({ default: false })
+	// @SkipThrottle({ default: false })
 	// @UseGuards(Ratelimits)
 	async createRegistrationConfirmation(@Body() inputDateRegConfirm: InputDateReqConfirmClass) {
 		console.log("registration-confirmation")
@@ -119,7 +122,7 @@ export class AuthController {
 
 	@Post("registration")
 	@HttpCode(204)
-	@SkipThrottle({ default: false })
+	// @SkipThrottle({ default: false })
 	// @UseGuards(Ratelimits)
 	@UseGuards(CheckLoginOrEmail)
 	async creteRegistration(@Req() req: Request, @Body() inputDataReq: InputDataReqClass) {
@@ -132,7 +135,7 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post("registration-email-resending")
-	@SkipThrottle({ default: false })
+	// @SkipThrottle({ default: false })
 	// @UseGuards(Ratelimits)
 	@UseGuards(IsExistEmailUser)
 	async createRegistrationEmailResending(@Req() req: Request, @Body() inputDateReqEmailResending: emailInputDataClass) {
@@ -144,6 +147,7 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post("logout")
+	@SkipThrottle({default: true})
 	@UseGuards(CheckRefreshToken)
 	async cretaeLogout(@Req() req: Request) {
 		const refreshToken: string = req.cookies.refreshToken;
@@ -154,6 +158,7 @@ export class AuthController {
 
 	@HttpCode(200)
 	@Get("me")
+	@SkipThrottle({default: true})
 	@UseGuards(CheckRefreshTokenForComments)
 	async findMe(@Req() req: Request) {
 		if (!req.headers.authorization) throw new UnauthorizedException('Not authorization 401')

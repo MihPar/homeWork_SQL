@@ -10,7 +10,7 @@ import { CreateNewUserCommand } from './useCase/createNewUser-use-case';
 import { dtoType } from './user.class';
 import { SkipThrottle } from '@nestjs/throttler';
 
-@SkipThrottle()
+// @SkipThrottle()
 @UseGuards(AuthBasic)
 @Controller('sa/users')
 export class UsersController {

@@ -18,14 +18,14 @@ export class AuthRepository {
   }
 
   async getCount(objCollection) {
-	const tenSecondsAgo = new Date(Date.now() - 10000);
+	// const tenSecondsAgo = new Date(Date.now() - 10000);
 	const count = (await this.dataSource.query(`
 	SELECT count(*)
 		FROM "IpCollection"
 		WHERE "ip" = $1
-		--AND "date" > CURRENT_TIMESTAMP -INTERVAL '10 seconds'
-		AND "date" > $2
-	`, [objCollection.ip, tenSecondsAgo]))[0]
+		AND "date" > CURRENT_TIMESTAMP -INTERVAL '10 seconds'
+		--AND "date" > $2
+	`, [objCollection.ip]))[0]
 	console.log("count: ", typeof count.count)
 	return +count.count
   }
