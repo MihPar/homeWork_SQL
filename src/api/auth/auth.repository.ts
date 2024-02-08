@@ -8,12 +8,12 @@ export class AuthRepository {
   constructor(@InjectDataSource() protected dataSource: DataSource) {}
 
   async create(objCollection) {
-    const createNewCollection = await this.dataSource.query(`
+    const createNewCollection = (await this.dataSource.query(`
 	INSERT INTO public."IpCollection"(
 		"ip", "url")
 		VALUES ('${objCollection.ip}', '${objCollection.url}');
-	`)
-		if(!createNewCollection[0]) return false
+	`))[0]
+		if(!createNewCollection) return false
 		return true
   }
 
