@@ -38,8 +38,8 @@ export class AuthController {
 	) {}
 
 	@HttpCode(204)
-	@SkipThrottle({ default: false })
 	@Post("password-recovery")
+	@SkipThrottle({ default: false })
 	// @UseGuards(Ratelimits)
 	async createPasswordRecovery(@Body() emailInputData: emailInputDataClass) {
 		const command = new RecoveryPasswordCommand(emailInputData.email)
@@ -47,8 +47,8 @@ export class AuthController {
 	}
 
 	@HttpCode(204)
-	@SkipThrottle({ default: false })
 	@Post("new-password")
+	@SkipThrottle({ default: false })
 	// @UseGuards(Ratelimits)
 	async createNewPassword(@Body() inputDataNewPassword: InputModelNewPasswordClass) {
 		const command = new NewPasswordCommand(inputDataNewPassword)
@@ -57,8 +57,8 @@ export class AuthController {
 	}
 
 	@HttpCode(200)
-	@SkipThrottle({ default: false })
 	@Post('login')
+	@SkipThrottle({ default: false })
 	// @UseGuards(Ratelimits)
 	async createLogin(
 		@Body() inutDataModel: InputDataModelClassAuth,
@@ -107,8 +107,8 @@ export class AuthController {
 		}
 
 	@HttpCode(204)
-	@SkipThrottle({ default: false })
 	@Post("registration-confirmation")
+	@SkipThrottle({ default: false })
 	// @UseGuards(Ratelimits)
 	async createRegistrationConfirmation(@Body() inputDateRegConfirm: InputDateReqConfirmClass) {
 		console.log("registration-confirmation")
@@ -118,8 +118,8 @@ export class AuthController {
 	}
 
 	@Post("registration")
-	@SkipThrottle({ default: false })
 	@HttpCode(204)
+	@SkipThrottle({ default: false })
 	// @UseGuards(Ratelimits)
 	@UseGuards(CheckLoginOrEmail)
 	async creteRegistration(@Req() req: Request, @Body() inputDataReq: InputDataReqClass) {
@@ -131,8 +131,8 @@ export class AuthController {
 	}
 
 	@HttpCode(204)
-	@SkipThrottle({ default: false })
 	@Post("registration-email-resending")
+	@SkipThrottle({ default: false })
 	// @UseGuards(Ratelimits)
 	@UseGuards(IsExistEmailUser)
 	async createRegistrationEmailResending(@Req() req: Request, @Body() inputDateReqEmailResending: emailInputDataClass) {
