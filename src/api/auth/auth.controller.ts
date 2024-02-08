@@ -104,7 +104,8 @@ export class AuthController {
 	async createRegistrationConfirmation(@Body() inputDateRegConfirm: InputDateReqConfirmClass) {
 		console.log("registration-confirmation")
 		const command = new RegistrationConfirmationCommand(inputDateRegConfirm)
-		await this.commandBus.execute(command)
+		const registrationConfirmation =  await this.commandBus.execute(command)
+		if(!registrationConfirmation) throw new BadRequestException([{ message: "bed request", field: "code" }])
 	}
 
 	@Post("registration")
