@@ -72,7 +72,8 @@ export class AuthController {
 			const command = new CreateDeviceCommand(IP, deviceName, user)
 			const tokens = await this.commandBus.execute(command)
 			if(!tokens){
-				throw new HttpException("Errror", 500)
+				// throw new HttpException("Errror", 500)
+				throw new UnauthorizedException("Errror")
 			}
 			res.cookie('refreshToken', tokens.refreshToken, {
                 httpOnly: true,
