@@ -99,6 +99,7 @@ export class AuthController {
 			httpOnly: true,
 			secure: true,
 		});
+		console.log("res.cookie: ", res.cookie)
 		return {accessToken: result.newToken};
 		}
 
