@@ -37,18 +37,18 @@ export class AuthController {
 	) {}
 
 	@HttpCode(204)
+	@Throttle({default: {ttl: 10000, limit: 5}})
 	@Post("password-recovery")
-	@UseGuards(Ratelimits)
-	// @Throttle({default: {ttl: 10000, limit: 5}})
+	// @UseGuards(Ratelimits)
 	async createPasswordRecovery(@Body() emailInputData: emailInputDataClass) {
 		const command = new RecoveryPasswordCommand(emailInputData.email)
 		const passwordRecovery = await this.commandBus.execute(command)
 	}
 
 	@HttpCode(204)
+	@Throttle({default: {ttl: 10000, limit: 5}})
 	@Post("new-password")
-	@UseGuards(Ratelimits)
-	// @Throttle({default: {ttl: 10000, limit: 5}})
+	// @UseGuards(Ratelimits)
 	async createNewPassword(@Body() inputDataNewPassword: InputModelNewPasswordClass) {
 		const command = new NewPasswordCommand(inputDataNewPassword)
 		const resultUpdatePassword = await this.commandBus.execute(command)
@@ -117,9 +117,9 @@ export class AuthController {
 	}
 
 	@Post("registration")
+	@Throttle({default: {ttl: 10000, limit: 5}})
 	@HttpCode(204)
-	@UseGuards(Ratelimits)
-	// @Throttle({default: {ttl: 10000, limit: 5}})
+	// @UseGuards(Ratelimits)
 	@UseGuards(CheckLoginOrEmail)
 	async creteRegistration(@Req() req: Request, @Body() inputDataReq: InputDataReqClass) {
 		const command = new RegistrationCommand(inputDataReq)
