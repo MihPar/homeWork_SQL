@@ -56,9 +56,9 @@ export class AuthController {
 	}
 
 	@HttpCode(200)
+	@Throttle({default: {ttl: 10000, limit: 5}})
 	@Post('login')
-	@UseGuards(Ratelimits)
-	// @Throttle({default: {ttl: 10000, limit: 5}})
+	// @UseGuards(Ratelimits)
 	async createLogin(
 		@Body() inutDataModel: InputDataModelClassAuth,
 		@Ip() IP: string, 
@@ -72,8 +72,7 @@ export class AuthController {
 			const command = new CreateDeviceCommand(IP, deviceName, user)
 			const tokens = await this.commandBus.execute(command)
 			if(!tokens){
-				// throw new HttpException("Errror", 500)
-				throw new UnauthorizedException("Errror")
+				throw new HttpException("Errror", 500)
 			}
 			res.cookie('refreshToken', tokens.refreshToken, {
                 httpOnly: true,
@@ -107,9 +106,9 @@ export class AuthController {
 		}
 
 	@HttpCode(204)
+	@Throttle({default: {ttl: 10000, limit: 5}})
 	@Post("registration-confirmation")
-	@UseGuards(Ratelimits)
-	// @Throttle({default: {ttl: 10000, limit: 5}})
+	// @UseGuards(Ratelimits)
 	async createRegistrationConfirmation(@Body() inputDateRegConfirm: InputDateReqConfirmClass) {
 		console.log("registration-confirmation")
 		const command = new RegistrationConfirmationCommand(inputDateRegConfirm)
@@ -131,9 +130,9 @@ export class AuthController {
 	}
 
 	@HttpCode(204)
+	@Throttle({default: {ttl: 10000, limit: 5}})
 	@Post("registration-email-resending")
-	@UseGuards(Ratelimits)
-	// @Throttle({default: {ttl: 10000, limit: 5}})
+	// @UseGuards(Ratelimits)
 	@UseGuards(IsExistEmailUser)
 	async createRegistrationEmailResending(@Req() req: Request, @Body() inputDateReqEmailResending: emailInputDataClass) {
 		const command = new RegistrationEmailResendingCommand(inputDateReqEmailResending)
