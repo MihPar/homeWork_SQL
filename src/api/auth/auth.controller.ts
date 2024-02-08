@@ -39,7 +39,7 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post("password-recovery")
-	@Throttle({default: {ttl: 10000, limit: 5}})
+	// @Throttle({default: {ttl: 10000, limit: 5}})
 	async createPasswordRecovery(@Body() emailInputData: emailInputDataClass) {
 		const command = new RecoveryPasswordCommand(emailInputData.email)
 		const passwordRecovery = await this.commandBus.execute(command)
@@ -47,7 +47,7 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post("new-password")
-	@Throttle({default: {ttl: 10000, limit: 5}})
+	// @Throttle({default: {ttl: 10000, limit: 5}})
 	async createNewPassword(@Body() inputDataNewPassword: InputModelNewPasswordClass) {
 		const command = new NewPasswordCommand(inputDataNewPassword)
 		const resultUpdatePassword = await this.commandBus.execute(command)
@@ -56,7 +56,7 @@ export class AuthController {
 
 	@HttpCode(200)
 	@Post('login')
-	@Throttle({default: {ttl: 10000, limit: 5}})
+	// @Throttle({default: {ttl: 10000, limit: 5}})
 	async createLogin(
 		@Body() inutDataModel: InputDataModelClassAuth,
 		@Ip() IP: string, 
@@ -105,8 +105,7 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post("registration-confirmation")
-	// @UseGuards(IsConfirmed)
-	@Throttle({default: {ttl: 10000, limit: 5}})
+	// @Throttle({default: {ttl: 10000, limit: 5}})
 	async createRegistrationConfirmation(@Body() inputDateRegConfirm: InputDateReqConfirmClass) {
 		console.log("registration-confirmation")
 		const command = new RegistrationConfirmationCommand(inputDateRegConfirm)
@@ -116,7 +115,7 @@ export class AuthController {
 
 	@Post("registration")
 	@HttpCode(204)
-	@Throttle({default: {ttl: 10000, limit: 5}})
+	// @Throttle({default: {ttl: 10000, limit: 5}})
 	@UseGuards(CheckLoginOrEmail)
 	async creteRegistration(@Req() req: Request, @Body() inputDataReq: InputDataReqClass) {
 		const command = new RegistrationCommand(inputDataReq)
@@ -128,7 +127,7 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post("registration-email-resending")
-	@Throttle({default: {ttl: 10000, limit: 5}})
+	// @Throttle({default: {ttl: 10000, limit: 5}})
 	@UseGuards(IsExistEmailUser)
 	async createRegistrationEmailResending(@Req() req: Request, @Body() inputDateReqEmailResending: emailInputDataClass) {
 		const command = new RegistrationEmailResendingCommand(inputDateReqEmailResending)
