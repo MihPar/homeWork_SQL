@@ -28,7 +28,7 @@ import { Throttle } from '@nestjs/throttler';
 
 
 @Controller('auth')
-// @UseGuards(Ratelimits)
+@UseGuards(Ratelimits)
 export class AuthController {
 	constructor(
 		protected commandBus: CommandBus,
