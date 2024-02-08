@@ -38,8 +38,10 @@ export class CheckRefreshToken implements CanActivate {
 	console.log("oldActiveDate: ", oldActiveDate)
 	if (
 	  !session ||
-	  session!.lastActiveDate !== oldActiveDate
+	  session!.lastActiveDate.toISOString() !== oldActiveDate
 	) {
+		console.log("lastActiveDate: ", typeof session!.lastActiveDate)
+		console.log("oldActiveDate: ", typeof oldActiveDate)
 		throw new UnauthorizedException("401")
 	}
 	console.log("payload: ", payload)

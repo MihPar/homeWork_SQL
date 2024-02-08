@@ -11,16 +11,15 @@ export class DeviceRepository {
   async terminateSession(deviceId: string) {
     const query = `
 		DELETE FROM public."Devices"
-			WHERE "Devices"."id" = $1
-			RETURNING *
+			WHERE "id" = $1
 `;
-    const deletedOne = this.dataSource.query(query, [deviceId]);
-    if (!deletedOne) return false;
+    const deletedOne = await this.dataSource.query(query, [deviceId]);
+    if (!deletedOne[0]) return false;
     return true;
   }
 
   async deleteAllDevices() {
-    const deletedAll = this.dataSource.query(`
+    const deletedAll = await this.dataSource.query(`
 		DELETE FROM public."Devices"
 	`);
     return true;
@@ -75,16 +74,4 @@ export class DeviceRepository {
     if (!decayResult) return false;
     return true;
   }
-
-  //   async createCollectionIP(reqData: CollectionIP) {
-  // 	await this.dataSource.query(`
-
-  // 	`);
-  // 	return reqData;
-  //   }
-
-  //   async countDocs(filter: any) {
-  // 	const result = await this.collectioinIPModel.countDocuments(filter);
-  // 	return result
-  //   }
 }

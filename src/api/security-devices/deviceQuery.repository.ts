@@ -19,22 +19,22 @@ export class DeviceQueryRepository {
 	}
 
 	async findDeviceByDeviceId(deviceId: string) {
-		const query = `
+    const query = `
 			SELECT *
 				FROM public."Devices"
 				WHERE "deviceId" = $1
-	`
-		const deviceByDeviceId = await this.dataSource.query(query, [deviceId])
-		return deviceByDeviceId.map(function(item) {
-			return {
-				ip: item.ip,
-				title: item.title,
-				deviceId: item.deviceId,
-				userId: item.userId,
-				lastActiveDate: item.lastActiveDate
-			}
-		})
-	  }
+	`;
+    const deviceByDeviceId = (
+      await this.dataSource.query(query, [deviceId])
+    )[0];
+    return deviceByDeviceId ? {
+      ip: deviceByDeviceId.ip,
+      title: deviceByDeviceId.title,
+      deviceId: deviceByDeviceId.deviceId,
+      userId: deviceByDeviceId.userId,
+      lastActiveDate: deviceByDeviceId.lastActiveDate,
+    } : null
+  }
 
 	async getAllDevicesUser(userId: string) {
 		const query = `
