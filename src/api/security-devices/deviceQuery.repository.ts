@@ -43,6 +43,7 @@ export class DeviceQueryRepository {
 				where "userId" = $1
 	`
 		const getAllDevices = await this.dataSource.query(query, [userId])
+		// return getAllDevices
 		return getAllDevices.map(function (item) {
 		  return {
 			ip: item.IP,
