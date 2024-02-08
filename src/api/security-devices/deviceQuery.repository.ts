@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectDataSource } from "@nestjs/typeorm";
 import { DataSource } from "typeorm";
-import { DeviceClass } from "./dto/device.class";
 
 @Injectable()
 export class DeviceQueryRepository {
@@ -44,7 +43,6 @@ export class DeviceQueryRepository {
 				where "userId" = $1
 	`
 		const getAllDevices = await this.dataSource.query(query, [userId])
-		console.log("getAllDevices: ", getAllDevices)
 		return getAllDevices.map(function (item) {
 		  return {
 			ip: item.ip,
