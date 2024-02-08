@@ -37,19 +37,20 @@ export class DeviceQueryRepository {
   }
 
 	async getAllDevicesUser(userId: string) {
+		console.log("userId: ", userId)
 		const query = `
 			SELECT *
 				FROM public."Devices"
 				where "userId" = $1
 	`
 		const getAllDevices = await this.dataSource.query(query, [userId])
-		// return getAllDevices
+		console.log("getAllDevices: ", getAllDevices)
 		return getAllDevices.map(function (item) {
 		  return {
-			ip: item.IP,
-			title: item.Title,
-			lastActiveDate: item.LastActiveDate,
-			deviceId: item.DeviceId,
+			ip: item.ip,
+			title: item.title,
+			lastActiveDate: item.lastActiveDate,
+			deviceId: item.deviceId,
 		  };
 		});
 	}
