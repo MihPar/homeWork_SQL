@@ -2,6 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { UsersQueryRepository } from '../users.queryRepository';
 import { UsersRepository } from '../users.repository';
 import { InputDateReqConfirmClass } from '../../auth/dto/auth.class.pipe';
+import { BadRequestException } from '@nestjs/common';
 
 export class RegistrationConfirmationCommand {
   constructor(public inputDateRegConfirm: InputDateReqConfirmClass) {}
@@ -20,6 +21,9 @@ export class RegistrationConfirmationUseCase
       command.inputDateRegConfirm.code,
     );
 	// console.log("user: ", user)
+	if(user!.isConfirmed) {
+		throw new BadRequestException([{message: 'Incorrect code!', field: 'code'}])
+	}
     const result = await this.usersRepository.updateConfirmation(user!.id);
     return result;
   }
