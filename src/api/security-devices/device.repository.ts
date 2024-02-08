@@ -57,7 +57,7 @@ export class DeviceRepository {
     const query = `
 		UPDATE public."Devices"
 			SET "lastActiveDate" = $1
-			WHERE d."deviceId" = $2 AND d."userId" = $3
+			WHERE "deviceId" = $2 AND "userId" = $3
 `;
     await this.dataSource.query(query, [
       newLastActiveDate,
