@@ -26,6 +26,7 @@ export class AuthRepository {
 		--AND "date" > CURRENT_TIMESTAMP -INTERVAL '10 seconds'
 		AND "date" > $2
 	`, [objCollection.ip, tenSecondsAgo]))[0]
-	return count
+	console.log("count: ", typeof count.count)
+	return +count.count
   }
 }

@@ -48,8 +48,8 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post("new-password")
-	@UseGuards(Ratelimits)
-	// @Throttle({default: {ttl: 10000, limit: 5}})
+	// @UseGuards(Ratelimits)
+	@Throttle({default: {ttl: 10000, limit: 5}})
 	async createNewPassword(@Body() inputDataNewPassword: InputModelNewPasswordClass) {
 		const command = new NewPasswordCommand(inputDataNewPassword)
 		const resultUpdatePassword = await this.commandBus.execute(command)
