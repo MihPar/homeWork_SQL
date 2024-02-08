@@ -18,10 +18,10 @@ export class Ratelimits implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req: Request = context.switchToHttp().getRequest();
 
-	const objCollection: CollectionIP = {
+	const objCollection = {
 		ip: req.ip || '',
 		url: req.originalUrl,
-		date: new Date(),
+		// date: new Date(),
 	}
     
 	const reqData: any = this.authRepository.create(objCollection)
