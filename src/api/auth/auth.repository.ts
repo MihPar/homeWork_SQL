@@ -22,9 +22,9 @@ export class AuthRepository {
 	const count = (await this.dataSource.query(`
 	SELECT count(*)
 		FROM "IpCollection"
-		WHERE "ip" = '${objCollection.ip}'
+		WHERE "ip" = $1
 		AND "date" > CURRENT_TIMESTAMP -INTERVAL '10 seconds'
-	`))[0]
+	`, [objCollection.ip]))[0]
 	return count
   }
 }
