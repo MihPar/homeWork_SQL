@@ -29,7 +29,6 @@ import { SkipThrottle, Throttle, ThrottlerGuard } from '@nestjs/throttler';
 
 // @SkipThrottle()
 @UseGuards(ThrottlerGuard)
-@Throttle({default: {ttl: 10000, limit: 5}})
 @Controller('auth')
 export class AuthController {
 	constructor(

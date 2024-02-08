@@ -89,10 +89,10 @@ const repositories = [AuthRepository, DeviceRepository, DeviceQueryRepository, U
       isGlobal: true,
       envFilePath: ".env",
     }),
-	// ThrottlerModule.forRoot([{
-	// 	ttl: 10000,
-	// 	limit: 5,
-	//   }]),
+	ThrottlerModule.forRoot([{
+		ttl: 10000,
+		limit: 5,
+	  }]),
     TypeOrmModule.forRoot({
       type: "postgres",
       host: "ep-weathered-mouse-a5h47925.us-east-2.aws.neon.tech",
