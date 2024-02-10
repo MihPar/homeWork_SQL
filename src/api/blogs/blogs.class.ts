@@ -7,7 +7,8 @@ export class Blogs {
 		public name: string,
 		public description: string,
 		public websiteUrl: string,
-		public isMembership: boolean) {
+		public isMembership: boolean,
+		public userId: string) {
 			this.createdAt = new Date().toISOString()
 		}
   };
@@ -19,14 +20,17 @@ export class BlogClass extends Blogs {
 		name: string,
 		description: string,
 		websiteUrl: string,
-		isMembership: boolean) {
-		super(id, name, description, websiteUrl,isMembership)
+		isMembership: boolean,
+		userId: string
+		) {
+		super(id, name, description, websiteUrl,isMembership, userId)
 	}
 		name: string
 		description: string
 		websiteUrl: string
 		createdAt: string
 		isMembership: boolean
+		userId: string
 
 		static getBlogsViewModel(inputBlog: BlogClass): BlogsViewType{
 			return {

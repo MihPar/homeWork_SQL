@@ -1,101 +1,87 @@
-import { Injectable } from '@nestjs/common';
-import { PaginationType } from '../../types/pagination.types';
-import { PostsViewModel } from './posts.type';
-import { DataSource } from 'typeorm';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { PostClass, Posts } from './post.class';
-import { LikeStatusEnum } from '../likes/likes.emun';
-
+import { Injectable } from "@nestjs/common";
+import { PaginationType } from "../../types/pagination.types";
+import { PostsViewModel } from "./posts.type";
+import { DataSource, ObjectId } from "typeorm";
+import { InjectDataSource } from "@nestjs/typeorm";
+import { PostClass, Posts } from "./post.class";
+import { LikeStatusEnum } from "../likes/likes.emun";
 
 @Injectable()
 export class PostsQueryRepository {
   constructor(@InjectDataSource() protected dataSource: DataSource) {}
 
-  //   async findPostById(postId: string, userId?: string | null): Promise<PostsViewModel | null> {
-  //     if(!ObjectId.isValid(postId)) return null;
-  // 	const post: PostClass | null = await this.postModel
-  //       .findOne({ _id: new ObjectId(postId) }, { __v: 0 })
-  //       .lean();
+  async findPostById(
+    postId: string,
+    userId?: string | null
+  ): Promise<PostsViewModel | null> {
+    if (!ObjectId.isValid(postId)) return null;
+    const query1 = `
+		select *
+			from public."Posts"
+			where "id" = $1
+	  `;
 
-  //     const newestLikes = await this.likeModel
-  //       .find({ postId: postId, myStatus: LikeStatusEnum.Like })
-  //       .sort({ addedAt: -1 })
-  //       .limit(3)
-  //       .skip(0)
-  //       .lean();
+    const post: PostClass | null = (
+      await this.dataSource.query(query1, [postId])
+    )[0];
+    const query2 = `
+			select *
+				from public."NewestLikes" 
+					where "postId" = $1
+					order by "addedAt" desc
+					limit 3 offset 0
+		`;
+    const newestLikes = await this.dataSource.query(query2, [postId])[0];
+    return post ? PostClass.getPostsViewModel(post, newestLikes) : null;
+  }
 
-  //     let myStatus: LikeStatusEnum = LikeStatusEnum.None;
+  async findAllPosts(
+    pageNumber: string,
+    pageSize: string,
+    sortBy: string,
+    sortDirection: string,
+    userId?: string | null
+  ): Promise<PaginationType<Posts>> {
+    const query1 = `
+			select *
+				from "Posts"
+				order by $1 ${sortDirection}
+				limit $2 offset $3
+		`;
+    const allPosts = await this.dataSource.query(query1, [
+      sortBy,
+      +pageSize,
+      (+pageNumber - 1) * +pageSize,
+    ]);
 
-  //     if (userId) {
-  //       const reaction = await this.likeModel.findOne({
-  //         postId: postId,
-  //         userId,
-  //       });
-  //       myStatus = reaction
-  //         ? (reaction.myStatus as unknown as LikeStatusEnum)
-  //         : LikeStatusEnum.None;
-  //     }
-  //     return post ? PostClass.getPostsViewModel(post, myStatus, newestLikes) : null;
-  //   }
+    const count = `
+		select count(*)
+			from "Posts"
+	`;
+    const totalCount = (await this.dataSource.query(count))[0].count;
+    const pagesCount: number = Math.ceil(+totalCount / +pageSize);
+    const query2 = `
+		select *
+			from "NewestLiks"
+			where "postId' = $1
+			order by "addedAt" desc
+			limit 3 offset 0
+	`;
+    let result: PaginationType<Posts> = {
+      pagesCount: pagesCount,
+      page: +pageNumber,
+      pageSize: +pageSize,
+      totalCount: +totalCount,
+      items: await Promise.all(
+        allPosts.map(async (post) => {
+          const newestLikes = await this.dataSource.query(query2, [post.id]);
 
-  //   async findAllPosts(
-  //     pageNumber: string,
-  //     pageSize: string,
-  //     sortBy: string,
-  //     sortDirection: string,
-  //     userId?: string | null,
-  //   ): Promise<PaginationType<Posts>> {
-  //     const filtered = {};
-  //     const allPosts: PostClass[] = await this.postModel
-  //       .find(filtered, { __v: 0 })
-  //       .sort({ [sortBy]: sortDirection === 'asc' ? 1 : -1 })
-  //       .skip((+pageNumber - 1) * +pageSize)
-  //       .limit(+pageSize)
-  //       .lean();
-
-  //     const totalCount: number = await this.postModel.countDocuments(filtered);
-  //     const pagesCount: number = Math.ceil(totalCount / +pageSize);
-
-  //     let result: PaginationType<Posts> = {
-  //       pagesCount: pagesCount,
-  //       page: +pageNumber,
-  //       pageSize: +pageSize,
-  //       totalCount: totalCount,
-  //       items: await Promise.all(
-  //         allPosts.map(async (post) => {
-  //           const newestLikes = await this.likeModel
-  //             .find({
-  //               postId: post._id.toString(),
-  //               myStatus: LikeStatusEnum.Like,
-  //             })
-  //             .sort({ addedAt: -1 })
-  //             .limit(3)
-  //             .skip(0)
-  //             .lean();
-
-  //           let myStatus: LikeStatusEnum = LikeStatusEnum.None;
-
-  //           if (userId) {
-  //             const reaction = await this.likeModel
-  //               .findOne(
-  //                 {
-  //                   postId: post._id.toString(),
-  //                   userId: userId,
-  //                 },
-  //                 { __v: 0 },
-  //               )
-  //               .lean();
-
-  //             myStatus = reaction
-  //               ? (reaction.myStatus as unknown as LikeStatusEnum)
-  //               : LikeStatusEnum.None;
-  //           }
-  //           return PostClass.getPostsViewModel(post, myStatus, newestLikes);
-  //         }),
-  //       ),
-  //     };
-  //     return result;
-  //   }
+          return PostClass.getPostsViewModel(post, newestLikes);
+        })
+      ),
+    };
+    return result;
+  }
 
   async findPostsByBlogsId(
     pageNumber: string,
@@ -105,7 +91,6 @@ export class PostsQueryRepository {
     blogId: string,
     userId: string | null
   ): Promise<PaginationType<Posts>> {
-
     const query1 = `
 		SELECT *
 			FROM public."Posts"
@@ -128,7 +113,7 @@ export class PostsQueryRepository {
     const totalCount = (await this.dataSource.query(count, [blogId]))[0].count;
     const pagesCount: number = Math.ceil(totalCount / +pageSize);
 
-	const query2 = `
+    const query2 = `
 			select *
 				from "NewestLikes"
 				where "postId" = $1

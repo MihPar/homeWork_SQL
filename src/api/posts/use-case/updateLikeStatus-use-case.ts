@@ -1,8 +1,8 @@
-import { InputModelLikeStatusClass } from './../../comment/comment.class-pipe';
+import { InputModelLikeStatusClass } from '../../comment/dto/comment.class-pipe';
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { UserClass } from "../../../schema/user.schema";
 import { LikesRepository } from "../../likes/likes.repository";
 import { PostsRepository } from "../posts.repository";
+import { UserClass } from '../../users/user.class';
 
 export class UpdateLikeStatusCommand {
 	constructor(

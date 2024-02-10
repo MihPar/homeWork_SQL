@@ -14,36 +14,35 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { PaginationType } from '../../types/pagination.types';
-import { CommentViewModel, CommentViewType } from '../comment/comment.type';
 import { InputModelClassPostId, InputModelContentePostClass, inputModelPostClass } from './dto/posts.class.pipe';
-import { CommentService } from '../comment/comment.service';
 import { PostsService } from './posts.service';
-import { CommentQueryRepository } from '../comment/comment.queryRepository';
 import { PostsQueryRepository } from './postQuery.repository';
 import { BlogsQueryRepository } from '../blogs/blogs.queryReposity';
-import { UserDecorator, UserIdDecorator } from '../../infrastructure/decorator/decorator.user';
-import { CheckRefreshTokenForPost } from '../../infrastructure/guards/post/bearer.authForPost';
-import { AuthBasic } from '../../infrastructure/guards/auth/basic.auth';
-import { UserClass } from '../../schema/user.schema';
-import { BlogClass } from '../../schema/blogs.schema';
 import { CommandBus } from '@nestjs/cqrs';
-import { CreateNewCommentByPostIdCommnad } from '../comment/use-case/createNewCommentByPotsId-use-case';
 import { CreatePostCommand } from './use-case/createPost-use-case';
-import { Posts } from '../../schema/post.schema';
 import { UpdateOldPostCommand } from './use-case/updateOldPost-use-case';
 import { DeletePostByIdCommand } from './use-case/deletePostById-use-case';
 import { UpdateLikeStatusCommand } from './use-case/updateLikeStatus-use-case';
-import { InputModelLikeStatusClass } from '../comment/comment.class-pipe';
-import { CheckRefreshTokenForGet } from '../../infrastructure/guards/comments/bearer.authGetComment';
+import { UserDecorator, UserIdDecorator } from '../../infrastructura/decorators/decorator.user';
+import { UserClass } from '../users/user.class';
+import { CheckRefreshTokenForPost } from './guards/bearer.authForPost';
+import { InputModelLikeStatusClass } from '../comment/dto/comment.class-pipe';
+import { CheckRefreshTokenForGet } from './guards/bearer.authGetComment';
+import { CommentViewModel, CommentViewType } from '../comment/comment.type';
+import { CommentQueryRepository } from '../comment/comment.queryRepository';
+import { Posts } from './post.class';
+import { PostsViewModel } from './posts.type';
+import { CreateNewCommentByPostIdCommnad } from '../comment/use-case/createNewCommentByPotsId-use-case';
+import { SkipThrottle } from '@nestjs/throttler';
 
+@SkipThrottle()
 @Controller('posts')
 export class PostController {
   constructor(
     protected postsQueryRepository: PostsQueryRepository,
-    protected commentQueryRepository: CommentQueryRepository,
-    protected commentService: CommentService,
     protected postsService: PostsService,
     protected blogsQueryRepository: BlogsQueryRepository,
+	protected commentQueryRepository: CommentQueryRepository,
 	protected commandBus: CommandBus
   ) {}
 
@@ -81,7 +80,7 @@ export class PostController {
     },
   ) {
     const isExistPots = await this.postsQueryRepository.findPostById(dto.postId);
-	console.log("isExistPots: ", isExistPots)
+	// console.log("isExistPots: ", isExistPots)
     if (!isExistPots) throw new NotFoundException('Blogs by id not found');
     const commentByPostsId: PaginationType<CommentViewType> | null =
       await this.commentQueryRepository.findCommentByPostId(
@@ -105,7 +104,7 @@ export class PostController {
   	@UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string | null
 	) {
-    const post: Posts | null = await this.postsQueryRepository.findPostById(dto.postId)
+    const post: PostsViewModel | null = await this.postsQueryRepository.findPostById(dto.postId)
     if (!post) throw new NotFoundException('Blogs by id not found 404')
 	const command = new CreateNewCommentByPostIdCommnad(dto.postId, inputModelContent, user, userId)
 	const createNewCommentByPostId: CommentViewModel | null = await this.commandBus.execute(command)
@@ -136,19 +135,19 @@ export class PostController {
     return getAllPosts;
   }
 
-  @Post()
-  @HttpCode(201)
-  @UseGuards(AuthBasic)
-  async createPost(@Body(new ValidationPipe({ validateCustomDecorators: true })) inputModelPost: inputModelPostClass) {
-    const findBlog: BlogClass | null = await this.blogsQueryRepository.findRawBlogById(
-      inputModelPost.blogId,
-    );
-    if (!findBlog) throw new BadRequestException('Blogs by id not found 400');
-	const command = new CreatePostCommand(inputModelPost, findBlog.name)
-	const createNewPost: Posts | null = await this.commandBus.execute(command)
-	if(!createNewPost) throw new BadRequestException('Blogs by id not found 400');
-    return createNewPost;
-  }
+//   @Post()
+//   @HttpCode(201)
+//   @UseGuards(AuthBasic)
+//   async createPost(@Body(new ValidationPipe({ validateCustomDecorators: true })) inputModelPost: inputModelPostClass) {
+//     const findBlog: BlogClass | null = await this.blogsQueryRepository.findRawBlogById(
+//       inputModelPost.blogId,
+//     );
+//     if (!findBlog) throw new BadRequestException('Blogs by id not found 400');
+// 	const command = new CreatePostCommand(inputModelPost, findBlog.name)
+// 	const createNewPost: Posts | null = await this.commandBus.execute(command)
+// 	if(!createNewPost) throw new BadRequestException('Blogs by id not found 400');
+//     return createNewPost;
+//   }
 
   @Get(':postId')
   @HttpCode(200)
@@ -157,7 +156,7 @@ export class PostController {
     @Param() dto: InputModelClassPostId, 
 	@UserIdDecorator() userId: string | null,
   ) {
-    const getPostById: Posts | null =
+    const getPostById: PostsViewModel | null =
       await this.postsQueryRepository.findPostById(dto.postId, userId);
     if (!getPostById) {
       throw new NotFoundException('Post by id not found');
@@ -165,26 +164,26 @@ export class PostController {
     return getPostById;
   }
 
-  @Put(':postId')
-  @HttpCode(204)
-  @UseGuards(AuthBasic)
-  async updatePostById(
-    @Param() dto: InputModelClassPostId, 
-    @Body(new ValidationPipe({ validateCustomDecorators: true })) inputModelData: inputModelPostClass,
-  ) {
-	const command = new UpdateOldPostCommand(dto.postId, inputModelData)
-	const updatePost: boolean = await this.commandBus.execute(command)
-    if (!updatePost) throw new NotFoundException('Blogs by id not found 404');
-    return
-  }
+//   @Put(':postId')
+//   @HttpCode(204)
+//   @UseGuards(AuthBasic)
+//   async updatePostById(
+//     @Param() dto: InputModelClassPostId, 
+//     @Body(new ValidationPipe({ validateCustomDecorators: true })) inputModelData: inputModelPostClass,
+//   ) {
+// 	const command = new UpdateOldPostCommand(dto.postId, inputModelData)
+// 	const updatePost: boolean = await this.commandBus.execute(command)
+//     if (!updatePost) throw new NotFoundException('Blogs by id not found 404');
+//     return
+//   }
 
-  @Delete(':id')
-  @HttpCode(204)
-  @UseGuards(AuthBasic)
-  async deletePostById(@Param('id') id: string, ): Promise<boolean> {
-	const command = new DeletePostByIdCommand(id)
-	const deletPost: boolean = await this.commandBus.execute(command)
-    if (!deletPost) throw new NotFoundException('Blogs by id not found 404');
-    return true;
-  }
+//   @Delete(':id')
+//   @HttpCode(204)
+//   @UseGuards(AuthBasic)
+//   async deletePostById(@Param('id') id: string, ): Promise<boolean> {
+// 	const command = new DeletePostByIdCommand(id)
+// 	const deletPost: boolean = await this.commandBus.execute(command)
+//     if (!deletPost) throw new NotFoundException('Blogs by id not found 404');
+//     return true;
+//   }
 }

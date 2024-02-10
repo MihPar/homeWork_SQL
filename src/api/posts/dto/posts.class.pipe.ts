@@ -1,6 +1,7 @@
 import { Transform, TransformFnParams } from "class-transformer";
 import { applyDecorators } from "@nestjs/common";
 import { IsEnum, IsMongoId, IsNotEmpty, IsString, MaxLength, MinLength } from "class-validator";
+import { LikeStatusEnum } from "../../likes/likes.emun";
 
 const Trim = () => Transform(({value}: TransformFnParams) => {
 	return value?.trim()

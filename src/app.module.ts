@@ -52,6 +52,10 @@ import { PostsService } from './api/posts/posts.service';
 import { BlogsRepository } from './api/blogs/blogs.repository';
 import { CheckRefreshTokenForGet } from './api/blogs/use-case/bearer.authGetComment';
 import { DeleteAllBlogsUseCase } from './api/blogs/use-case/deletAllBlogs-use-case';
+import { BlogsControllerForSA } from './api/blogsForSA/blogs.controller';
+import { BlogsQueryRepositoryForSA } from './api/blogsForSA/blogs.queryReposity';
+import { BlogsServiceForSA } from './api/blogsForSA/blogs.service';
+import { BlogsRepositoryForSA } from './api/blogsForSA/blogs.repository';
 
 const userCases = [
   RecoveryPasswordUseCase,
@@ -87,10 +91,10 @@ const gards = [
 const validation = [CustomLoginvalidation, CustomEmailvalidation]
 const manager = [EmailManager]
 const adapter = [GenerateHashAdapter, PayloadAdapter, EmailAdapter]
-const services = [JwtService, ApiJwtService, BlogsService, PostsService]
+const services = [JwtService, ApiJwtService, BlogsService, PostsService, BlogsServiceForSA]
 const configs = [ApiConfigService]
 
-const repositories = [AuthRepository, DeviceRepository, DeviceQueryRepository, UsersRepository, UsersQueryRepository, BlogsQueryRepository, PostsQueryRepository, BlogsRepository];
+const repositories = [AuthRepository, DeviceRepository, DeviceQueryRepository, UsersRepository, UsersQueryRepository, BlogsQueryRepository, PostsQueryRepository, BlogsRepository, BlogsQueryRepositoryForSA, BlogsRepositoryForSA];
 
 @Module({
   imports: [
@@ -125,7 +129,7 @@ const repositories = [AuthRepository, DeviceRepository, DeviceQueryRepository, U
     //   synchronize: true,
     // }),
   ],
-  controllers: [AuthController, DeleteAllDataController, UsersController, SecurityDeviceController, BlogsController],
+  controllers: [AuthController, DeleteAllDataController, UsersController, SecurityDeviceController, BlogsController, BlogsControllerForSA],
 
   providers: [
     ...repositories,
