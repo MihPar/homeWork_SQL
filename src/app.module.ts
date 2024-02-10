@@ -44,6 +44,14 @@ import { CreateNewUserUseCase } from './api/users/useCase/createNewUser-use-case
 import { CustomLoginvalidation } from './api/auth/adapter/customLoginValidator';
 import { CustomEmailvalidation } from './api/auth/adapter/customEmailValidatro';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { BlogsController } from './api/blogs/blogs.controller';
+import { BlogsQueryRepository } from './api/blogs/blogs.queryReposity';
+import { BlogsService } from './api/blogs/blogs.service';
+import { PostsQueryRepository } from './api/posts/postQuery.repository';
+import { PostsService } from './api/posts/posts.service';
+import { BlogsRepository } from './api/blogs/blogs.repository';
+import { CheckRefreshTokenForGet } from './api/blogs/use-case/bearer.authGetComment';
+import { DeleteAllBlogsUseCase } from './api/blogs/use-case/deletAllBlogs-use-case';
 
 const userCases = [
   RecoveryPasswordUseCase,
@@ -61,7 +69,8 @@ const userCases = [
   DeleteAllUsersUseCase,
   DeleteAllDevicesUseCase,
   TerminateAllCurrentSessionUseCase,
-  CreateNewUserUseCase
+  CreateNewUserUseCase,
+  DeleteAllBlogsUseCase
 ];
 
 const gards = [
@@ -71,16 +80,17 @@ const gards = [
   CheckLoginOrEmail,
   IsExistEmailUser,
   CheckRefreshTokenForComments,
-  AuthBasic
+  AuthBasic,
+  CheckRefreshTokenForGet
 ];
 
 const validation = [CustomLoginvalidation, CustomEmailvalidation]
 const manager = [EmailManager]
 const adapter = [GenerateHashAdapter, PayloadAdapter, EmailAdapter]
-const services = [JwtService, ApiJwtService]
+const services = [JwtService, ApiJwtService, BlogsService, PostsService]
 const configs = [ApiConfigService]
 
-const repositories = [AuthRepository, DeviceRepository, DeviceQueryRepository, UsersRepository, UsersQueryRepository];
+const repositories = [AuthRepository, DeviceRepository, DeviceQueryRepository, UsersRepository, UsersQueryRepository, BlogsQueryRepository, PostsQueryRepository, BlogsRepository];
 
 @Module({
   imports: [
@@ -115,7 +125,8 @@ const repositories = [AuthRepository, DeviceRepository, DeviceQueryRepository, U
     //   synchronize: true,
     // }),
   ],
-  controllers: [AuthController, DeleteAllDataController, UsersController, SecurityDeviceController],
+  controllers: [AuthController, DeleteAllDataController, UsersController, SecurityDeviceController, BlogsController],
+
   providers: [
     ...repositories,
     ...userCases,
