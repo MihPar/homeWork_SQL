@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { bodyBlogsModel, inputModelClass } from "../blogs.class";
+import { bodyBlogsModel, inputModelClass } from "../dto/blogs.class-pipe";
 import { BlogsRepository } from "../blogs.repository";
 
 export class UpdateBlogCommand {

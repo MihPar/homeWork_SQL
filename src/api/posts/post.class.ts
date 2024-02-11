@@ -6,7 +6,6 @@ export class Posts {
 	public createdAt: string;
 	public extendedLikesInfo!: LikesInfoModel;
 	constructor(
-	  public id: string,
 	  public title: string,
 	  public shortDescription: string,
 	  public content: string,
@@ -26,7 +25,6 @@ export class Posts {
 
 export class PostClass extends Posts {
 	constructor(
-		id: string,
 		title: string,
 		shortDescription: string,
 		content: string,
@@ -36,8 +34,9 @@ export class PostClass extends Posts {
 		dislikesCount: number, 
 		myStatus: LikeStatusEnum
 	) {
-		super(id, title, shortDescription, content, blogId, blogName, likesCount, dislikesCount, myStatus);
+		super(title, shortDescription, content, blogId, blogName, likesCount, dislikesCount, myStatus);
 	}
+	id: string;
   	title: string;
   	shortDescription: string;
  	content: string;
@@ -69,7 +68,7 @@ export class PostClass extends Posts {
 			  }))},
 		  };
 	  }
-	  getPostViewModel(myStatus: LikeStatusEnum,
+	  getPostViewModel(
 		newestLikes: newestLikesType[]): PostsViewModel {
 		return {
 		  id: this.id.toString(),
@@ -81,8 +80,8 @@ export class PostClass extends Posts {
 		  createdAt: this.createdAt,
 		  extendedLikesInfo: {
 			  dislikesCount: this.extendedLikesInfo.dislikesCount, 
-			  likesCount: this.extendedLikesInfo.likesCount, 
-			  myStatus, 
+			  likesCount: this.extendedLikesInfo.dislikesCount,
+			  myStatus: this.myStatus,
 			  newestLikes
 		  },
 		};

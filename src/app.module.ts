@@ -56,6 +56,9 @@ import { BlogsControllerForSA } from './api/blogsForSA/blogs.controller';
 import { BlogsQueryRepositoryForSA } from './api/blogsForSA/blogs.queryReposity';
 import { BlogsServiceForSA } from './api/blogsForSA/blogs.service';
 import { BlogsRepositoryForSA } from './api/blogsForSA/blogs.repository';
+import { ForbiddenCalss } from './api/security-devices/gards/forbidden';
+import { updateExistingPostByIdWithBlogIdUseCase } from './api/blogsForSA/use-case/updatePostByIdWithBlogId-use-case';
+import { DeletePostByIdCommandUseCase } from './api/blogsForSA/use-case/deletPostById-use-case';
 
 const userCases = [
   RecoveryPasswordUseCase,
@@ -74,7 +77,10 @@ const userCases = [
   DeleteAllDevicesUseCase,
   TerminateAllCurrentSessionUseCase,
   CreateNewUserUseCase,
-  DeleteAllBlogsUseCase
+  DeleteAllBlogsUseCase,
+  ForbiddenCalss,
+  updateExistingPostByIdWithBlogIdUseCase,
+  DeletePostByIdCommandUseCase
 ];
 
 const gards = [

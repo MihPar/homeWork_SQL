@@ -1,96 +1,120 @@
-import { ObjectId } from 'mongodb';
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
-import { PostClass, PostDocument } from '../../schema/post.schema';
 import { Injectable } from '@nestjs/common';
 import { LikeStatusEnum } from '../../api/likes/likes.emun';
+import { InjectDataSource } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
+import { PostClass } from './post.class';
 
 @Injectable()
 export class PostsRepository {
   constructor(
-    @InjectModel(PostClass.name) private postModel: Model<PostDocument>,
+    @InjectDataSource() protected dataSource: DataSource
   ) {}
 
   async createNewPosts(newPost: PostClass): Promise<PostClass | null> {
     try {
-      const resultNewPost = await this.postModel.create(newPost);
-      await resultNewPost.save();
-      return newPost;
+		const query = `
+		INSERT INTO public."Posts"(
+			"blogId", title, "shortDescription", content, "blogName", "createdAt", "likesCount", "dislikesCount", "myStatus")
+			VALUES (${newPost.blogId}, ${newPost.title}, ${newPost.shortDescription}, ${newPost.content}, ${newPost.blogName}, ${newPost.createdAt}, ${newPost.likesCount}, ${newPost.dislikesCount}, ${newPost.myStatus});
+		`
+      const resultNewPost = (await this.dataSource.query(query))[0]
+      return resultNewPost;
     } catch (error) {
       console.log(error, 'error in create post');
       return null;
     }
   }
 
-  async updatePost(
-    postId: string,
-    title: string,
-    shortDescription: string,
-    content: string,
-    blogId: string,
-  ): Promise<boolean> {
-    const result = await this.postModel.updateOne(
-      { _id: new ObjectId(postId) },
-      {
-        $set: {
-          title: title,
-          shortDescription: shortDescription,
-          content: content,
-          blogId: blogId,
-        },
-      },
-    );
-    return result.matchedCount === 1;
+  async updatePost(newPost: PostClass, id: string): Promise<PostClass> {
+	const query = `
+		UPDATE public."Posts"
+			SET "blogId"=${newPost.blogId}, title=${newPost.title}, "shortDescription"=${newPost.shortDescription}, content=${newPost.content}, "blogName"=${newPost.blogName}, "createdAt"=${newPost.createdAt}, "likesCount"=${newPost.likesCount}, "dislikesCount"=${newPost.dislikesCount}, "myStatus"=${newPost.myStatus}
+			WHERE "id" = $1
+	`
+    const result =( await this.dataSource.query(query, [id]))[0]
+	return result
   }
 
-  async deletedPostById(id: string): Promise<boolean> {
-    const result = await this.postModel.deleteOne({ _id: new ObjectId(id) });
-    return result.deletedCount === 1;
+  async deletedPostByIdWithBlogId(id: string, blogId: string): Promise<boolean> {
+	const query = `
+		delete from "Posts"
+			where "id" = $1 and "blogid" = $2
+	`
+    const result = await this.dataSource.query(query, [id, blogId])
+	if(!result) return false
+	return true
   }
 
-  async deleteRepoPosts() {
-    const deletedAll = await this.postModel.deleteMany({});
-    return deletedAll.deletedCount === 1;
-  }
+//   async deleteRepoPosts() {
+//     const deletedAll = await this.postModel.deleteMany({});
+//     return deletedAll.deletedCount === 1;
+//   }
 
-  async increase(postId: string, likeStatus: string) {
-    if (likeStatus === LikeStatusEnum.None) {
-      return;
-    }
-    return await this.postModel.updateOne(
-      { _id: new ObjectId(postId) },
-      {
-        $inc:
-          likeStatus === 'Dislike'
-            ? { 'extendedLikesInfo.dislikesCount': 1 }
-            : { 'extendedLikesInfo.likesCount': 1 },
-      },
-    );
-  }
+//   async increase(postId: string, likeStatus: string) {
+//     if (likeStatus === LikeStatusEnum.None) {
+//       return;
+//     }
+//     return await this.postModel.updateOne(
+//       { _id: new ObjectId(postId) },
+//       {
+//         $inc:
+//           likeStatus === 'Dislike'
+//             ? { 'extendedLikesInfo.dislikesCount': 1 }
+//             : { 'extendedLikesInfo.likesCount': 1 },
+//       },
+//     );
+//   }
 
-  async decrease(postId: string, likeStatus: string) {
-    if (likeStatus === LikeStatusEnum.None) {
-      return;
-    }
-    return await this.postModel.updateOne(
-      { _id: new ObjectId(postId) },
-      {
-        $inc:
-          likeStatus === 'Dislike'
-            ? { 'extendedLikesInfo.dislikesCount': -1 }
-            : { 'extendedLikesInfo.likesCount': -1 },
-      },
-    );
-  }
+//   async decrease(postId: string, likeStatus: string) {
+//     if (likeStatus === LikeStatusEnum.None) {
+//       return;
+//     }
+//     return await this.postModel.updateOne(
+//       { _id: new ObjectId(postId) },
+//       {
+//         $inc:
+//           likeStatus === 'Dislike'
+//             ? { 'extendedLikesInfo.dislikesCount': -1 }
+//             : { 'extendedLikesInfo.likesCount': -1 },
+//       },
+//     );
+//   }
 
-  async findPostById(blogId: string) {
+  async findPostByBlogId(blogId: string) {
     try {
-      const post = await this.postModel
-        .findOne({ blogId: new ObjectId(blogId) }, { __v: 0 })
-        .lean();
+		const query = `
+			select * 
+				from "Posts"
+				where "blogId" = $1
+		`
+      const post = (await this.dataSource.query(query, [blogId]))[0]
       return post;
     } catch (error) {
       return null;
     }
+  }
+
+  async findNewestLike(postId: string) {
+	try{
+		const query = `
+			select *
+				from "NewestLike"
+				where "postId" = $1
+		`
+		const findNewestLike = (await this.dataSource.query(query, [postId]))[0]
+		return findNewestLike
+	} catch(erro) {
+		return null
+	}
+  }
+
+  async findPostByIdAndBlogId(id: string, blogId: string) {
+	const query = `
+		select *
+			from "Posts"
+			where "id" = $1 and "blogId" = $2
+	`
+	const findPostById = (await this.dataSource.query(query, [id, blogId]))[0]
+	return findPostById
   }
 }

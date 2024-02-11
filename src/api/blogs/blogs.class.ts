@@ -32,14 +32,15 @@ export class BlogClass extends Blogs {
 		isMembership: boolean
 		userId: string
 
-		static getBlogsViewModel(inputBlog: BlogClass): BlogsViewType{
+		static getBlogsViewModel(inputBlog: BlogClass) {
 			return {
 				id: inputBlog.id,
 				name: inputBlog.name,
 				description: inputBlog.description,
 				websiteUrl: inputBlog.websiteUrl,
 				createdAt: inputBlog.createdAt,
-				isMembership: inputBlog.isMembership
+				isMembership: inputBlog.isMembership,
+				userId: inputBlog.userId
 			}
 		}
 

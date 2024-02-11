@@ -3,7 +3,7 @@ import { PaginationType } from "../../types/pagination.types";
 import { BlogsViewType } from "./blogs.type";
 import { InjectDataSource } from "@nestjs/typeorm";
 import { DataSource } from "typeorm";
-import { BlogClass } from "../blogs/blogs.class";
+import { BlogClass, Blogs } from "../blogs/blogs.class";
 
 @Injectable()
 export class BlogsQueryRepositoryForSA {
@@ -49,26 +49,26 @@ export class BlogsQueryRepositoryForSA {
     return result;
   }
 
-  async findRawBlogById(
-    blogId: string,
-    userId?: string
-  ): Promise<BlogClass | null> {
-    const blog: BlogClass | null = await this.blogModel
-      .findOne({ _id: new ObjectId(blogId) }, { __v: 0 })
-      .lean();
-    return blog;
-  }
+//   async findRawBlogById(
+//     blogId: string,
+//     userId?: string
+//   ): Promise<BlogClass | null> {
+//     const blog: BlogClass | null = await this.blogModel
+//       .findOne({ _id: new ObjectId(blogId) }, { __v: 0 })
+//       .lean();
+//     return blog;
+//   }
 
   async findBlogById(
     blogId: string,
     userId?: string
-  ): Promise<BlogsViewType | null> {
+  ): Promise<Blogs | null> {
 	const query = `
 		select *
 			from "Blogs"
 			where "blogId" = $1 AND "userId" = $2
 	`
-    const blog: BlogClass | null = await this.dataSource.query(query, [blogId, userId])
+    const blog: BlogClass | null = (await this.dataSource.query(query, [blogId, userId]))[0]
     return blog ? BlogClass.getBlogsViewModel(blog) : null;
   }
 }

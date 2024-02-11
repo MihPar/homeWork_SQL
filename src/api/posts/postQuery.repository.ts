@@ -89,7 +89,6 @@ export class PostsQueryRepository {
     sortBy: string,
     sortDirection: string,
     blogId: string,
-    userId: string | null
   ): Promise<PaginationType<Posts>> {
     const query1 = `
 		SELECT *

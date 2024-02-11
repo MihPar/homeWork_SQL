@@ -1,6 +1,6 @@
 import { CommandBus } from '@nestjs/cqrs';
 import { BadRequestException, Body, Controller, Delete, ForbiddenException, Get, HttpCode, NotFoundException, Param, Post, Put, Query, UseFilters, UseGuards, ValidationPipe } from "@nestjs/common";
-import { bodyBlogsModel, inputModelClass } from "./blogs.class";
+import { bodyBlogsModel, inputModelClass, inputModelUpdataPost } from "./dto/blogs.class-pipe";
 import { BlogsViewType } from "./blogs.type";
 import { BlogsServiceForSA } from "./blogs.service";
 import { PostsService } from "../posts/posts.service";
@@ -20,17 +20,20 @@ import { ForbiddenCalss } from '../security-devices/gards/forbidden';
 import { Posts } from '../posts/post.class';
 import { bodyPostsModelClass } from '../posts/dto/posts.class.pipe';
 import { BlogsQueryRepositoryForSA } from './blogs.queryReposity';
+import { PostsRepository } from '../posts/posts.repository';
+import { UpdateExistingPostByIdWithBlogIdCommand } from './use-case/updatePostByIdWithBlogId-use-case';
+import { DeletePostByIdCommand } from './use-case/deletPostById-use-case';
 
 @SkipThrottle()
 @Controller('sa/blogs')
 @UseGuards(AuthBasic)
+@UseGuards(ForbiddenCalss)
 export class BlogsControllerForSA {
   constructor(
     protected blogsQueryRepositoryForSA: BlogsQueryRepositoryForSA,
-    protected blogsServiceForSA: BlogsServiceForSA,
     protected postsQueryRepository: PostsQueryRepository,
-    protected postsService: PostsService,
     protected blogsRepositoryForSA: BlogsRepositoryForSA,
+	protected postsRepository: PostsRepository,
 	protected commandBus: CommandBus
   ) {}
 
@@ -133,26 +136,23 @@ export class BlogsControllerForSA {
         query.sortBy || 'createdAt',
         query.sortDirection || 'desc',
         dto.blogId,
-		userId
       );
     if (!getPosts) throw new NotFoundException('Blogs by id not found');
     return getPosts;
   }
 
-  
-
-  @Get(':blogId')
-  @HttpCode(200)
-  async getBlogsById(
-    @Param() dto: inputModelClass,
-  ): Promise<BlogsViewType | null> {
-    const blogById: BlogsViewType | null =
-      await this.blogsQueryRepositoryForSA.findBlogById(dto.blogId);
-    if (!blogById) throw new NotFoundException('Blogs by id not found 404');
-    return blogById;
+  @Get(':blogId/posts/:postId')
+  @HttpCode(204)
+  async updatePostByIdWithModel(@Param() dto: inputModelUpdataPost, @Body() inputModel: bodyPostsModelClass) {
+const command = new UpdateExistingPostByIdWithBlogIdCommand(dto, inputModel)
+	const updateExistingPost = await this.commandBus.execute(command)
+	if(!updateExistingPost) throw new NotFoundException("Post not find")
   }
 
- 
-
-  
+  @Delete(':blogId/posts/:postId')
+  @HttpCode(204)
+  async deletePostByIdWithBlogId(@Param() dto: inputModelUpdataPost) {
+	const command = new DeletePostByIdCommand(dto)
+	const deletePostById = await this.commandBus.execute(command)
+  }
 }

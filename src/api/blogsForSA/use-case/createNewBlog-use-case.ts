@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { bodyBlogsModel } from "../blogs.class";
+import { bodyBlogsModel } from "../dto/blogs.class-pipe";
 import { BlogsViewType } from "../blogs.type";
 import { BlogsRepository } from "../blogs.repository";
 import { BlogClass } from "../../blogs/blogs.class";

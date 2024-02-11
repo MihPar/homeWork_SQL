@@ -1,14 +1,14 @@
 import { Injectable } from "@nestjs/common";
-import { LikeClass, LikeDocument } from '../../schema/likes.schema';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from "mongoose";
-import { ObjectId } from "mongodb";
 import { Like } from "./likes.class";
 import { LikeStatusEnum } from "./likes.emun";
+import { InjectDataSource } from "@nestjs/typeorm";
+import { DataSource } from "typeorm";
 
 @Injectable()
 export class LikesRepository {
-	constructor(@InjectModel(LikeClass.name) private likeModel: Model<LikeDocument>) {}
+	constructor(
+		@InjectDataSource() protected dataSource: DataSource
+	) {}
 
 	async deleteLikes() {
 		const deleteAllLikes = await this.likeModel.deleteMany({});
@@ -43,23 +43,23 @@ export class LikesRepository {
 		return saveResult
 	}
 
-	async getNewLike(postId: string, blogId: string) {
-		const newestLikes = await this.likeModel
-			  .find({ postId }) //
-			  .sort({ addedAt: -1 })
-			  .limit(3)
-			  .skip(0)
-			  .lean();
-			let myStatus: LikeStatusEnum = LikeStatusEnum.None;
-			if (blogId) {
-			  const reaction = await this.likeModel.findOne({ blogId: new ObjectId(blogId) }, { __v: 0 }); //
-			  myStatus = reaction
-				? (reaction.myStatus as unknown as LikeStatusEnum)
-				: LikeStatusEnum.None;
-			}
-			const result = {
-				newestLikes, myStatus
-			}
-			return result
-	}
+	// async getNewLike(postId: string, blogId: string) {
+	// 	const newestLikes = await this.likeModel
+	// 		  .find({ postId }) //
+	// 		  .sort({ addedAt: -1 })
+	// 		  .limit(3)
+	// 		  .skip(0)
+	// 		  .lean();
+	// 		let myStatus: LikeStatusEnum = LikeStatusEnum.None;
+	// 		if (blogId) {
+	// 		  const reaction = await this.likeModel.findOne({ blogId: new ObjectId(blogId) }, { __v: 0 }); //
+	// 		  myStatus = reaction
+	// 			? (reaction.myStatus as unknown as LikeStatusEnum)
+	// 			: LikeStatusEnum.None;
+	// 		}
+	// 		const result = {
+	// 			newestLikes, myStatus
+	// 		}
+	// 		return result
+	// }
 }
