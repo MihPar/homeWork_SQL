@@ -154,5 +154,6 @@ const command = new UpdateExistingPostByIdWithBlogIdCommand(dto, inputModel)
   async deletePostByIdWithBlogId(@Param() dto: inputModelUpdataPost) {
 	const command = new DeletePostByIdCommand(dto)
 	const deletePostById = await this.commandBus.execute(command)
+	if(!deletePostById) throw new NotFoundException("Post not find")
   }
 }

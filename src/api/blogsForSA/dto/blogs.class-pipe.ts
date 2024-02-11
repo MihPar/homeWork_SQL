@@ -27,14 +27,20 @@ function IsCustomString() {
 }
 
 export class inputModelClass {
+	@IsString()
+	@Trim()
 	@IsUUID()
 	blogId: string
 }
 
 export class inputModelUpdataPost {
+	@IsString()
+	@Trim()
 	@IsUUID()
 	blogId: string
 
+	@IsString()
+	@Trim()
 	@IsUUID()
 	postId: string
 }
