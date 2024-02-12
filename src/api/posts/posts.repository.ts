@@ -46,10 +46,9 @@ export class PostsRepository {
   }
 
   async deleteRepoPosts() {
-	const query = `
+    await this.dataSource.query(`
 		DELETE FROM public."Posts"
-	`
-    await this.dataSource.query(query);
+	`);
     return true
   }
 

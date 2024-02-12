@@ -101,8 +101,8 @@ export class UsersRepository {
     return true;
   }
 
-  async deleteAll() {
-    const deleteAllUsers = await this.dataSource.query(`
+  async deleteAllUsers() {
+    await this.dataSource.query(`
 		DELETE FROM public."Users"
 	`);
     return true;

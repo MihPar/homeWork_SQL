@@ -56,12 +56,13 @@ import { BlogsRepositoryForSA } from './api/blogsForSA/blogs.repository';
 import { ForbiddenCalss } from './api/security-devices/gards/forbidden';
 import { updateExistingPostByIdWithBlogIdUseCase } from './api/blogsForSA/use-case/updatePostByIdWithBlogId-use-case';
 import { DeletePostByIdCommandUseCase } from './api/blogsForSA/use-case/deletPostById-use-case';
-import { DeleteAllPostsComand } from './api/posts/use-case/deleteAllPosts-use-case';
+import { DeleteAllPostsComand, DeleteAllPostsUseCase } from './api/posts/use-case/deleteAllPosts-use-case';
 import { CreatePostUseCase } from './api/posts/use-case/createPost-use-case';
 import { CreateNewBlogUseCase } from './api/blogs/use-case/createNewBlog-use-case';
 import { BlogsRepository } from './api/blogs/blogs.repository';
 import { PostsRepository } from './api/posts/posts.repository';
 import { LikesRepository } from './api/likes/likes.repository';
+import { DeleteAllBlogsForSAUseCase } from './api/blogsForSA/use-case/deletAllBlogs-use-case';
 
 const userCases = [
   RecoveryPasswordUseCase,
@@ -86,7 +87,9 @@ const userCases = [
   DeletePostByIdCommandUseCase,
   DeleteAllPostsComand,
   CreatePostUseCase,
-  CreateNewBlogUseCase
+  CreateNewBlogUseCase,
+  DeleteAllBlogsForSAUseCase,
+  DeleteAllPostsUseCase
 ];
 
 const gards = [

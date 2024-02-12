@@ -11,6 +11,6 @@ export class DeleteAllUsersUseCase implements ICommandHandler<DeleteAllUsersComm
 		protected readonly usersRepository: UsersRepository
 	) {}
  	async execute(command: DeleteAllUsersCommnad): Promise<any> {
-		return await this.usersRepository.deleteAll();
+		return await this.usersRepository.deleteAllUsers();
 	}
 }
