@@ -3,12 +3,11 @@ import { BlogsViewType } from "./blogs.type";
 export class Blogs {
 	public createdAt: string
 	constructor(
-		public id: string,
 		public name: string,
 		public description: string,
 		public websiteUrl: string,
 		public isMembership: boolean,
-		public userId: string) {
+		) {
 			this.createdAt = new Date().toISOString()
 		}
   };
@@ -16,15 +15,14 @@ export class Blogs {
 
 export class BlogClass extends Blogs {
 	constructor(
-		id: string,
 		name: string,
 		description: string,
 		websiteUrl: string,
 		isMembership: boolean,
-		userId: string
 		) {
-		super(id, name, description, websiteUrl,isMembership, userId)
+		super(name, description, websiteUrl, isMembership)
 	}
+		id: string
 		name: string
 		description: string
 		websiteUrl: string

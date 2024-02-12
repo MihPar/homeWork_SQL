@@ -1,20 +1,19 @@
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { PostsRepository } from "../posts.repository";
-import { ObjectId } from "mongodb";
+// import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+// import { PostsRepository } from "../posts.repository";
 
-export class DeletePostByIdCommand {
-	constructor(
-		public postId: string
-	) {}
-}
+// export class DeletePostByIdCommand {
+// 	constructor(
+// 		public postId: string
+// 	) {}
+// }
 
-@CommandHandler(DeletePostByIdCommand)
-export class DeletePostByIdUseCase implements ICommandHandler<DeletePostByIdCommand> {
-	constructor(
-		protected readonly postsRepository: PostsRepository
-	) {}
-	async execute(command: DeletePostByIdCommand): Promise<boolean> {
-		if(!ObjectId.isValid(command.postId)) return false;
-		return await this.postsRepository.deletedPostById(command.postId);
-	}
-}
+// @CommandHandler(DeletePostByIdCommand)
+// export class DeletePostByIdUseCase implements ICommandHandler<DeletePostByIdCommand> {
+// 	constructor(
+// 		protected readonly postsRepository: PostsRepository
+// 	) {}
+// 	async execute(command: DeletePostByIdCommand): Promise<boolean> {
+// 		if(!ObjectId.isValid(command.postId)) return false;
+// 		return await this.postsRepository.deletedPostById(command.postId);
+// 	}
+// }

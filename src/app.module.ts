@@ -46,19 +46,22 @@ import { CustomEmailvalidation } from './api/auth/adapter/customEmailValidatro';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { BlogsController } from './api/blogs/blogs.controller';
 import { BlogsQueryRepository } from './api/blogs/blogs.queryReposity';
-import { BlogsService } from './api/blogs/blogs.service';
 import { PostsQueryRepository } from './api/posts/postQuery.repository';
 import { PostsService } from './api/posts/posts.service';
-import { BlogsRepository } from './api/blogs/blogs.repository';
 import { CheckRefreshTokenForGet } from './api/blogs/use-case/bearer.authGetComment';
 import { DeleteAllBlogsUseCase } from './api/blogs/use-case/deletAllBlogs-use-case';
 import { BlogsControllerForSA } from './api/blogsForSA/blogs.controller';
 import { BlogsQueryRepositoryForSA } from './api/blogsForSA/blogs.queryReposity';
-import { BlogsServiceForSA } from './api/blogsForSA/blogs.service';
 import { BlogsRepositoryForSA } from './api/blogsForSA/blogs.repository';
 import { ForbiddenCalss } from './api/security-devices/gards/forbidden';
 import { updateExistingPostByIdWithBlogIdUseCase } from './api/blogsForSA/use-case/updatePostByIdWithBlogId-use-case';
 import { DeletePostByIdCommandUseCase } from './api/blogsForSA/use-case/deletPostById-use-case';
+import { DeleteAllPostsComand } from './api/posts/use-case/deleteAllPosts-use-case';
+import { CreatePostUseCase } from './api/posts/use-case/createPost-use-case';
+import { CreateNewBlogUseCase } from './api/blogs/use-case/createNewBlog-use-case';
+import { BlogsRepository } from './api/blogs/blogs.repository';
+import { PostsRepository } from './api/posts/posts.repository';
+import { LikesRepository } from './api/likes/likes.repository';
 
 const userCases = [
   RecoveryPasswordUseCase,
@@ -80,7 +83,10 @@ const userCases = [
   DeleteAllBlogsUseCase,
   ForbiddenCalss,
   updateExistingPostByIdWithBlogIdUseCase,
-  DeletePostByIdCommandUseCase
+  DeletePostByIdCommandUseCase,
+  DeleteAllPostsComand,
+  CreatePostUseCase,
+  CreateNewBlogUseCase
 ];
 
 const gards = [
@@ -97,10 +103,10 @@ const gards = [
 const validation = [CustomLoginvalidation, CustomEmailvalidation]
 const manager = [EmailManager]
 const adapter = [GenerateHashAdapter, PayloadAdapter, EmailAdapter]
-const services = [JwtService, ApiJwtService, BlogsService, PostsService, BlogsServiceForSA]
+const services = [JwtService, ApiJwtService, PostsService]
 const configs = [ApiConfigService]
 
-const repositories = [AuthRepository, DeviceRepository, DeviceQueryRepository, UsersRepository, UsersQueryRepository, BlogsQueryRepository, PostsQueryRepository, BlogsRepository, BlogsQueryRepositoryForSA, BlogsRepositoryForSA];
+const repositories = [AuthRepository, DeviceRepository, DeviceQueryRepository, UsersRepository, UsersQueryRepository, BlogsQueryRepository, PostsQueryRepository, BlogsQueryRepositoryForSA, BlogsRepositoryForSA, BlogsRepository, PostsRepository, LikesRepository];
 
 @Module({
   imports: [

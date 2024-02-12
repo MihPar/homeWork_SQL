@@ -45,12 +45,18 @@ export class BlogsRepositoryForSA {
 
   async deletedBlog(id: string): Promise<boolean | null> {
 	const query = `
-		select *
-			from "Blogs"
+		delete from public."Blogs"
 			where "blogId" = $1
 	`
     const result = (await this.dataSource.query(query, [id]))[0]
     if(!result) return null
+	return true
+  }
+
+  async deleteRepoBlogsFroSA() {
+	await this.dataSource.query(`
+		delete from public."Blogs"
+	`)
 	return true
   }
 }

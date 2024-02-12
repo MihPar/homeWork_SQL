@@ -21,8 +21,6 @@ import { BlogsQueryRepository } from '../blogs/blogs.queryReposity';
 import { CommandBus } from '@nestjs/cqrs';
 import { CreatePostCommand } from './use-case/createPost-use-case';
 import { UpdateOldPostCommand } from './use-case/updateOldPost-use-case';
-import { DeletePostByIdCommand } from './use-case/deletePostById-use-case';
-import { UpdateLikeStatusCommand } from './use-case/updateLikeStatus-use-case';
 import { UserDecorator, UserIdDecorator } from '../../infrastructura/decorators/decorator.user';
 import { UserClass } from '../users/user.class';
 import { CheckRefreshTokenForPost } from './guards/bearer.authForPost';
@@ -34,6 +32,7 @@ import { Posts } from './post.class';
 import { PostsViewModel } from './posts.type';
 import { CreateNewCommentByPostIdCommnad } from '../comment/use-case/createNewCommentByPotsId-use-case';
 import { SkipThrottle } from '@nestjs/throttler';
+import { UpdateLikeStatusCommand } from './use-case/updateLikeStatus-use-case';
 
 @SkipThrottle()
 @Controller('posts')

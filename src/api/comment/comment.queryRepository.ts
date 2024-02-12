@@ -13,27 +13,27 @@ export class CommentQueryRepository {
     @InjectDataSource() protected dataSource: DataSource
   ) {}
 
-  async findCommentById(
-    commentId: string,
-    userId: string | null,
-  ): Promise<CommentViewModel | null> {
-	if(!ObjectId.isValid(commentId)) return null
-    try {
-      const commentById: CommentClass | null = await this.commentModel.findOne({
-        _id: new ObjectId(commentId),
-      });
-      if (!commentById) {
-        return null;
-      }
-      const findLike: Like | null = await this.findLikeCommentByUser(
-        commentId,
-        userId,
-      );
-      return commentDBToView(commentById, findLike?.myStatus ?? null);
-    } catch (e) {
-      return null;
-    }
-  }
+//   async findCommentById(
+//     commentId: string,
+//     userId: string | null,
+//   ): Promise<CommentViewModel | null> {
+// 	if(!ObjectId.isValid(commentId)) return null
+//     try {
+//       const commentById: CommentClass | null = await this.commentModel.findOne({
+//         _id: new ObjectId(commentId),
+//       });
+//       if (!commentById) {
+//         return null;
+//       }
+//       const findLike: Like | null = await this.findLikeCommentByUser(
+//         commentId,
+//         userId,
+//       );
+//       return commentDBToView(commentById, findLike?.myStatus ?? null);
+//     } catch (e) {
+//       return null;
+//     }
+//   }
 
 //   async findLikeCommentByUser(commentId: string, userId: string | null) {
 //     const likeModel: Like | null = await this.likeModel.findOne({

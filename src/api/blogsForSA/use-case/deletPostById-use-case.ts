@@ -1,5 +1,4 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { BlogsRepository } from "../../blogs/blogs.repository";
 import { inputModelUpdataPost } from "../dto/blogs.class-pipe";
 import { PostsRepository } from "../../posts/posts.repository";
 

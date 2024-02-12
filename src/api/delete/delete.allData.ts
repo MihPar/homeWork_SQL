@@ -4,6 +4,7 @@ import { DeleteAllUsersCommnad } from "../users/useCase/deleteAllUsers-use-case"
 import { DeleteAllDevicesCommnad } from "../security-devices/useCase/deleteAllDevices-use-case";
 import { SkipThrottle } from "@nestjs/throttler";
 import { DeleteAllBlogsCommnad } from "../blogs/use-case/deletAllBlogs-use-case";
+import { DeleteAllPostsComand } from "../posts/use-case/deleteAllPosts-use-case";
 
 @SkipThrottle()
 @Controller('testing/all-data')
@@ -18,7 +19,7 @@ export class DeleteAllDataController {
 	@Delete()
 	@HttpCode(204)
 	async deleteAllData() {
-		// await this.commandBus.execute(new DeleteAllPostsComand())
+		await this.commandBus.execute(new DeleteAllPostsComand())
 		await this.commandBus.execute(new DeleteAllBlogsCommnad())
 		await this.commandBus.execute(new DeleteAllDevicesCommnad())
 		await this.commandBus.execute(new DeleteAllUsersCommnad())

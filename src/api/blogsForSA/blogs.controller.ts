@@ -2,7 +2,6 @@ import { CommandBus } from '@nestjs/cqrs';
 import { BadRequestException, Body, Controller, Delete, ForbiddenException, Get, HttpCode, NotFoundException, Param, Post, Put, Query, UseFilters, UseGuards, ValidationPipe } from "@nestjs/common";
 import { bodyBlogsModel, inputModelClass, inputModelUpdataPost } from "./dto/blogs.class-pipe";
 import { BlogsViewType } from "./blogs.type";
-import { BlogsServiceForSA } from "./blogs.service";
 import { PostsService } from "../posts/posts.service";
 import {BlogsRepositoryForSA } from "./blogs.repository";
 import { PostsQueryRepository } from "../posts/postQuery.repository";

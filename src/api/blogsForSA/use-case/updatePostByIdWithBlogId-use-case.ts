@@ -3,14 +3,14 @@ import { DataSource } from 'typeorm';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { PostsViewModel } from '../../posts/posts.type';
 import { LikesRepository } from '../../likes/likes.repository';
-import { imputModelUpdataPost, inputModelClass } from '../dto/blogs.class-pipe';
 import { bodyPostsModelClass } from '../../posts/dto/posts.class.pipe';
 import { PostClass } from '../../posts/post.class';
 import { LikeStatusEnum } from '../../likes/likes.emun';
+import { inputModelUpdataPost } from '../dto/blogs.class-pipe';
 
 export class UpdateExistingPostByIdWithBlogIdCommand {
   constructor(
-	public dto: imputModelUpdataPost,
+	public dto: inputModelUpdataPost,
 	public inputModel: bodyPostsModelClass
   ) {}
 }

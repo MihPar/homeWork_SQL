@@ -3,15 +3,12 @@ import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post
 import { BlogsQueryRepository } from "./blogs.queryReposity";
 import { bodyBlogsModel, inputModelClass } from "./dto/blogs.class.pipe";
 import { BlogsViewType } from "./blogs.type";
-import { BlogsService } from "./blogs.service";
 import { bodyPostsModelClass } from "../posts/dto/posts.class.pipe";
 import { PostsService } from "../posts/posts.service";
-import { BlogsRepository } from "./blogs.repository";
 import { PostsQueryRepository } from "../posts/postQuery.repository";
 import { PaginationType } from "../../types/pagination.types";
 import { CreateNewBlogCommand } from './use-case/createNewBlog-use-case';
 import { UpdateBlogCommand } from './use-case/updateBlog-use-case';
-import { CreateNewPostForBlogCommand } from './use-case/createNewPostForBlog-use-case';
 import { SkipThrottle } from '@nestjs/throttler';
 import { CheckRefreshTokenForGet } from './use-case/bearer.authGetComment';
 import { UserDecorator, UserIdDecorator } from '../../infrastructura/decorators/decorator.user';
@@ -23,10 +20,7 @@ import { Posts } from '../posts/post.class';
 export class BlogsController {
   constructor(
     protected blogsQueryRepository: BlogsQueryRepository,
-    protected blogsService: BlogsService,
     protected postsQueryRepository: PostsQueryRepository,
-    protected postsService: PostsService,
-    protected blogsRepository: BlogsRepository,
 	protected commandBus: CommandBus
   ) {}
 

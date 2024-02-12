@@ -45,40 +45,68 @@ export class PostsRepository {
 	return true
   }
 
-//   async deleteRepoPosts() {
-//     const deletedAll = await this.postModel.deleteMany({});
-//     return deletedAll.deletedCount === 1;
-//   }
+  async deleteRepoPosts() {
+	const query = `
+		DELETE FROM public."Posts"
+	`
+    await this.dataSource.query(query);
+    return true
+  }
 
-//   async increase(postId: string, likeStatus: string) {
-//     if (likeStatus === LikeStatusEnum.None) {
-//       return;
-//     }
-//     return await this.postModel.updateOne(
-//       { _id: new ObjectId(postId) },
-//       {
-//         $inc:
-//           likeStatus === 'Dislike'
-//             ? { 'extendedLikesInfo.dislikesCount': 1 }
-//             : { 'extendedLikesInfo.likesCount': 1 },
-//       },
-//     );
-//   }
+  async increase(postId: string, likeStatus: string) {
+    if (likeStatus === LikeStatusEnum.None) {
+      return;
+    } else if(likeStatus === 'Dislike') {
+		let dislike = 'Dislike'
+		const query = `
+			UPDATE public."Posts"
+				SET "likesCount"=${1}
+				WHERE "id" = $1 AND "myStatus" = ${dislike}
+		`
+		return await this.dataSource.query(query, [postId])
+	} else {
+		let like = 'Like'
+		const query = `
+			UPDATE public."Posts"
+				SET "dislikesCount"=${1}
+				WHERE "id" = $1 AND "myStatus" = ${like}
+		`
+		return await this.dataSource.query(query, [postId])
+	}
+	
+  }
 
-//   async decrease(postId: string, likeStatus: string) {
-//     if (likeStatus === LikeStatusEnum.None) {
-//       return;
-//     }
-//     return await this.postModel.updateOne(
-//       { _id: new ObjectId(postId) },
-//       {
-//         $inc:
-//           likeStatus === 'Dislike'
-//             ? { 'extendedLikesInfo.dislikesCount': -1 }
-//             : { 'extendedLikesInfo.likesCount': -1 },
-//       },
-//     );
-//   }
+  async decrease(postId: string, likeStatus: string) {
+    if (likeStatus === LikeStatusEnum.None) {
+      return;
+    } else if(likeStatus === 'Dislike') {
+		let dislike = 'Dislike'
+		const query = `
+			UPDATE public."Posts"
+				SET "likesCount"=${-1}
+				WHERE "id" = $1 AND "myStatus" = ${dislike}
+		`
+		return await this.dataSource.query(query, [postId])
+	} else {
+		let like = 'Like'
+		const query = `
+			UPDATE public."Posts"
+				SET "dislikesCount"=${-1}
+				WHERE "id" = $1 AND "myStatus" = ${like}
+		`
+		return await this.dataSource.query(query, [postId])
+	}
+	
+    // return await this.postModel.updateOne(
+    //   { _id: new ObjectId(postId) },
+    //   {
+    //     $inc:
+    //       likeStatus === 'Dislike'
+    //         ? { 'extendedLikesInfo.dislikesCount': -1 }
+    //         : { 'extendedLikesInfo.likesCount': -1 },
+    //   },
+    // );
+  }
 
   async findPostByBlogId(blogId: string) {
     try {

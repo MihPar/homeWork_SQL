@@ -1,5 +1,5 @@
+import { BlogsRepositoryForSA } from './../blogs.repository';
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { BlogsRepository } from "../../blogs/blogs.repository";
 
 export class DeleteAllBlogsCommnad {
 	constructor() {}
@@ -8,9 +8,9 @@ export class DeleteAllBlogsCommnad {
 @CommandHandler(DeleteAllBlogsCommnad)
 export class DeleteAllBlogsUseCase implements ICommandHandler<DeleteAllBlogsCommnad> {
 	constructor(
-		protected readonly blogsRepository: BlogsRepository
+		protected readonly blogsRepositoryForSA: BlogsRepositoryForSA
 	) {}
  	async execute(command: DeleteAllBlogsCommnad): Promise<any> {
-		return await this.blogsRepository.deleteRepoBlogs();
+		return await this.blogsRepositoryForSA.deleteRepoBlogsFroSA();
 	}
 }

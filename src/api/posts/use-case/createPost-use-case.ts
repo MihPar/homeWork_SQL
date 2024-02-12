@@ -4,6 +4,7 @@ import { PostsViewModel } from "../posts.type";
 import { PostsRepository } from "../posts.repository";
 import { LikesRepository } from "../../likes/likes.repository";
 import { PostClass } from "../post.class";
+import { LikeStatusEnum } from "../../likes/likes.emun";
 
 export class CreatePostCommand {
 	constructor(
@@ -26,7 +27,7 @@ export class CreatePostUseCase implements ICommandHandler<CreatePostCommand> {
 				command.inputModelPost.content,
 				command.inputModelPost.blogId,
 				command.blogName,
-				0, 0
+				0, 0, LikeStatusEnum.None
 			);
 			const createPost: PostClass | null = await this.postsRepository.createNewPosts(newPost);
 			if(!createPost) {
@@ -35,6 +36,6 @@ export class CreatePostUseCase implements ICommandHandler<CreatePostCommand> {
 			const post = await this.postsRepository.findPostById(command.inputModelPost.blogId)
 			if(!post) return null
 			const result = await this.likesRepository.getNewLike(post._id.toString(), command.inputModelPost.blogId)
-			return createPost.getPostViewModel(result.myStatus, result.newestLikes);
+			return createPost.getPostViewModel(result.newestLikes);
 	}
 }
