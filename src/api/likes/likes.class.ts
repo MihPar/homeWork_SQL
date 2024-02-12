@@ -1,10 +1,9 @@
-import { ObjectId } from "mongodb";
 import { LikeStatusEnum } from "./likes.emun";
 
 export class Like {
     constructor(
-	  public _id: ObjectId,
-	  public userId: ObjectId,
+	  public id: string,
+	  public userId: string,
 	  public login: string,
 	  public commentId: string,
 	  public postId: string,

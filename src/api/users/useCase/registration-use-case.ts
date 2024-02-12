@@ -36,11 +36,7 @@ export class RegistrationUseCase implements ICommandHandler<RegistrationCommand>
       }).toISOString()
 	newUser.isConfirmed = false
 	newUser.createdAt = new Date().toISOString()
-
-	
-
     const userId: string = await this.usersRepository.createUser(newUser);
-	// console.log("userId: ", userId)
     try {
       await this.emailManager.sendEamilConfirmationMessage(
         newUser.email,

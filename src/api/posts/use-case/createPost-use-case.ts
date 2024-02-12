@@ -1,9 +1,9 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { inputModelPostClass } from "../dto/posts.class.pipe";
 import { PostsViewModel } from "../posts.type";
-import { PostClass } from "../../../schema/post.schema";
 import { PostsRepository } from "../posts.repository";
 import { LikesRepository } from "../../likes/likes.repository";
+import { PostClass } from "../post.class";
 
 export class CreatePostCommand {
 	constructor(

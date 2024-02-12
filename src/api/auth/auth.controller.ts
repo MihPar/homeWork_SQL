@@ -19,7 +19,7 @@ import { RegistrationCommand } from "../users/useCase/registration-use-case";
 import { IsExistEmailUser } from "./gards/isExixtEmailUser";
 import { RegistrationEmailResendingCommand } from "../users/useCase/registrationEmailResending-use-case";
 import { LogoutCommand } from "../security-devices/useCase/logout-use-case";
-import { CheckRefreshTokenForComments } from "../comments/bearer.authForComments";
+import { CheckRefreshTokenForComments } from "../comment/use-case/bearer.authForComments";
 import { GetUserIdByTokenCommand } from "./useCase.ts/getUserIdByToken-use-case";
 import { UsersQueryRepository } from "../users/users.queryRepository";
 import { UserDecorator, UserIdDecorator } from "../../infrastructura/decorators/decorator.user";

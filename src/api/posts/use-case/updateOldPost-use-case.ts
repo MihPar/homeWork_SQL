@@ -1,7 +1,9 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { inputModelPostClass } from "../dto/posts.class.pipe";
 import { PostsRepository } from "../posts.repository";
-import { ObjectId } from "mongodb";
+import { PostClass } from "../post.class";
+import { LikeStatusEnum } from "../../likes/likes.emun";
+import { PostsViewModel } from "../posts.type";
 
 export class UpdateOldPostCommand {
 	constructor(
@@ -15,15 +17,25 @@ export class UpdateOldPostUseCase implements ICommandHandler<UpdateOldPostComman
 	constructor(
 		protected readonly postsRepository: PostsRepository
 	) {}
-	async execute(command: UpdateOldPostCommand): Promise<boolean> {
-		if(!ObjectId.isValid(command.postId)) return false;
-			const updatPostById: boolean = await this.postsRepository.updatePost(
-				command.postId,
-				command.inputModelData.title,
-				command.inputModelData.shortDescription,
-				command.inputModelData.content,
-				command.inputModelData.blogId
+	async execute(command: UpdateOldPostCommand): Promise<PostsViewModel | null> {
+		// if(!ObjectId.isValid(command.postId)) return false;
+		const findPostById: PostClass = await this.postsRepository.findPostById(command.postId)
+		if(!findPostById) return null
+		const findNewestLike = await this.postsRepository.findNewestLike(command.postId)
+		if(!findNewestLike) return null
+		const newPost = new PostClass(
+			command.inputModelData.title,
+			command.inputModelData.shortDescription,
+			command.inputModelData.content,
+			command.inputModelData.blogId,
+			findPostById.blogName,
+			findPostById.likesCount,
+			findPostById.dislikesCount,
+			LikeStatusEnum.Like
+			)
+			const updatPostById: PostClass = await this.postsRepository.updatePost(
+				newPost, findNewestLike
 			);
-			return updatPostById;
+			return updatPostById ? PostClass.getPostsViewModel(updatPostById, findNewestLike) : null
 	}
 }

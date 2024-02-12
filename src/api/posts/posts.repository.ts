@@ -117,4 +117,14 @@ export class PostsRepository {
 	const findPostById = (await this.dataSource.query(query, [id, blogId]))[0]
 	return findPostById
   }
+
+  async findPostById(id: string) {
+	const query = `
+		select *
+			from "Posts"
+			where "id" = $1
+	`
+	const findPostById = (await this.dataSource.query(query, [id]))[0]
+	return findPostById
+  }
 }

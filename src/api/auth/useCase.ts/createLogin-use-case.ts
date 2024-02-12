@@ -20,19 +20,10 @@ export class CreateLoginUseCase implements ICommandHandler<CreateLoginCommand> {
         await this.usersQueryRepository.findByLoginOrEmail(
           command.inutDataModel.loginOrEmail
         );
-
-		// const mappingData = getViewUser(user.Id, user.Login, user.Email, user.CreatedAt)
-
-	  		// console.log("user: ", user)
-			// console.log("user?.passwordHash: ", user!.passwordHash)
-			// console.log("user?.userName: ", user!.userName)
-		// user!.passwordHash = uuidv4()
-		// console.log("command.inutDataModel.password,: ", command.inutDataModel.password,)
       if (!user) return null;
       const resultBcryptCompare: boolean = await bcrypt.compare(
         command.inutDataModel.password, user!.passwordHash
 		);
-    //   console.log("resultBcryptCompare: ", resultBcryptCompare);
       if (resultBcryptCompare !== true) return null;
       return user;
     } catch (error) {

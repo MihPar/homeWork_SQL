@@ -19,7 +19,7 @@ import { CheckRefreshToken } from './api/auth/gards/checkRefreshToken';
 import { IsConfirmed } from './api/auth/gards/isCodeConfirmed';
 import { CheckLoginOrEmail } from './api/auth/gards/checkEmailOrLogin';
 import { IsExistEmailUser } from './api/auth/gards/isExixtEmailUser';
-import { CheckRefreshTokenForComments } from './api/comments/bearer.authForComments';
+import { CheckRefreshTokenForComments } from './api/comment/use-case/bearer.authForComments';
 import { DeviceRepository } from './api/security-devices/device.repository';
 import { DeviceQueryRepository } from './api/security-devices/deviceQuery.repository';
 import { UsersRepository } from './api/users/users.repository';
