@@ -23,7 +23,7 @@ import { PostsRepository } from '../posts/posts.repository';
 import { UpdateExistingPostByIdWithBlogIdCommand } from './use-case/updatePostByIdWithBlogId-use-case';
 import { DeletePostByIdCommand } from './use-case/deletPostById-use-case';
 
-@SkipThrottle()
+// @SkipThrottle()
 @Controller('sa/blogs')
 @UseGuards(AuthBasic)
 @UseGuards(ForbiddenCalss)

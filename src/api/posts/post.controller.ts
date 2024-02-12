@@ -34,7 +34,7 @@ import { CreateNewCommentByPostIdCommnad } from '../comment/use-case/createNewCo
 import { SkipThrottle } from '@nestjs/throttler';
 import { UpdateLikeStatusCommand } from './use-case/updateLikeStatus-use-case';
 
-@SkipThrottle()
+// @SkipThrottle()
 @Controller('posts')
 export class PostController {
   constructor(

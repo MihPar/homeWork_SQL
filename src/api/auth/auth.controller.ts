@@ -27,7 +27,7 @@ import { Ratelimits } from "./gards/rateLimits";
 import { SkipThrottle, Throttle, ThrottlerGuard } from '@nestjs/throttler';
 
 
-@UseGuards(ThrottlerGuard)
+// @UseGuards(ThrottlerGuard)
 @Controller('auth')
 export class AuthController {
 	constructor(
@@ -82,7 +82,7 @@ export class AuthController {
 	
 	@HttpCode(200)
 	@Post("refresh-token")
-	@SkipThrottle({default: true})
+	// @SkipThrottle({default: true})
 	@UseGuards(CheckRefreshToken)
 	async cretaeRefreshToken(
 		@Req() req: Request,
@@ -139,7 +139,7 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post("logout")
-	@SkipThrottle({default: true})
+	// @SkipThrottle({default: true})
 	@UseGuards(CheckRefreshToken)
 	async cretaeLogout(@Req() req: Request) {
 		const refreshToken: string = req.cookies.refreshToken;
@@ -150,7 +150,7 @@ export class AuthController {
 
 	@HttpCode(200)
 	@Get("me")
-	@SkipThrottle({default: true})
+	// @SkipThrottle({default: true})
 	@UseGuards(CheckRefreshTokenForComments)
 	async findMe(@Req() req: Request) {
 		if (!req.headers.authorization) throw new UnauthorizedException('Not authorization 401')

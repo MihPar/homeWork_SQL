@@ -6,7 +6,7 @@ import { SkipThrottle } from "@nestjs/throttler";
 import { DeleteAllBlogsCommnad } from "../blogs/use-case/deletAllBlogs-use-case";
 import { DeleteAllPostsComand } from "../posts/use-case/deleteAllPosts-use-case";
 
-@SkipThrottle()
+// @SkipThrottle()
 @Controller('testing/all-data')
 export class DeleteAllDataController {
 	constructor(

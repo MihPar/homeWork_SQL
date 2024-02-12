@@ -15,7 +15,7 @@ import { UserDecorator, UserIdDecorator } from '../../infrastructura/decorators/
 import { UserClass } from '../users/user.class';
 import { Posts } from '../posts/post.class';
 
-@SkipThrottle()
+// @SkipThrottle()
 @Controller('blogs')
 export class BlogsController {
   constructor(
