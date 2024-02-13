@@ -171,7 +171,6 @@ export class BlogsControllerForSA {
 
   @Delete(':blogId/posts/:postId')
   @HttpCode(204)
-//   @UseGuards(ForbiddenCalss)
 @UseGuards(CheckRefreshTokenForSA)
   async deletePostByIdWithBlogId(
 	@Param() dto: inputModelUpdataPost, 
