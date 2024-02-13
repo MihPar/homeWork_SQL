@@ -2,16 +2,17 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { PostsViewModel } from '../../posts/posts.type';
 import { PostsRepository } from '../../posts/posts.repository';
 import { LikesRepository } from '../../likes/likes.repository';
-import { inputModelClass } from '../dto/blogs.class-pipe';
 import { bodyPostsModelClass } from '../../posts/dto/posts.class.pipe';
 import { PostClass } from '../../posts/post.class';
 import { LikeStatusEnum } from '../../likes/likes.emun';
+import { NewestLikesClass } from '../../likes/likes.class';
 
 export class CreateNewPostForBlogCommand {
   constructor(
 	public blogId: string,
     public inputDataModel: bodyPostsModelClass,
-	public blogName: string
+	public blogName: string,
+	public userId: string
   ) {}
 }
 
@@ -33,10 +34,22 @@ export class CreateNewPostForBlogUseCase
       0, 0, LikeStatusEnum.None
     );
     const createPost: PostClass | null = await this.postsRepository.createNewPosts(newPost)
-	if(!createPost) return null
-	const post = await this.postsRepository.findPostById(command.blogId)
-    if (!post) return null;
-	const newestLike = await this.postsRepository.findNewestLike(post.id.toString())
-	return createPost.getPostViewModel(newestLike);
+	if (!createPost) return null;
+  // const post = await this.postsRepository.findPostById(createPost.id)
+  // if (!post) return null;
+  const newest = new NewestLikesClass(
+    new Date().toISOString(),
+    command.userId,
+    command.blogName,
+    createPost.id
+  );
+  const createNewestLikes =
+    await this.postsRepository.createNewestLikes(newest);
+  // const newestLike = await this.postsRepository.findNewestLike(createPost.id)
+//   console.log(
+//     "return post: ",
+//     PostClass.getPostsViewModelForSA(createPost, createNewestLikes)
+//   );
+	return PostClass.getPostsViewModelForSA(createPost, createNewestLikes);
   }
 }

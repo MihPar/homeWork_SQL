@@ -50,9 +50,9 @@ import { PostsQueryRepository } from './api/posts/postQuery.repository';
 import { PostsService } from './api/posts/posts.service';
 import { CheckRefreshTokenForGet } from './api/blogs/use-case/bearer.authGetComment';
 import { DeleteAllBlogsUseCase } from './api/blogs/use-case/deletAllBlogs-use-case';
-import { BlogsControllerForSA } from './api/blogsForSA/blogs.controller';
-import { BlogsQueryRepositoryForSA } from './api/blogsForSA/blogs.queryReposity';
-import { BlogsRepositoryForSA } from './api/blogsForSA/blogs.repository';
+import { BlogsControllerForSA } from './api/blogsForSA/blogsForSA.controller';
+import { BlogsQueryRepositoryForSA } from './api/blogsForSA/blogsForSA.queryReposity';
+import { BlogsRepositoryForSA } from './api/blogsForSA/blogsForSA.repository';
 import { ForbiddenCalss } from './api/security-devices/gards/forbidden';
 import { updateExistingPostByIdWithBlogIdUseCase } from './api/blogsForSA/use-case/updatePostByIdWithBlogId-use-case';
 import { DeletePostByIdCommandUseCase } from './api/blogsForSA/use-case/deletPostById-use-case';
@@ -67,6 +67,7 @@ import { CreateNewBlogForSAUseCase } from './api/blogsForSA/use-case/createNewBl
 import { UpdateBlogForSAUseCase } from './api/blogsForSA/use-case/updateBlog-use-case';
 import { CheckRefreshTokenForSA } from './api/blogsForSA/guards/bearer.authGetComment';
 import { DeleteBlogByIdForSAUseCase } from './api/blogsForSA/use-case/deleteBlogById-use-case';
+import { CreateNewPostForBlogUseCase } from './api/blogsForSA/use-case/createNewPostForBlog-use-case';
 
 const userCases = [
   RecoveryPasswordUseCase,
@@ -96,7 +97,8 @@ const userCases = [
   DeleteAllPostsUseCase,
   CreateNewBlogForSAUseCase,
   UpdateBlogForSAUseCase,
-  DeleteBlogByIdForSAUseCase
+  DeleteBlogByIdForSAUseCase,
+  CreateNewPostForBlogUseCase
 ];
 
 const gards = [

@@ -1,4 +1,4 @@
-import { BlogsRepositoryForSA } from './../blogs.repository';
+import { BlogsRepositoryForSA } from '../blogsForSA.repository';
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 
 export class DeleteAllBlogsForSACommnad {

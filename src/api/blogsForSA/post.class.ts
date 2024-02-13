@@ -1,5 +1,5 @@
 import { LikeStatusEnum } from "../likes/likes.emun";
-import { LikesInfoModel, newestLikesType } from "../likes/likes.type";
+import { LikesInfoModel, NewestLikesType } from "../likes/likes.type";
 import { PostsViewModel } from "../posts/posts.type";
 
 export class Posts {
@@ -33,7 +33,7 @@ export class Posts {
 		  super(id, title, shortDescription, content, blogId, blogName);
 		}
 		static getPostsViewModel(post: PostsDB, myStatus: LikeStatusEnum,
-		  newestLikes: newestLikesType[]): PostsViewModel {
+		  newestLikes: NewestLikesType[]): PostsViewModel {
 		  return {
 			id: post.id.toString(),
 			title: post.title,
@@ -54,7 +54,7 @@ export class Posts {
 			};
 		}
 		getPostViewModel(myStatus: LikeStatusEnum,
-		  newestLikes: newestLikesType[]): PostsViewModel {
+		  newestLikes: NewestLikesType[]): PostsViewModel {
 		  return {
 			id: this.id.toString(),
 			title: this.title,

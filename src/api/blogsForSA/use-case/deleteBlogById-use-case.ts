@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { BlogsQueryRepositoryForSA } from '../blogs.queryReposity';
+import { BlogsQueryRepositoryForSA } from '../blogsForSA.queryReposity';
 
 export class DeleteBlogByIdForSACommnad {
   constructor(public id: string) {}

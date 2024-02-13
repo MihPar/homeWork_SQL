@@ -1,8 +1,7 @@
 import { CommandBus } from '@nestjs/cqrs';
 import { Body, Controller, Delete, ForbiddenException, Get, HttpCode, NotFoundException, Param, Post, Put, Query, UseGuards, ValidationPipe } from "@nestjs/common";
 import { bodyBlogsModel, inputModelClass, inputModelUpdataPost } from "./dto/blogs.class-pipe";
-import { BlogsViewType } from "./blogs.type";
-import {BlogsRepositoryForSA } from "./blogs.repository";
+import {BlogsRepositoryForSA } from "./blogsForSA.repository";
 import { PostsQueryRepository } from "../posts/postQuery.repository";
 import { PaginationType } from "../../types/pagination.types";
 import { UpdateBlogForSACommand } from './use-case/updateBlog-use-case';
@@ -14,13 +13,14 @@ import { UserClass } from '../users/user.class';
 import { ForbiddenCalss } from '../security-devices/gards/forbidden';
 import { Posts } from '../posts/post.class';
 import { bodyPostsModelClass } from '../posts/dto/posts.class.pipe';
-import { BlogsQueryRepositoryForSA } from './blogs.queryReposity';
+import { BlogsQueryRepositoryForSA } from './blogsForSA.queryReposity';
 import { PostsRepository } from '../posts/posts.repository';
 import { UpdateExistingPostByIdWithBlogIdCommand } from './use-case/updatePostByIdWithBlogId-use-case';
 import { DeletePostByIdCommand } from './use-case/deletPostById-use-case';
 import { CreateNewBlogForSACommand } from './use-case/createNewBlog-use-case';
 import { CheckRefreshTokenForSA } from './guards/bearer.authGetComment';
 import { DeleteBlogByIdForSACommnad } from './use-case/deleteBlogById-use-case';
+import { BlogsViewType, BlogsViewTypeWithUserId } from '../blogs/blogs.type';
 
 // @SkipThrottle()
 @UseGuards(AuthBasic)
@@ -107,14 +107,16 @@ export class BlogsControllerForSA {
 
   @HttpCode(201)
   @Post(':blogId/posts')
-  @UseGuards(ForbiddenCalss)
+  @UseGuards(CheckRefreshTokenForSA)
   async createPostByBlogId(
     @Param() dto: inputModelClass,
     @Body(new ValidationPipe({ validateCustomDecorators: true })) inputDataModel: bodyPostsModelClass,
+	@UserIdDecorator() userId: string,
   ) {
-    const findBlog: BlogsViewType | null = await this.blogsQueryRepositoryForSA.findBlogById(dto.blogId);
-    if (!findBlog) throw new NotFoundException('Blogs by id not found 404');
-	const command = new CreateNewPostForBlogCommand( dto.blogId, inputDataModel, findBlog.name)
+    const findBlog: BlogsViewTypeWithUserId | null = await this.blogsQueryRepositoryForSA.findBlogById(dto.blogId);
+    if(!findBlog) throw new NotFoundException("404")
+	if(userId !== findBlog.userId) throw new ForbiddenException("This user does not have access in blog, 403")
+	const command = new CreateNewPostForBlogCommand( dto.blogId, inputDataModel, findBlog.name, userId)
 	const createNewPost: Posts | null = await this.commandBus.execute(command)
     if (!createNewPost) throw new NotFoundException('Blogs by id not found 404');
     return createNewPost;

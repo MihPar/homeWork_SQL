@@ -7,7 +7,7 @@ import {
 	UnauthorizedException,
   } from '@nestjs/common';
   import { Request } from 'express';
-import { BlogsQueryRepositoryForSA } from '../blogs.queryReposity';
+import { BlogsQueryRepositoryForSA } from '../blogsForSA.queryReposity';
   
   @Injectable()
   export class ForbiddenCalss implements CanActivate {

@@ -4,10 +4,10 @@ export interface LikesInfoViewModel {
     dislikesCount: number
     likesCount: number
 	myStatus: LikeStatusEnum,
-	newestLikes: newestLikesType[]
+	newestLikes: NewestLikesType[]
 }
 
-export type newestLikesType = {
+export type NewestLikesType = {
     addedAt: string,
     userId: string,
     login: string
@@ -22,8 +22,4 @@ export type likeInfoType = {
 	likesCount: number
     dislikesCount: number
     myStatus: LikeStatusEnum
-}
-
-export type likeStatusType = {
-		likeStatus: string
 }

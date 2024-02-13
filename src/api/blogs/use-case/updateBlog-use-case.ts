@@ -1,4 +1,4 @@
-import { BlogsRepositoryForSA } from './../../blogsForSA/blogs.repository';
+import { BlogsRepositoryForSA } from '../../blogsForSA/blogsForSA.repository';
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { bodyBlogsModel } from "../dto/blogs.class.pipe";
 

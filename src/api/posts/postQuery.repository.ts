@@ -104,6 +104,7 @@ export class PostsQueryRepository {
       (+pageNumber - 1) * +pageSize,
     ]);
 
+	console.log("findPostsByBlogId: ", findPostsByBlogId)
     const count = `
   		SELECT count(*)
   			FROM public."Posts"

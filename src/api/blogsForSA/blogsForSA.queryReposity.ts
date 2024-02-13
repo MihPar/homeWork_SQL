@@ -1,10 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { PaginationType } from "../../types/pagination.types";
-import { BlogsViewType } from "./blogs.type";
 import { InjectDataSource } from "@nestjs/typeorm";
 import { DataSource } from "typeorm";
 import { BlogClass, Blogs } from "../blogs/blogs.class";
-import { BlogsViewTypeWithUserId } from "../blogs/blogs.type";
+import { BlogsViewType, BlogsViewTypeWithUserId } from "../blogs/blogs.type";
 
 @Injectable()
 export class BlogsQueryRepositoryForSA {

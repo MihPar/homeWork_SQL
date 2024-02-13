@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { bodyBlogsModel } from "../dto/blogs.class.pipe";
 import { BlogsViewType } from "../blogs.type";
-import { BlogsRepositoryForSA } from "../../blogsForSA/blogs.repository";
+import { BlogsRepositoryForSA } from "../../blogsForSA/blogsForSA.repository";
 import { BlogClass } from "../blogs.class";
 
 export class CreateNewBlogCommand {

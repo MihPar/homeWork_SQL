@@ -1,5 +1,5 @@
 import { LikeStatusEnum } from "../likes/likes.emun";
-import { LikesInfoModel, newestLikesType } from "../likes/likes.type";
+import { LikesInfoModel, NewestLikesType } from "../likes/likes.type";
 import { PostsViewModel } from "./posts.type";
 
 export class Posts {
@@ -48,7 +48,7 @@ export class PostClass extends Posts {
 	myStatus: LikeStatusEnum
 
 	  static getPostsViewModel(post: PostClass,
-		newestLikes: newestLikesType[]): PostsViewModel {
+		newestLikes: NewestLikesType[]): PostsViewModel {
 		return {
 		  id: post.id.toString(),
 		  title: post.title,
@@ -68,8 +68,50 @@ export class PostClass extends Posts {
 			  }))},
 		  };
 	  }
+
+	  static getPostsViewModelForSA(post: PostClass,
+		newestLikes: NewestLikesType[]): PostsViewModel {
+		return {
+		  id: post.id,
+		  title: post.title,
+		  shortDescription: post.shortDescription,
+		  content: post.content,
+		  blogId: post.blogId,
+		  blogName: post.blogName,
+		  createdAt: post.createdAt,
+		  extendedLikesInfo: {
+			  dislikesCount: post.dislikesCount, 
+			  likesCount: post.likesCount, 
+			  myStatus: post.myStatus,
+			  newestLikes: newestLikes.map(l => ({
+				  addedAt: l.addedAt,
+				  login: l.login,
+				  userId: l.userId
+			  }))},
+		  };
+	  }
+
+	  getPostwModel(post: PostClass,
+		newestLikes: NewestLikesType[]): PostsViewModel {
+		return {
+		  id: this.id.toString(),
+		  title: this.title,
+		  shortDescription: this.shortDescription,
+		  content: this.content,
+		  blogId: this.blogId,
+		  blogName: this.blogName,
+		  createdAt: this.createdAt,
+		  extendedLikesInfo: {
+			  dislikesCount: this.extendedLikesInfo.dislikesCount, 
+			  likesCount: this.extendedLikesInfo.dislikesCount,
+			  myStatus: this.myStatus,
+			  newestLikes
+		  },
+		};
+	  }
+
 	  getPostViewModel(
-		newestLikes: newestLikesType[]): PostsViewModel {
+		newestLikes: NewestLikesType[]): PostsViewModel {
 		return {
 		  id: this.id.toString(),
 		  title: this.title,

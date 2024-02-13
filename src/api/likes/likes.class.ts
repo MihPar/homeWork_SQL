@@ -11,3 +11,13 @@ export class Like {
 	  public addedAt: string
     ) {}
   }
+
+
+  export class NewestLikesClass {
+	constructor(
+		public addedAT: string,
+		public userId: string,
+		public login: string,
+		public postId: string
+	) {}
+  }
