@@ -19,10 +19,11 @@ export class BlogsQueryRepositoryForSA {
 	const query1 = `
 		select *
 			from public."Blogs"
-			where "name" like $1
+			where "name" ILIKE $1
 			order by "${sortBy}" ${sortDirection}
 			limit $2 offset $3
 	`
+console.log("query1: ", query1)
 
 	const findAllBlogs = await this.dataSource.query(query1, [
 		`%${searchNameTerm}%`,
@@ -35,9 +36,10 @@ export class BlogsQueryRepositoryForSA {
 	const query2 = `
 		select count(*)
 			from "Blogs"
-			where "name" = $1
+			where "name" ILIKE $1
 	`
 	const totalCount = (await this.dataSource.query(query2, [`%${searchNameTerm}%`]))[0].count
+	console.log("totalCount: ", totalCount)
     const pagesCount: number = Math.ceil(+totalCount / +pageSize);
 
     const result: PaginationType<BlogsViewType> = {

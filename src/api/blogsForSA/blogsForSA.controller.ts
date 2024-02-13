@@ -46,7 +46,6 @@ export class BlogsControllerForSA {
       pageSize: string;
     },
   ) {
-	console.log("query.sortDirection: ", query.sortDirection)
     const getAllBlogs: PaginationType<BlogsViewType> =
       await this.blogsQueryRepositoryForSA.findAllBlogs(
         query.searchNameTerm,
