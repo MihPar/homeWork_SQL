@@ -37,7 +37,7 @@ export class BlogsController {
   ) {
     const getAllBlogs: PaginationType<BlogsViewType> =
       await this.blogsQueryRepository.findAllBlogs(
-        query.searchNameTerm,
+        query.searchNameTerm ?? '',
 		(query.sortBy || 'createdAt'),
 		(query.sortDirection || 'desc'),
         (query.pageNumber || '1'),

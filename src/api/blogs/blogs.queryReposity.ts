@@ -16,6 +16,7 @@ export class BlogsQueryRepository {
     pageNumber: string,
     pageSize: string
   ): Promise<PaginationType<BlogsViewType>> {
+	console.log([+pageNumber, +pageSize, searchNameTerm])
     const getFilter = `
 			SELECT *
 				FROM public."Blogs"
@@ -36,17 +37,19 @@ export class BlogsQueryRepository {
 					WHERE "name" ILIKE $1
 		`;
     const totalCount = (
-      await this.dataSource.query(count, [`${searchNameTerm}`])
+      await this.dataSource.query(count, [`%${searchNameTerm}%`])
     )[0].count;
-    const pagesCount: number = Math.ceil(totalCount / +pageSize);
+    const pagesCount: number = Math.ceil(+totalCount / +pageSize);
 
+	console.log("totalCount: ", totalCount)
     const result: PaginationType<BlogsViewType> = {
       pagesCount: pagesCount,
       page: +pageNumber,
       pageSize: +pageSize,
-      totalCount: totalCount,
+      totalCount: +totalCount,
       items: findAllBlogs.map((item) => BlogClass.createNewBlogForSA(item)),
     };
+	console.log("result: ", result)
     return result;
   }
 
