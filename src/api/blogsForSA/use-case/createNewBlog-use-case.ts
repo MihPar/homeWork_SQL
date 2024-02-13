@@ -23,11 +23,11 @@ export class CreateNewBlogForSAUseCase
       command.inputDateModel.name,
       command.inputDateModel.description,
       command.inputDateModel.websiteUrl,
-      true
+      false
     );
     const createBlog: BlogClass | null =
       await this.blogsRepositoryForSA.createNewBlogs(newBlog);
     if (!createBlog) return null;
-    return BlogClass.getBlogsViewModel(createBlog)
+    return BlogClass.createNewBlogForSA(createBlog)
   }
 }

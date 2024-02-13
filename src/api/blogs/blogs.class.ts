@@ -42,6 +42,17 @@ export class BlogClass extends Blogs {
 			}
 		}
 
+		static createNewBlogForSA(inputBlog: BlogClass) {
+			return {
+				id: inputBlog.id,
+				name: inputBlog.name,
+				description: inputBlog.description,
+				websiteUrl: inputBlog.websiteUrl,
+				createdAt: inputBlog.createdAt,
+				isMembership: inputBlog.isMembership,
+			}
+		}
+
 		getBlogViewModel(): BlogsViewType {
 			return {
 				id: this.id,
