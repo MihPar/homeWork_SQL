@@ -36,7 +36,6 @@ export class UsersQueryRepository {
       (+pageNumber - 1) * +pageSize,
     ]);
 
-    // console.log("findAllUsers: ", findAllUsers);
     const countTotalCount = `
 		SELECT count(*)
 			from "Users"
@@ -48,7 +47,6 @@ export class UsersQueryRepository {
       `%${searchEmailTerm}%`,
     ]);
     const totalCount = resultCount[0].count;
-    // console.log("totalCount: ", totalCount);
 
     const pagesCount: number = await Math.ceil(totalCount / +pageSize);
     return {
