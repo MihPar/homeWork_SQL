@@ -83,6 +83,7 @@ export class BlogsController {
         dto.blogId,
       );
     if (!getPosts) throw new NotFoundException('Blogs by id not found');
+	console.log("getPosts: ", getPosts)
     return getPosts;
   }
 

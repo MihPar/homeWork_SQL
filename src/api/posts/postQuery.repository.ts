@@ -104,30 +104,30 @@ export class PostsQueryRepository {
       (+pageNumber - 1) * +pageSize,
     ]);
 
-	console.log("findPostsByBlogId: ", findPostsByBlogId)
+	// console.log("findPostsByBlogId: ", findPostsByBlogId)
     const count = `
   		SELECT count(*)
   			FROM public."Posts"
   			WHERE "blogId" = $1
   `;
     const totalCount = (await this.dataSource.query(count, [blogId]))[0].count;
-    const pagesCount: number = Math.ceil(totalCount / +pageSize);
+    const pagesCount: number = Math.ceil(+totalCount / +pageSize);
 
-    const query2 = `
-			select *
-				from "NewestLikes"
-				where "postId" = $1
-		`;
+    // const query2 = `
+	// 		select *
+	// 			from "NewestLikes"
+	// 			where "postId" = $1
+	// 	`;
 
     const result: PaginationType<Posts> = {
       pagesCount: pagesCount,
       page: +pageNumber,
       pageSize: +pageSize,
       totalCount: +totalCount,
-      items: findPostsByBlogId.map(async function (post: PostClass) {
-        const newestLike = (await this.dataSource.query(query2, [post.id]))[0];
-        return PostClass.getPostsViewModel(post, newestLike);
-      }),
+      items: findPostsByBlogId.map((post: PostClass)  =>
+        // const newestLike = (await this.dataSource.query(query2, [post.id]))[0];
+         PostClass.getPostsViewModelForSA(post)
+      ),
     };
     return result;
   }
