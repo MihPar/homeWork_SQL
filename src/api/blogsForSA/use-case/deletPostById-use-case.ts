@@ -14,6 +14,7 @@ export class DeletePostByIdCommandUseCase implements ICommandHandler<DeletePostB
 		protected readonly postRepository: PostsRepository
 	) {}
  	async execute(command: DeletePostByIdCommand): Promise<any> {
+		console.log("try2")
 		return await this.postRepository.deletedPostByIdWithBlogId(command.dto.postId, command.dto.blogId);
 	}
 }

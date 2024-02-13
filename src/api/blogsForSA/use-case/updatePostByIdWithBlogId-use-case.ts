@@ -24,6 +24,7 @@ export class updateExistingPostByIdWithBlogIdUseCase
   ) {}
   async execute(command: UpdateExistingPostByIdWithBlogIdCommand): Promise<PostsViewModel | null> {
 	const findPostById: PostClass = await this.postsRepository.findPostByIdAndBlogId(command.dto.postId, command.dto.blogId)
+	// console.log("findPostById: ", findPostById)
 	if(!findPostById) return null
 	const findNewestLike = await this.postsRepository.findNewestLike(command.dto.postId)
 	// if(!findNewestLike) return null
@@ -35,6 +36,7 @@ export class updateExistingPostByIdWithBlogIdUseCase
 	  findPostById.blogName,
       0, 0, LikeStatusEnum.None
     );
+	// console.log("newPost: ", newPost)
     const updateExistingPost: PostClass = await this.postsRepository.updatePost(newPost, command.dto.postId)
 	if(!updateExistingPost) return null
 	return PostClass.getPostsViewModelForSA(updateExistingPost, findNewestLike);

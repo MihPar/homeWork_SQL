@@ -41,10 +41,25 @@ export class PostsRepository {
   async updatePost(newPost: PostClass, id: string): Promise<PostClass> {
     const query = `
 		UPDATE public."Posts"
-			SET "blogId"=${newPost.blogId}, title=${newPost.title}, "shortDescription"=${newPost.shortDescription}, content=${newPost.content}, "blogName"=${newPost.blogName}, "createdAt"=${newPost.createdAt}, "likesCount"=${newPost.likesCount}, "dislikesCount"=${newPost.dislikesCount}, "myStatus"=${newPost.myStatus}
-			WHERE "id" = $1
+			SET "blogId"=$1, "title"=$2, "shortDescription"=$3, "content"=$4, "blogName"=$5, "createdAt"=$6, "likesCount"=$7, "dislikesCount"=$8, "myStatus"=$9
+			WHERE "id" = $10
+			returning *
 	`;
-    const result = (await this.dataSource.query(query, [id]))[0];
+    const result = (
+      await this.dataSource.query(query, [
+        newPost.blogId,
+        newPost.title,
+        newPost.shortDescription,
+		newPost.content,
+		newPost.blogName,
+		newPost.createdAt,
+		newPost.likesCount,
+		newPost.dislikesCount,
+		newPost.myStatus,
+        id,
+      ])
+    )[0];
+	// console.log("result: ", result)
     return result;
   }
 
@@ -52,6 +67,7 @@ export class PostsRepository {
     id: string,
     blogId: string
   ): Promise<boolean> {
+	console.log("try3")
     const query = `
 		delete from "Posts"
 			where "id" = $1 and "blogid" = $2
@@ -146,7 +162,7 @@ export class PostsRepository {
 		`;
       // console.log("query: ", query)
       const findNewestLike = (await this.dataSource.query(query, [id]))[0];
-      console.log("findNewestLike1111: ", findNewestLike);
+    //   console.log("findNewestLike1111: ", findNewestLike);
       return findNewestLike;
     } catch (erro) {
       return null;
