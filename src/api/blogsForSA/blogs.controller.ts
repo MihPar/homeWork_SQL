@@ -76,12 +76,12 @@ export class BlogsControllerForSA {
     @Body(new ValidationPipe({ validateCustomDecorators: true })) inputDateMode: bodyBlogsModel,
 	@UserDecorator() user: UserClass,
 	@UserIdDecorator() userId: string,
-  ) {
+  ): Promise<boolean> {
 	const isExistBlog = await this.blogsQueryRepositoryForSA.findBlogById(dto.blogId)
 	if(!isExistBlog) throw new NotFoundException("404")
 	if(userId !== isExistBlog.userId) throw new ForbiddenException("This user does not have access in blog, 403")
 	const command = new UpdateBlogForSACommand(dto.blogId, inputDateMode)
-	const isUpdateBlog = await this.commandBus.execute(command)
+	const isUpdateBlog: boolean = await this.commandBus.execute(command)
     if (!isUpdateBlog) throw new NotFoundException('Blogs by id not found 404');
 	return true
   }
