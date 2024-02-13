@@ -14,11 +14,11 @@ import { RegistrationUseCase } from './api/users/useCase/registration-use-case';
 import { RegistrationEmailResendingUseCase } from './api/users/useCase/registrationEmailResending-use-case';
 import { LogoutUseCase } from './api/security-devices/useCase/logout-use-case';
 import { GetUserIdByTokenUseCase } from './api/auth/useCase.ts/getUserIdByToken-use-case';
-import { Ratelimits } from './api/auth/gards/rateLimits';
-import { CheckRefreshToken } from './api/auth/gards/checkRefreshToken';
-import { IsConfirmed } from './api/auth/gards/isCodeConfirmed';
-import { CheckLoginOrEmail } from './api/auth/gards/checkEmailOrLogin';
-import { IsExistEmailUser } from './api/auth/gards/isExixtEmailUser';
+import { Ratelimits } from './api/auth/guards/rateLimits';
+import { CheckRefreshToken } from './api/auth/guards/checkRefreshToken';
+import { IsConfirmed } from './api/auth/guards/isCodeConfirmed';
+import { CheckLoginOrEmail } from './api/auth/guards/checkEmailOrLogin';
+import { IsExistEmailUser } from './api/auth/guards/isExixtEmailUser';
 import { CheckRefreshTokenForComments } from './api/comment/use-case/bearer.authForComments';
 import { DeviceRepository } from './api/security-devices/device.repository';
 import { DeviceQueryRepository } from './api/security-devices/deviceQuery.repository';
@@ -63,6 +63,9 @@ import { BlogsRepository } from './api/blogs/blogs.repository';
 import { PostsRepository } from './api/posts/posts.repository';
 import { LikesRepository } from './api/likes/likes.repository';
 import { DeleteAllBlogsForSAUseCase } from './api/blogsForSA/use-case/deletAllBlogs-use-case';
+import { CreateNewBlogForSAUseCase } from './api/blogsForSA/use-case/createNewBlog-use-case';
+import { UpdateBlogForSAUseCase } from './api/blogsForSA/use-case/updateBlog-use-case';
+import { CheckRefreshTokenForSA } from './api/blogsForSA/guards/bearer.authGetComment';
 
 const userCases = [
   RecoveryPasswordUseCase,
@@ -89,7 +92,9 @@ const userCases = [
   CreatePostUseCase,
   CreateNewBlogUseCase,
   DeleteAllBlogsForSAUseCase,
-  DeleteAllPostsUseCase
+  DeleteAllPostsUseCase,
+  CreateNewBlogForSAUseCase,
+  UpdateBlogForSAUseCase
 ];
 
 const gards = [
@@ -100,7 +105,8 @@ const gards = [
   IsExistEmailUser,
   CheckRefreshTokenForComments,
   AuthBasic,
-  CheckRefreshTokenForGet
+  CheckRefreshTokenForGet,
+  CheckRefreshTokenForSA
 ];
 
 const validation = [CustomLoginvalidation, CustomEmailvalidation]

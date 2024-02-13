@@ -6,7 +6,7 @@ import {
   ExecutionContext,
   BadRequestException,
 } from '@nestjs/common';
-import { UsersQueryRepository } from '../../../api/users/users.queryRepository';
+import { UsersQueryRepository } from '../../users/users.queryRepository';
 import { UserClass } from '../../users/user.class';
 
 @Injectable()

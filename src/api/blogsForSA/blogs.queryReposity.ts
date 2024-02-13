@@ -67,9 +67,10 @@ export class BlogsQueryRepositoryForSA {
 	const query = `
 		select *
 			from "Blogs"
-			where "blogId" = $1 AND "userId" = $2
+			where "id" = $1
 	`
-    const blog: BlogClass | null = (await this.dataSource.query(query, [blogId, userId]))[0]
+    const blog: BlogClass | null = (await this.dataSource.query(query, [blogId]))[0]
+	console.log("blog: ", blog)
     return blog ? BlogClass.getBlogsViewModel(blog) : null;
   }
 }

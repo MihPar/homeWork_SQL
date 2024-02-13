@@ -4,27 +4,30 @@ import { BlogsViewType } from "../blogs.type";
 import { BlogClass } from "../../blogs/blogs.class";
 import { BlogsRepositoryForSA } from "../blogs.repository";
 
-export class CreateNewBlogCommand {
+export class CreateNewBlogForSACommand {
 	constructor(
-		public inputDateModel: bodyBlogsModel
+		public inputDateModel: bodyBlogsModel,
+		public userId: string
 	) {}
 }
 
-@CommandHandler(CreateNewBlogCommand)
-export class CreateNewBlogUseCase
-  implements ICommandHandler<CreateNewBlogCommand>
+@CommandHandler(CreateNewBlogForSACommand) 
+export class CreateNewBlogForSAUseCase
+  implements ICommandHandler<CreateNewBlogForSACommand>
 {
   constructor(protected readonly blogsRepositoryForSA: BlogsRepositoryForSA) {}
-  async execute(command: CreateNewBlogCommand): Promise<BlogsViewType | null> {
+  async execute(
+    command: CreateNewBlogForSACommand
+  ): Promise<BlogsViewType | null> {
     const newBlog: BlogClass = new BlogClass(
       command.inputDateModel.name,
       command.inputDateModel.description,
       command.inputDateModel.websiteUrl,
-      false,
+      true
     );
     const createBlog: BlogClass | null =
       await this.blogsRepositoryForSA.createNewBlogs(newBlog);
     if (!createBlog) return null;
-    return createBlog.getBlogViewModel();
+    return BlogClass.getBlogsViewModel(createBlog)
   }
 }

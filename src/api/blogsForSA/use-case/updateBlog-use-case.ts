@@ -2,17 +2,17 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { bodyBlogsModel, inputModelClass } from "../dto/blogs.class-pipe";
 import { BlogsRepositoryForSA } from "../blogs.repository";
 
-export class UpdateBlogCommand {
+export class UpdateBlogForSACommand {
 	constructor(
 		public blogId: string,
 		public inputDateMode: bodyBlogsModel,
 	) {}
 }
 
-@CommandHandler(UpdateBlogCommand)
-export class UpdateBlogUseCase implements ICommandHandler<UpdateBlogCommand> {
+@CommandHandler(UpdateBlogForSACommand)
+export class UpdateBlogForSAUseCase implements ICommandHandler<UpdateBlogForSACommand> {
   constructor(private readonly blogsRepositoryForSA: BlogsRepositoryForSA) {}
-  async execute(command: UpdateBlogCommand): Promise<boolean> {
+  async execute(command: UpdateBlogForSACommand): Promise<boolean> {
     return await this.blogsRepositoryForSA.updateBlogById(
       command.blogId,
       command.inputDateMode.name,

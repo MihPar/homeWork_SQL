@@ -9,21 +9,21 @@ import { NewPasswordCommand } from "./useCase.ts/createNewPassword-use-case";
 import { CreateLoginCommand } from "./useCase.ts/createLogin-use-case";
 import { UserClass } from "../users/user.class";
 import { CreateDeviceCommand } from "./useCase.ts/createDevice-use-case";
-import { CheckRefreshToken } from "./gards/checkRefreshToken";
+import { CheckRefreshToken } from "./guards/checkRefreshToken";
 import { RefreshTokenCommand } from "./useCase.ts/refreshToken-use-case";
 import { UpdateDeviceCommand } from "../security-devices/useCase/updateDevice-use-case";
-import { IsConfirmed } from "./gards/isCodeConfirmed";
+import { IsConfirmed } from "./guards/isCodeConfirmed";
 import { RegistrationConfirmationCommand } from "../users/useCase/registratinConfirmation-use-case";
-import { CheckLoginOrEmail } from "./gards/checkEmailOrLogin";
+import { CheckLoginOrEmail } from "./guards/checkEmailOrLogin";
 import { RegistrationCommand } from "../users/useCase/registration-use-case";
-import { IsExistEmailUser } from "./gards/isExixtEmailUser";
+import { IsExistEmailUser } from "./guards/isExixtEmailUser";
 import { RegistrationEmailResendingCommand } from "../users/useCase/registrationEmailResending-use-case";
 import { LogoutCommand } from "../security-devices/useCase/logout-use-case";
 import { CheckRefreshTokenForComments } from "../comment/use-case/bearer.authForComments";
 import { GetUserIdByTokenCommand } from "./useCase.ts/getUserIdByToken-use-case";
 import { UsersQueryRepository } from "../users/users.queryRepository";
 import { UserDecorator, UserIdDecorator } from "../../infrastructura/decorators/decorator.user";
-import { Ratelimits } from "./gards/rateLimits";
+import { Ratelimits } from "./guards/rateLimits";
 import { SkipThrottle, Throttle, ThrottlerGuard } from '@nestjs/throttler';
 
 

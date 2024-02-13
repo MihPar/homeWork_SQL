@@ -3,7 +3,7 @@ dotenv.config();
 import { JwtService } from '@nestjs/jwt';
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
-import { UsersQueryRepository } from '../../../api/users/users.queryRepository';
+import { UsersQueryRepository } from '../../users/users.queryRepository';
 import { DeviceQueryRepository } from '../../security-devices/deviceQuery.repository';
 
 @Injectable()

@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectDataSource } from "@nestjs/typeorm";
 import { DataSource } from "typeorm";
 import { BlogClass } from "../blogs/blogs.class";
-import { query } from "express";
+
 
 @Injectable()
 export class BlogsRepositoryForSA {
@@ -11,14 +11,22 @@ export class BlogsRepositoryForSA {
 	) {}
   async createNewBlogs(newBlog: BlogClass): Promise<BlogClass | null> {
 	try {
-		const query = `
-		INSERT INTO public."Blogs"(
-			name, description, "websiteUrl", "createdAt", "isMembership", "userId")
-			VALUES (${newBlog.name}, ${newBlog.description}, ${newBlog.websiteUrl}, ${newBlog.createdAt}, ${newBlog.isMembership}, ${newBlog.userId});
-
-		`
-		const result = (await this.dataSource.query(query))[0]
-		return result
+		const query1 = `
+			INSERT INTO public."Blogs"(
+				"name", "description", "websiteUrl", "createdAt", "isMembership")
+				VALUES ($1, $2, $3, $4, $5)
+				returning *
+		`;
+		const insert = (
+      await this.dataSource.query(query1, [
+        newBlog.name,
+        newBlog.description,
+        newBlog.websiteUrl,
+        new Date().toISOString(),
+        newBlog.isMembership,
+      ])
+    )[0];
+		return insert
 	} catch(error) {
 		console.log(error, 'error in create post');
       return null;
@@ -27,7 +35,7 @@ export class BlogsRepositoryForSA {
   }
 
   async updateBlogById(
-    id: string,
+    blogId: string,
     name: string,
     description: string,
     websiteUrl: string,
@@ -36,9 +44,11 @@ export class BlogsRepositoryForSA {
 	const query = `
 		UPDATE public."Blogs"
 			SET name=$1, description=$2, "websiteUrl"=$3
-			WHERE "blogId" = $4
+			WHERE "id"=$4
+			returning *
 		`
-    const result = (await this.dataSource.query(query, [name, description, websiteUrl, id]))[0]
+    const result = (await this.dataSource.query(query, [name, description, websiteUrl, blogId]))[0]
+	// console.log("result: ", result)
 	if(!result) return false
     return true
   }

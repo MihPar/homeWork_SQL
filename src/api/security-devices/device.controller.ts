@@ -4,7 +4,7 @@ import { DeviceRepository } from './device.repository';
 import { Request } from "express";
 import { CommandBus } from "@nestjs/cqrs";
 import { PayloadAdapter } from "../auth/adapter/payload.adapter";
-import { CheckRefreshToken } from "../auth/gards/checkRefreshToken";
+import { CheckRefreshToken } from "../auth/guards/checkRefreshToken";
 import { UserClass } from "../users/user.class";
 import { TerminateAllCurrentSessionCommand } from "./useCase/terminateAllCurrentSeccion-use-case";
 import { ForbiddenCalss } from "./gards/forbidden";

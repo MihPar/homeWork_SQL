@@ -1,17 +1,13 @@
 import { CommandBus } from '@nestjs/cqrs';
-import { BadRequestException, Body, Controller, Delete, ForbiddenException, Get, HttpCode, NotFoundException, Param, Post, Put, Query, UseFilters, UseGuards, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, ForbiddenException, Get, HttpCode, NotFoundException, Param, Post, Put, Query, UseGuards, ValidationPipe } from "@nestjs/common";
 import { bodyBlogsModel, inputModelClass, inputModelUpdataPost } from "./dto/blogs.class-pipe";
 import { BlogsViewType } from "./blogs.type";
-import { PostsService } from "../posts/posts.service";
 import {BlogsRepositoryForSA } from "./blogs.repository";
 import { PostsQueryRepository } from "../posts/postQuery.repository";
 import { PaginationType } from "../../types/pagination.types";
-import { CreateNewBlogCommand } from './use-case/createNewBlog-use-case';
-import { UpdateBlogCommand } from './use-case/updateBlog-use-case';
+import { UpdateBlogForSACommand } from './use-case/updateBlog-use-case';
 import { CreateNewPostForBlogCommand } from './use-case/createNewPostForBlog-use-case';
 import { AuthBasic } from '../users/gards/basic.auth';
-import { SkipThrottle } from '@nestjs/throttler';
-import { HttpExceptionFilter } from '../../infrastructura/exceptionFilters.ts/exceptionFilter';
 import { CheckRefreshTokenForGet } from '../blogs/use-case/bearer.authGetComment';
 import { UserDecorator, UserIdDecorator } from '../../infrastructura/decorators/decorator.user';
 import { UserClass } from '../users/user.class';
@@ -22,11 +18,12 @@ import { BlogsQueryRepositoryForSA } from './blogs.queryReposity';
 import { PostsRepository } from '../posts/posts.repository';
 import { UpdateExistingPostByIdWithBlogIdCommand } from './use-case/updatePostByIdWithBlogId-use-case';
 import { DeletePostByIdCommand } from './use-case/deletPostById-use-case';
+import { CreateNewBlogForSACommand } from './use-case/createNewBlog-use-case';
+import { CheckRefreshTokenForSA } from './guards/bearer.authGetComment';
 
 // @SkipThrottle()
-@Controller('sa/blogs')
 @UseGuards(AuthBasic)
-@UseGuards(ForbiddenCalss)
+@Controller('sa/blogs')
 export class BlogsControllerForSA {
   constructor(
     protected blogsQueryRepositoryForSA: BlogsQueryRepositoryForSA,
@@ -61,23 +58,29 @@ export class BlogsControllerForSA {
 
   @Post()
   @HttpCode(201)
-  async createBlog(@Body(new ValidationPipe({ validateCustomDecorators: true })) inputDateModel: bodyBlogsModel) {
-	const command = new CreateNewBlogCommand(inputDateModel)
+  async createBlog(
+	@Body(new ValidationPipe({ validateCustomDecorators: true })) inputDateModel: bodyBlogsModel,
+	@UserDecorator() user: UserClass,
+	@UserIdDecorator() userId: string,
+	) {
+	const command = new CreateNewBlogForSACommand(inputDateModel, userId)
 	const createBlog: BlogsViewType = await this.commandBus.execute(command)
     return createBlog;
   }
 
   @Put(':blogId')
   @HttpCode(204)
+  @UseGuards(CheckRefreshTokenForSA)
   async updateBlogsById(
     @Param() dto: inputModelClass,
     @Body(new ValidationPipe({ validateCustomDecorators: true })) inputDateMode: bodyBlogsModel,
 	@UserDecorator() user: UserClass,
 	@UserIdDecorator() userId: string,
   ) {
-	const isExistBlog = await this.blogsQueryRepositoryForSA.findBlogById(dto.blogId, userId)
-	if(!isExistBlog) throw new  ForbiddenException("403")
-	const command = new UpdateBlogCommand(dto.blogId, inputDateMode)
+	const isExistBlog = await this.blogsQueryRepositoryForSA.findBlogById(dto.blogId)
+	if(!isExistBlog) throw new NotFoundException("404")
+	if(userId !== isExistBlog.userId) throw new ForbiddenException("This user does not have access in blog, 403")
+	const command = new UpdateBlogForSACommand(dto.blogId, inputDateMode)
 	const isUpdateBlog = await this.commandBus.execute(command)
     if (!isUpdateBlog) throw new NotFoundException('Blogs by id not found 404');
 	return true
@@ -85,6 +88,7 @@ export class BlogsControllerForSA {
 
   @Delete(':id')
   @HttpCode(204)
+  @UseGuards(CheckRefreshTokenForSA)
   async deleteBlogsById(
 	@Param('id') id: string,
 	@UserDecorator() user: UserClass,
@@ -99,6 +103,7 @@ export class BlogsControllerForSA {
 
   @HttpCode(201)
   @Post(':blogId/posts')
+  @UseGuards(ForbiddenCalss)
   async createPostByBlogId(
     @Param() dto: inputModelClass,
     @Body(new ValidationPipe({ validateCustomDecorators: true })) inputDataModel: bodyPostsModelClass,
@@ -113,6 +118,7 @@ export class BlogsControllerForSA {
   
   @Get(':blogId/posts')
   @HttpCode(200)
+  @UseGuards(ForbiddenCalss)
   @UseGuards(CheckRefreshTokenForGet)
   async getPostsByBlogId(
     @Param() dto: inputModelClass,
@@ -142,6 +148,7 @@ export class BlogsControllerForSA {
 
   @Get(':blogId/posts/:postId')
   @HttpCode(204)
+  @UseGuards(ForbiddenCalss)
   async updatePostByIdWithModel(@Param() dto: inputModelUpdataPost, @Body() inputModel: bodyPostsModelClass) {
 const command = new UpdateExistingPostByIdWithBlogIdCommand(dto, inputModel)
 	const updateExistingPost = await this.commandBus.execute(command)
@@ -150,6 +157,7 @@ const command = new UpdateExistingPostByIdWithBlogIdCommand(dto, inputModel)
 
   @Delete(':blogId/posts/:postId')
   @HttpCode(204)
+  @UseGuards(ForbiddenCalss)
   async deletePostByIdWithBlogId(@Param() dto: inputModelUpdataPost) {
 	const command = new DeletePostByIdCommand(dto)
 	const deletePostById = await this.commandBus.execute(command)

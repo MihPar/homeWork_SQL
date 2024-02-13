@@ -15,6 +15,7 @@ export class ForbiddenCalss implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req: Request = context.switchToHttp().getRequest();
     const deviceId = req.params.deviceId;
+	console.log("deviceId: ", deviceId)
     if (!deviceId) throw new NotFoundException('404');
     const findSession = await this.deviceQueryRepository.findDeviceByDeviceId(
       deviceId,
