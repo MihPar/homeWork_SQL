@@ -37,19 +37,19 @@ export class CreateNewPostForBlogUseCase
 	if (!createPost) return null;
   // const post = await this.postsRepository.findPostById(createPost.id)
   // if (!post) return null;
-  const newest = new NewestLikesClass(
-    new Date().toISOString(),
-    command.userId,
-    command.blogName,
-    createPost.id
-  );
-  const createNewestLikes =
-    await this.postsRepository.createNewestLikes(newest);
+//   const newest = new NewestLikesClass(
+//     new Date().toISOString(),
+//     command.userId,
+//     command.blogName,
+//     createPost.id
+//   );
+//   const createNewestLikes =
+//     await this.postsRepository.createNewestLikes(newest);
   // const newestLike = await this.postsRepository.findNewestLike(createPost.id)
 //   console.log(
 //     "return post: ",
 //     PostClass.getPostsViewModelForSA(createPost, createNewestLikes)
 //   );
-	return PostClass.getPostsViewModelForSA(createPost, createNewestLikes);
+	return PostClass.getPostsViewModelForSA(createPost);
   }
 }

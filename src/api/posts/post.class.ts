@@ -70,7 +70,7 @@ export class PostClass extends Posts {
 	  }
 
 	  static getPostsViewModelForSA(post: PostClass,
-		newestLikes: NewestLikesType[]): PostsViewModel {
+		newestLikes?: NewestLikesType[]): PostsViewModel {
 		return {
 		  id: post.id,
 		  title: post.title,
@@ -83,11 +83,11 @@ export class PostClass extends Posts {
 			  dislikesCount: post.dislikesCount, 
 			  likesCount: post.likesCount, 
 			  myStatus: post.myStatus,
-			  newestLikes: newestLikes.map(l => ({
+			  newestLikes: newestLikes ? newestLikes.map(l => ({
 				  addedAt: l.addedAt,
 				  login: l.login,
 				  userId: l.userId
-			  }))},
+			  })) : []},
 		  };
 	  }
 
