@@ -162,15 +162,25 @@ export class BlogsControllerForSA {
 	const blog = await this.blogsQueryRepositoryForSA.findBlogById(dto.blogId);
 	if(!blog) throw new NotFoundException("404")
 	if(userId !== blog.userId) throw new ForbiddenException("This user does not have access in blog, 403")
-const command = new UpdateExistingPostByIdWithBlogIdCommand(dto, inputModel)
+	console.log('try')
+    const command = new UpdateExistingPostByIdWithBlogIdCommand(dto, inputModel)
 	const updateExistingPost = await this.commandBus.execute(command)
+	console.log("updateExistingPost: ", updateExistingPost)
 	if(!updateExistingPost) throw new NotFoundException("Post not find")
   }
 
   @Delete(':blogId/posts/:postId')
   @HttpCode(204)
-  @UseGuards(ForbiddenCalss)
-  async deletePostByIdWithBlogId(@Param() dto: inputModelUpdataPost) {
+//   @UseGuards(ForbiddenCalss)
+@UseGuards(CheckRefreshTokenForSA)
+  async deletePostByIdWithBlogId(
+	@Param() dto: inputModelUpdataPost, 
+	@UserIdDecorator() userId: string | null
+	) {
+	const blog = await this.blogsQueryRepositoryForSA.findBlogById(dto.blogId);
+	if(!blog) throw new NotFoundException("404")
+	if(userId !== blog.userId) throw new ForbiddenException("This user does not have access in blog, 403")
+	console.log('try')
 	const command = new DeletePostByIdCommand(dto)
 	const deletePostById = await this.commandBus.execute(command)
 	if(!deletePostById) throw new NotFoundException("Post not find")

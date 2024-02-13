@@ -26,7 +26,7 @@ export class updateExistingPostByIdWithBlogIdUseCase
 	const findPostById: PostClass = await this.postsRepository.findPostByIdAndBlogId(command.dto.postId, command.dto.blogId)
 	if(!findPostById) return null
 	const findNewestLike = await this.postsRepository.findNewestLike(command.dto.postId)
-	if(!findNewestLike) return null
+	// if(!findNewestLike) return null
     const newPost: PostClass = new PostClass(
       command.inputModel.title,
       command.inputModel.shortDescription,
@@ -37,6 +37,6 @@ export class updateExistingPostByIdWithBlogIdUseCase
     );
     const updateExistingPost: PostClass = await this.postsRepository.updatePost(newPost, command.dto.postId)
 	if(!updateExistingPost) return null
-	return updateExistingPost.getPostViewModel(findNewestLike);
+	return PostClass.getPostsViewModelForSA(updateExistingPost, findNewestLike);
   }
 }
