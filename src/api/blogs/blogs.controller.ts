@@ -71,19 +71,23 @@ export class BlogsController {
 		sortDirection: string;
 		},
   ) {
-	// console.log("blog")
+	query.pageNumber = query.pageNumber || '1'
+	query.pageSize = query.pageSize || '10'
+	query.sortBy = query.sortBy || 'createdAt'
+	query.sortDirection = query.sortDirection || "desc"
+
     const blog = await this.blogsQueryRepository.findBlogById(dto.blogId);
     if (!blog) throw new NotFoundException('Blogs by id not found');
     const getPosts: PaginationType<Posts> =
       await this.postsQueryRepository.findPostsByBlogsId(
-        query.pageNumber || '1',
-        query.pageSize || '10',
-        query.sortBy || 'createdAt',
-        query.sortDirection || 'desc',
+        query.pageNumber,
+        query.pageSize,
+        query.sortBy,
+        query.sortDirection,
         dto.blogId,
       );
     if (!getPosts) throw new NotFoundException('Blogs by id not found');
-	console.log("getPosts: ", getPosts)
+	// console.log("getPosts: ", getPosts)
     return getPosts;
   }
 

@@ -124,8 +124,7 @@ export class BlogsControllerForSA {
   
   @Get(':blogId/posts')
   @HttpCode(200)
-  @UseGuards(ForbiddenCalss)
-  @UseGuards(CheckRefreshTokenForGet)
+  @UseGuards(CheckRefreshTokenForSA)
   async getPostsByBlogId(
     @Param() dto: inputModelClass,
 	@UserDecorator() user: UserClass,
@@ -139,7 +138,8 @@ export class BlogsControllerForSA {
     },
   ) {
     const blog = await this.blogsQueryRepositoryForSA.findBlogById(dto.blogId);
-    if (!blog) throw new NotFoundException('Blogs by id not found');
+    if(!blog) throw new NotFoundException("404")
+	if(userId !== blog.userId) throw new ForbiddenException("This user does not have access in blog, 403")
     const getPosts: PaginationType<Posts> =
       await this.postsQueryRepository.findPostsByBlogsId(
         query.pageNumber || '1',
@@ -154,8 +154,14 @@ export class BlogsControllerForSA {
 
   @Put(':blogId/posts/:postId')
   @HttpCode(204)
-  @UseGuards(ForbiddenCalss)
-  async updatePostByIdWithModel(@Param() dto: inputModelUpdataPost, @Body() inputModel: bodyPostsModelClass) {
+  @UseGuards(CheckRefreshTokenForSA)
+  async updatePostByIdWithModel(
+	@Param() dto: inputModelUpdataPost, 
+	@Body() inputModel: bodyPostsModelClass,
+	@UserIdDecorator() userId: string | null) {
+	const blog = await this.blogsQueryRepositoryForSA.findBlogById(dto.blogId);
+	if(!blog) throw new NotFoundException("404")
+	if(userId !== blog.userId) throw new ForbiddenException("This user does not have access in blog, 403")
 const command = new UpdateExistingPostByIdWithBlogIdCommand(dto, inputModel)
 	const updateExistingPost = await this.commandBus.execute(command)
 	if(!updateExistingPost) throw new NotFoundException("Post not find")

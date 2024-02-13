@@ -94,12 +94,12 @@ export class PostsQueryRepository {
 		SELECT *
 			FROM public."Posts"
 			WHERE "blogId" = $1
-			ORDER BY "$2" ${sortDirection}
-			LIMIT $3 OFFSET $4
+			ORDER BY "${sortBy}" ${sortDirection}
+			LIMIT $2 OFFSET $3
 	`;
+	// console.log("qeury1: ", query1)
     const findPostsByBlogId = await this.dataSource.query(query1, [
       blogId,
-      sortBy,
       +pageSize,
       (+pageNumber - 1) * +pageSize,
     ]);
@@ -129,6 +129,7 @@ export class PostsQueryRepository {
          PostClass.getPostsViewModelForSA(post)
       ),
     };
+	// console.log("result: ", result)
     return result;
   }
 }
