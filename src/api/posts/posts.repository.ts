@@ -67,10 +67,10 @@ export class PostsRepository {
     id: string,
     blogId: string
   ): Promise<boolean> {
-	console.log("try3")
+	// console.log("try3")
     const query = `
 		delete from "Posts"
-			where "id" = $1 and "blogid" = $2
+			where "id" = $1 and "blogId" = $2
 	`;
     const result = await this.dataSource.query(query, [id, blogId]);
     if (!result) return false;
