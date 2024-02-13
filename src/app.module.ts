@@ -66,6 +66,7 @@ import { DeleteAllBlogsForSAUseCase } from './api/blogsForSA/use-case/deletAllBl
 import { CreateNewBlogForSAUseCase } from './api/blogsForSA/use-case/createNewBlog-use-case';
 import { UpdateBlogForSAUseCase } from './api/blogsForSA/use-case/updateBlog-use-case';
 import { CheckRefreshTokenForSA } from './api/blogsForSA/guards/bearer.authGetComment';
+import { DeleteBlogByIdForSAUseCase } from './api/blogsForSA/use-case/deleteBlogById-use-case';
 
 const userCases = [
   RecoveryPasswordUseCase,
@@ -94,7 +95,8 @@ const userCases = [
   DeleteAllBlogsForSAUseCase,
   DeleteAllPostsUseCase,
   CreateNewBlogForSAUseCase,
-  UpdateBlogForSAUseCase
+  UpdateBlogForSAUseCase,
+  DeleteBlogByIdForSAUseCase
 ];
 
 const gards = [

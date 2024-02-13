@@ -20,6 +20,7 @@ import { UpdateExistingPostByIdWithBlogIdCommand } from './use-case/updatePostBy
 import { DeletePostByIdCommand } from './use-case/deletPostById-use-case';
 import { CreateNewBlogForSACommand } from './use-case/createNewBlog-use-case';
 import { CheckRefreshTokenForSA } from './guards/bearer.authGetComment';
+import { DeleteBlogByIdForSACommnad } from './use-case/deleteBlogById-use-case';
 
 // @SkipThrottle()
 @UseGuards(AuthBasic)
@@ -95,8 +96,10 @@ export class BlogsControllerForSA {
 	@UserIdDecorator() userId: string,
 	) {
 	const isExistBlog = await this.blogsQueryRepositoryForSA.findBlogById(id, userId)
-	if(!isExistBlog) throw new  ForbiddenException("403")
-    const isDeleted: boolean | null = await this.blogsRepositoryForSA.deletedBlog(id);
+	if(!isExistBlog) throw new NotFoundException("404")
+	if(userId !== isExistBlog.userId) throw new ForbiddenException("This user does not have access in blog, 403")
+	const command = new DeleteBlogByIdForSACommnad(id)
+    const isDeleted: boolean | null = await this.commandBus.execute(command);
     if (!isDeleted) throw new NotFoundException('Blogs by id not found 404');
     return isDeleted;
   }

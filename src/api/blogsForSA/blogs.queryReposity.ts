@@ -72,4 +72,14 @@ export class BlogsQueryRepositoryForSA {
     const blog: BlogClass | null = (await this.dataSource.query(query, [blogId]))[0]
     return blog ? BlogClass.getBlogsViewModel(blog) : null;
   }
+
+  async deletedBlog(id: string): Promise<boolean | null> {
+	const query = `
+		delete from public."Blogs"
+			where "id" = $1
+	`
+    const result = (await this.dataSource.query(query, [id]))[0]
+    if(!result) return null
+	return true
+  }
 }
