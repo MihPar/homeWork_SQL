@@ -70,7 +70,6 @@ export class BlogsQueryRepositoryForSA {
 			where "id" = $1
 	`
     const blog: BlogClass | null = (await this.dataSource.query(query, [blogId]))[0]
-	console.log("blog: ", blog)
     return blog ? BlogClass.getBlogsViewModel(blog) : null;
   }
 }

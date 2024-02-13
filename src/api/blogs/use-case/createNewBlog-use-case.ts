@@ -17,8 +17,8 @@ export class CreateNewBlogUseCase implements ICommandHandler<CreateNewBlogComman
 	){}
 	async execute(command: CreateNewBlogCommand): Promise<BlogsViewType | null> {
 			const newBlog: BlogClass = new BlogClass (command.inputDateModel.name, command.inputDateModel.description, command.inputDateModel.websiteUrl, false)
-			const createBlog: BlogClass | null = await this.blogsRepositoryForSA.createNewBlogs(newBlog);
+			const createBlog: BlogClass | null= await this.blogsRepositoryForSA.createNewBlogs(newBlog);
 			if(!createBlog) return null
-			return createBlog.getBlogViewModel();
+			return BlogClass.createNewBlogForSA(createBlog);
 	}
 }
