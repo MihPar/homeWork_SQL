@@ -91,24 +91,24 @@ export class PostClass extends Posts {
 		  };
 	  }
 
-	  getPostwModel(post: PostClass,
-		newestLikes: NewestLikesType[]): PostsViewModel {
-		return {
-		  id: this.id.toString(),
-		  title: this.title,
-		  shortDescription: this.shortDescription,
-		  content: this.content,
-		  blogId: this.blogId,
-		  blogName: this.blogName,
-		  createdAt: this.createdAt,
-		  extendedLikesInfo: {
-			  dislikesCount: this.extendedLikesInfo.dislikesCount, 
-			  likesCount: this.extendedLikesInfo.dislikesCount,
-			  myStatus: this.myStatus,
-			  newestLikes
-		  },
-		};
-	  }
+	//   getPostwModel(post: PostClass,
+	// 	newestLikes: NewestLikesType[]): PostsViewModel {
+	// 	return {
+	// 	  id: this.id.toString(),
+	// 	  title: this.title,
+	// 	  shortDescription: this.shortDescription,
+	// 	  content: this.content,
+	// 	  blogId: this.blogId,
+	// 	  blogName: this.blogName,
+	// 	  createdAt: this.createdAt,
+	// 	  extendedLikesInfo: {
+	// 		  dislikesCount: this.extendedLikesInfo.dislikesCount, 
+	// 		  likesCount: this.extendedLikesInfo.dislikesCount,
+	// 		  myStatus: this.myStatus,
+	// 		  newestLikes
+	// 	  },
+	// 	};
+	//   }
 
 	  getPostViewModel(
 		newestLikes: NewestLikesType[]): PostsViewModel {
