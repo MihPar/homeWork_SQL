@@ -94,7 +94,7 @@ export class PostsQueryRepository {
 		SELECT *
 			FROM public."Posts"
 			WHERE "blogId" = $1
-			ORDER BY $2 ${sortDirection}
+			ORDER BY "$2" ${sortDirection}
 			LIMIT $3 OFFSET $4
 	`;
     const findPostsByBlogId = await this.dataSource.query(query1, [

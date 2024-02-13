@@ -22,7 +22,7 @@ export class BlogsRepositoryForSA {
         newBlog.name,
         newBlog.description,
         newBlog.websiteUrl,
-        new Date().toISOString(),
+        newBlog.createdAt,
         newBlog.isMembership,
       ])
     )[0];

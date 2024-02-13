@@ -152,7 +152,7 @@ export class BlogsControllerForSA {
     return getPosts;
   }
 
-  @Get(':blogId/posts/:postId')
+  @Put(':blogId/posts/:postId')
   @HttpCode(204)
   @UseGuards(ForbiddenCalss)
   async updatePostByIdWithModel(@Param() dto: inputModelUpdataPost, @Body() inputModel: bodyPostsModelClass) {
