@@ -20,17 +20,19 @@ export class BlogsQueryRepositoryForSA {
 	const query1 = `
 		select *
 			from public."Blogs"
-			where "name" = $1
+			where "name" like $1
 			order by $2 ${sortDirection}
 			limit $3 offset $4
 	`
 
-	const blogs = await this.dataSource.query(query1, [
+	const findAllBlogs = await this.dataSource.query(query1, [
 		`%${searchNameTerm}%`,
 		sortBy,
 		+pageSize,
 		(+pageNumber - 1) * +pageSize
 	])
+
+	console.log("findAllBlogs: ", findAllBlogs)
 
 	const query2 = `
 		select count(*)
@@ -45,7 +47,7 @@ export class BlogsQueryRepositoryForSA {
       page: +pageNumber,
       pageSize: +pageSize,
       totalCount: +totalCount,
-      items: blogs.map((item) => BlogClass.getBlogsViewModel(item)),
+      items: findAllBlogs.map((item) => BlogClass.createNewBlogForSA(item)),
     };
     return result;
   }
