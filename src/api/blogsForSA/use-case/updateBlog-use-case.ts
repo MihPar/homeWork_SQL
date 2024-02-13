@@ -1,7 +1,6 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { bodyBlogsModel, inputModelClass } from "../dto/blogs.class-pipe";
+import { bodyBlogsModel } from "../dto/blogs.class-pipe";
 import { BlogsRepositoryForSA } from "../blogs.repository";
-import { NotFoundException } from "@nestjs/common";
 
 export class UpdateBlogForSACommand {
 	constructor(
