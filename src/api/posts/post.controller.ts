@@ -155,6 +155,7 @@ export class PostController {
     @Param() dto: InputModelClassPostId, 
 	@UserIdDecorator() userId: string | null,
   ) {
+	console.log("try")
     const getPostById: PostsViewModel | null =
       await this.postsQueryRepository.findPostById(dto.postId, userId);
     if (!getPostById) {

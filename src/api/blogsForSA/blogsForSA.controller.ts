@@ -119,7 +119,6 @@ export class BlogsControllerForSA {
 	const command = new CreateNewPostForBlogCommand( dto.blogId, inputDataModel, findBlog.name, userId)
 	const createNewPost: Posts | null = await this.commandBus.execute(command)
     if (!createNewPost) throw new NotFoundException('Blogs by id not found 404');
-	console.log("createNewPost: ", createNewPost)
     return createNewPost;
   }
   

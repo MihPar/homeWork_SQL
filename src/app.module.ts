@@ -68,6 +68,8 @@ import { UpdateBlogForSAUseCase } from './api/blogsForSA/use-case/updateBlog-use
 import { CheckRefreshTokenForSA } from './api/blogsForSA/guards/bearer.authGetComment';
 import { DeleteBlogByIdForSAUseCase } from './api/blogsForSA/use-case/deleteBlogById-use-case';
 import { CreateNewPostForBlogUseCase } from './api/blogsForSA/use-case/createNewPostForBlog-use-case';
+import { PostController } from './api/posts/post.controller';
+import { CommentQueryRepository } from './api/comment/comment.queryRepository';
 
 const userCases = [
   RecoveryPasswordUseCase,
@@ -119,7 +121,7 @@ const adapter = [GenerateHashAdapter, PayloadAdapter, EmailAdapter]
 const services = [JwtService, ApiJwtService, PostsService]
 const configs = [ApiConfigService]
 
-const repositories = [AuthRepository, DeviceRepository, DeviceQueryRepository, UsersRepository, UsersQueryRepository, BlogsQueryRepository, PostsQueryRepository, BlogsQueryRepositoryForSA, BlogsRepositoryForSA, BlogsRepository, PostsRepository, LikesRepository];
+const repositories = [AuthRepository, DeviceRepository, DeviceQueryRepository, UsersRepository, UsersQueryRepository, BlogsQueryRepository, PostsQueryRepository, BlogsQueryRepositoryForSA, BlogsRepositoryForSA, BlogsRepository, PostsRepository, LikesRepository, CommentQueryRepository];
 
 @Module({
   imports: [
@@ -154,7 +156,7 @@ const repositories = [AuthRepository, DeviceRepository, DeviceQueryRepository, U
     //   synchronize: true,
     // }),
   ],
-  controllers: [AuthController, DeleteAllDataController, UsersController, SecurityDeviceController, BlogsController, BlogsControllerForSA],
+  controllers: [AuthController, DeleteAllDataController, UsersController, SecurityDeviceController, BlogsController, BlogsControllerForSA, PostController],
 
   providers: [
     ...repositories,

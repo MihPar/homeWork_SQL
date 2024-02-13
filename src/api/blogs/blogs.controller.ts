@@ -107,6 +107,7 @@ export class BlogsController {
   async getBlogsById(
     @Param() dto: inputModelClass,
   ): Promise<BlogsViewType | null> {
+	// console.log("try")
     const blogById: BlogsViewType | null =
       await this.blogsQueryRepository.findBlogById(dto.blogId);
     if (!blogById) throw new NotFoundException('Blogs by id not found 404');
