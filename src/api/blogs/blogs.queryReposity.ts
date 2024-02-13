@@ -29,7 +29,7 @@ export class BlogsQueryRepository {
       +pageSize,
       (+pageNumber - 1) * +pageSize,
     ]);
-console.log("findAllBlogs: ", findAllBlogs)
+// console.log("findAllBlogs: ", findAllBlogs)
     const count = `
 			SELECT count(*)
 				FROM public."Blogs"
