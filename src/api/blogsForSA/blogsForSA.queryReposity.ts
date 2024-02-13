@@ -20,13 +20,12 @@ export class BlogsQueryRepositoryForSA {
 		select *
 			from public."Blogs"
 			where "name" like $1
-			order by $2 ${sortDirection}
-			limit $3 offset $4
+			order by "${sortBy}" ${sortDirection}
+			limit $2 offset $3
 	`
 
 	const findAllBlogs = await this.dataSource.query(query1, [
 		`%${searchNameTerm}%`,
-		sortBy,
 		+pageSize,
 		(+pageNumber - 1) * +pageSize
 	])
