@@ -24,12 +24,12 @@ export class BlogsQueryRepository {
 					LIMIT $3 OFFSET $4
 		`;
     const findAllBlogs = await this.dataSource.query(getFilter, [
-      `${searchNameTerm}`,
+      `%${searchNameTerm}%`,
       sortBy,
       +pageSize,
       (+pageNumber - 1) * +pageSize,
     ]);
-
+console.log("findAllBlogs: ", findAllBlogs)
     const count = `
 			SELECT count(*)
 				FROM public."Blogs"
@@ -45,7 +45,7 @@ export class BlogsQueryRepository {
       page: +pageNumber,
       pageSize: +pageSize,
       totalCount: totalCount,
-      items: findAllBlogs.map((item) => BlogClass.getBlogsViewModel(item)),
+      items: findAllBlogs.map((item) => BlogClass.createNewBlogForSA(item)),
     };
     return result;
   }

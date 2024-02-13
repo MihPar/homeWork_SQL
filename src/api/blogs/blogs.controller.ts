@@ -21,7 +21,6 @@ export class BlogsController {
   constructor(
     protected blogsQueryRepository: BlogsQueryRepository,
     protected postsQueryRepository: PostsQueryRepository,
-	protected commandBus: CommandBus
   ) {}
 
   @Get()
@@ -44,6 +43,7 @@ export class BlogsController {
         (query.pageNumber || '1'),
         (query.pageSize || '10'),
       );
+	//   console.log("getAllBlogs: ", getAllBlogs)
     return getAllBlogs;
   }
 

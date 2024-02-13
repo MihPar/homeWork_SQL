@@ -66,7 +66,7 @@ export class BlogsControllerForSA {
 	) {
 	const command = new CreateNewBlogForSACommand(inputDateModel, userId)
 	const createBlog: BlogsViewType = await this.commandBus.execute(command)
-	console.log("createBlog: ", createBlog)
+	// console.log("createBlog: ", createBlog)
     return createBlog;
   }
 
