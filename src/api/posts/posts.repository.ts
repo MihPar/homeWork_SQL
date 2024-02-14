@@ -60,7 +60,7 @@ export class PostsRepository {
       ])
     )[0];
 	// console.log("result: ", result)
-    return result;
+    return result[0];
   }
 
   async deletedPostByIdWithBlogId(

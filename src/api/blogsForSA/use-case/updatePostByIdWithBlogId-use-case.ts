@@ -39,6 +39,8 @@ export class updateExistingPostByIdWithBlogIdUseCase
 	// console.log("newPost: ", newPost)
     const updateExistingPost: PostClass = await this.postsRepository.updatePost(newPost, command.dto.postId)
 	if(!updateExistingPost) return null
+	// console.log("updateExistingPost: ", updateExistingPost)
+	// console.log("PostClass.getPostsViewModelForSA(updateExistingPost, findNewestLike): ", PostClass.getPostsViewModelForSA(updateExistingPost, findNewestLike))
 	return PostClass.getPostsViewModelForSA(updateExistingPost, findNewestLike);
   }
 }
