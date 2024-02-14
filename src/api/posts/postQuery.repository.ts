@@ -45,11 +45,10 @@ export class PostsQueryRepository {
     const query1 = `
 			select *
 				from "Posts"
-				order by $1 ${sortDirection}
-				limit $2 offset $3
+				order by "${sortBy} ${sortDirection}
+				limit $1 offset $2
 		`;
     const allPosts = await this.dataSource.query(query1, [
-      sortBy,
       +pageSize,
       (+pageNumber - 1) * +pageSize,
     ]);
