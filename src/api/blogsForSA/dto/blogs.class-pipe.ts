@@ -1,7 +1,6 @@
 import { IsMongoId, IsNotEmpty, IsString, IsUUID, IsUrl, MaxLength } from "class-validator";
 import { Transform, TransformFnParams } from "class-transformer";
 import { applyDecorators } from "@nestjs/common";
-import { CustomIdValidation } from "../../auth/adapter/customIdValidation";
 
 const Trim = () => Transform(({value}: TransformFnParams) => value?.trim())
 

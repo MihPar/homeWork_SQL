@@ -45,7 +45,7 @@ export class PostsQueryRepository {
     const query1 = `
 			select *
 				from "Posts"
-				order by "${sortBy} ${sortDirection}
+				order by "${sortBy}" ${sortDirection}
 				limit $1 offset $2
 		`;
     const allPosts = await this.dataSource.query(query1, [
@@ -53,6 +53,7 @@ export class PostsQueryRepository {
       (+pageNumber - 1) * +pageSize,
     ]);
 
+	// console.log(allPosts)
     const count = `
 		select count(*)
 			from "Posts"

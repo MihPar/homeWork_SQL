@@ -159,7 +159,6 @@ export class BlogsControllerForSA {
 	@Param() dto: inputModelUpdataPost, 
 	@Body() inputModel: bodyPostsModelClass,
 	@UserIdDecorator() userId: string | null) {
-	if(!dto.blogId && !dto.postId) throw new NotFoundException("404")
 	const blog = await this.blogsQueryRepositoryForSA.findBlogById(dto.blogId);
 	if(!blog) throw new NotFoundException("404")
 	const findPost = await this.postsQueryRepository.findPostById(dto.postId)
@@ -179,7 +178,7 @@ export class BlogsControllerForSA {
 	@Param() dto: inputModelUpdataPost, 
 	@UserIdDecorator() userId: string | null
 	) {
-	if(!dto.blogId && !dto.postId) throw new NotFoundException("404")
+	// if(!dto.blogId && !dto.postId) throw new NotFoundException("404")
 	const blog = await this.blogsQueryRepositoryForSA.findBlogById(dto.blogId);
 	if(!blog) throw new NotFoundException("404")
 	const findPost = await this.postsQueryRepository.findPostById(dto.postId)

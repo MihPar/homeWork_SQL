@@ -131,6 +131,7 @@ export class PostController {
         (query.sortDirection || 'desc'),
         userId,
       );
+	//   console.log("getAllPosts: ", getAllPosts )
     return getAllPosts;
   }
 
