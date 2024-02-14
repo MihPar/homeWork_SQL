@@ -169,7 +169,7 @@ export class BlogsControllerForSA {
 
     const command = new UpdateExistingPostByIdWithBlogIdCommand(dto, inputModel)
 	const updateExistingPost = await this.commandBus.execute(command)
-	console.log("updateExistingPost: ", updateExistingPost)
+	// console.log("updateExistingPost: ", updateExistingPost)
 	if(!updateExistingPost) throw new NotFoundException("Post not find")
   }
 

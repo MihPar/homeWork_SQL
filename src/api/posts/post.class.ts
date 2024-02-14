@@ -1,5 +1,6 @@
 import { LikeStatusEnum } from "../likes/likes.emun";
 import { LikesInfoModel, NewestLikesType } from "../likes/likes.type";
+import { bodyPostsModelClass } from "./dto/posts.class.pipe";
 import { PostsViewModel } from "./posts.type";
 
 export class Posts {
@@ -91,24 +92,12 @@ export class PostClass extends Posts {
 		  };
 	  }
 
-	//   getPostwModel(post: PostClass,
-	// 	newestLikes: NewestLikesType[]): PostsViewModel {
-	// 	return {
-	// 	  id: this.id.toString(),
-	// 	  title: this.title,
-	// 	  shortDescription: this.shortDescription,
-	// 	  content: this.content,
-	// 	  blogId: this.blogId,
-	// 	  blogName: this.blogName,
-	// 	  createdAt: this.createdAt,
-	// 	  extendedLikesInfo: {
-	// 		  dislikesCount: this.extendedLikesInfo.dislikesCount, 
-	// 		  likesCount: this.extendedLikesInfo.dislikesCount,
-	// 		  myStatus: this.myStatus,
-	// 		  newestLikes
-	// 	  },
-	// 	};
-	//   }
+	  static updatePresentPost(post: PostClass, newData: bodyPostsModelClass): PostClass {
+		  post.title = newData.title,
+		  post.shortDescription = newData.shortDescription,
+		  post.content = newData.content
+		  return post
+	  }
 
 	  getPostViewModel(
 		newestLikes: NewestLikesType[]): PostsViewModel {

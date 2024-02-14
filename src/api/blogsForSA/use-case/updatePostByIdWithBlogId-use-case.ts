@@ -28,15 +28,16 @@ export class updateExistingPostByIdWithBlogIdUseCase
 	if(!findPostById) return null
 	const findNewestLike = await this.postsRepository.findNewestLike(command.dto.postId)
 	// if(!findNewestLike) return null
-    const newPost: PostClass = new PostClass(
-      command.inputModel.title,
-      command.inputModel.shortDescription,
-      command.inputModel.content,
-      command.dto.blogId,
-	  findPostById.blogName,
-      0, 0, LikeStatusEnum.None
-    );
+    // const newPost: PostClass = new PostClass(
+    //   command.inputModel.title,
+    //   command.inputModel.shortDescription,
+    //   command.inputModel.content,
+    //   command.dto.blogId,
+	//   findPostById.blogName,
+    //   0, 0, LikeStatusEnum.None
+    // );
 	// console.log("newPost: ", newPost)
+	const newPost = PostClass.updatePresentPost(findPostById, command.inputModel)
     const updateExistingPost: PostClass = await this.postsRepository.updatePost(newPost, command.dto.postId)
 	if(!updateExistingPost) return null
 	// console.log("updateExistingPost: ", updateExistingPost)
