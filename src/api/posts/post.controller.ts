@@ -79,7 +79,6 @@ export class PostController {
     },
   ) {
     const isExistPots = await this.postsQueryRepository.findPostById(dto.postId);
-	// console.log("isExistPots: ", isExistPots)
     if (!isExistPots) throw new NotFoundException('Blogs by id not found');
     const commentByPostsId: PaginationType<CommentViewType> | null =
       await this.commentQueryRepository.findCommentByPostId(
@@ -131,7 +130,6 @@ export class PostController {
         (query.sortDirection || 'desc'),
         userId,
       );
-	//   console.log("getAllPosts: ", getAllPosts )
     return getAllPosts;
   }
 

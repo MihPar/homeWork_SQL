@@ -66,7 +66,6 @@ export class BlogsControllerForSA {
 	) {
 	const command = new CreateNewBlogForSACommand(inputDateModel, userId)
 	const createBlog: BlogsViewType = await this.commandBus.execute(command)
-	// console.log("createBlog: ", createBlog)
     return createBlog;
   }
 
@@ -165,11 +164,9 @@ export class BlogsControllerForSA {
 	const findPost = await this.postsQueryRepository.findPostById(dto.postId)
 	if(!findPost) throw new NotFoundException("404")
 	if(userId !== blog.userId) throw new ForbiddenException("This user does not have access in blog, 403")
-	// console.log('try')
 
     const command = new UpdateExistingPostByIdWithBlogIdCommand(dto, inputModel)
 	const updateExistingPost = await this.commandBus.execute(command)
-	// console.log("updateExistingPost: ", updateExistingPost)
 	if(!updateExistingPost) throw new NotFoundException("Post not find")
   }
 
@@ -180,13 +177,11 @@ export class BlogsControllerForSA {
 	@Param() dto: inputModelUpdataPost, 
 	@UserIdDecorator() userId: string | null
 	) {
-	// if(!dto.blogId && !dto.postId) throw new NotFoundException("404")
 	const blog = await this.blogsQueryRepositoryForSA.findBlogById(dto.blogId);
 	if(!blog) throw new NotFoundException("404")
 	const findPost = await this.postsQueryRepository.findPostById(dto.postId)
 	if(!findPost) throw new NotFoundException("404")
 	if(userId !== blog.userId) throw new ForbiddenException("This user does not have access in blog, 403")
-	// console.log('try')
 	const command = new DeletePostByIdCommand(dto)
 	const deletePostById = await this.commandBus.execute(command)
 	if(!deletePostById) throw new NotFoundException("Post not find")
