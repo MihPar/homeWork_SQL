@@ -13,19 +13,45 @@ export class CommentRepository {
 	// }
 
 
-	// async increase(commentId: string, likeStatus: string){
-	// 	if(likeStatus !== 'Dislike' && likeStatus !== 'Like') {
-	// 		return
-	// 	} 
-	// 	return await this.commentModel.updateOne({_id: new ObjectId(commentId)}, {$inc: likeStatus === 'Dislike' ? {dislikesCount: 1} : {likesCount: 1}})
-	// }
+	async increase(commentId: string, likeStatus: string){
+		if(likeStatus !== 'Dislike' && likeStatus !== 'Like') {
+			return
+		} else if(likeStatus === "Dislike") {
+			const query = `
+				UPDATE public."Comments"
+					SET "dislikesCount"=$1
+					WHERE "id" = $2
+			`
+			return await this.dataSource.query(query, [1, commentId])
+		} else if(likeStatus === "Like") {
+			const query = `
+				UPDATE public."Comments"
+					SET "likesCount"=$1
+					WHERE "id" = $2
+			`
+			return await this.dataSource.query(query, [1, commentId])
+		} 
+	}
 
-	// async decrease(commentId: string, likeStatus: string){
-	// 	if(likeStatus !== 'Dislike' && likeStatus !== 'Like') {
-	// 		return
-	// 	} 
-	// 	return await this.commentModel.updateOne({_id: new ObjectId(commentId)}, {$inc: likeStatus === 'Dislike' ? {dislikesCount: -1} : {likesCount: -1}})
-	// }
+	async decrease(commentId: string, likeStatus: string){
+		if(likeStatus !== 'Dislike' && likeStatus !== 'Like') {
+			return
+		} else if(likeStatus === 'Dislike') {
+			const query = `
+				UPDATE public."Comments"
+					SET "dislikesCount"=$1
+					WHERE "id" = $2
+			`
+			return await this.dataSource.query(query, [-1, commentId])
+		} else if(likeStatus === "Like") {
+			const query = `
+				UPDATE public."Comments"
+					SET "likesCount"=$1
+					WHERE "id" = $2
+			`
+			return await this.dataSource.query(query, [1, commentId])
+		} 
+	}
 
 	// async updateComment(commentId: string, content: string) {
 	// 	const updateOne = await this.commentModel.updateOne(

@@ -1,5 +1,5 @@
 import { Transform, TransformFnParams } from "class-transformer";
-import { IsEnum, IsIn, IsMongoId, IsNotEmpty, IsString, Length, Matches, MaxLength, MinLength } from "class-validator";
+import { IsEnum, IsIn, IsMongoId, IsNotEmpty, IsString, IsUUID, Length, Matches, MaxLength, MinLength } from "class-validator";
 import { applyDecorators } from "@nestjs/common";
 import { LikeStatusEnum } from "../../likes/likes.emun";
 
@@ -21,7 +21,7 @@ export class updateLikeDto{
 }
 
   export class inputModelCommentId {
-	@IsMongoId()
+	@IsUUID()
 	commentId: string
   }
 
@@ -35,6 +35,6 @@ export class updateLikeDto{
   }
 
   export class inputModelId {
-	@IsMongoId()
+	@IsUUID()
 	id: string
   }

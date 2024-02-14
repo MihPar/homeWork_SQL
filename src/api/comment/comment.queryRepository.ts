@@ -13,34 +13,34 @@ export class CommentQueryRepository {
     @InjectDataSource() protected dataSource: DataSource
   ) {}
 
-//   async findCommentById(
-//     commentId: string,
-//     userId: string | null,
-//   ): Promise<CommentViewModel | null> {
-// 	if(!ObjectId.isValid(commentId)) return null
-//     try {
-//       const commentById: CommentClass | null = await this.commentModel.findOne({
-//         _id: new ObjectId(commentId),
-//       });
-//       if (!commentById) {
-//         return null;
-//       }
-//       const findLike: Like | null = await this.findLikeCommentByUser(
-//         commentId,
-//         userId,
-//       );
-//       return commentDBToView(commentById, findLike?.myStatus ?? null);
-//     } catch (e) {
-//       return null;
-//     }
-//   }
+  async findCommentById(
+    commentId: string,
+    userId: string | null,
+  ): Promise<CommentViewModel | null> {
+	if(!ObjectId.isValid(commentId)) return null
+    try {
+      const commentById: CommentClass | null = await this.commentModel.findOne({
+        _id: new ObjectId(commentId),
+      });
+      if (!commentById) {
+        return null;
+      }
+      const findLike: Like | null = await this.findLikeCommentByUser(
+        commentId,
+        userId,
+      );
+      return commentDBToView(commentById, findLike?.myStatus ?? null);
+    } catch (e) {
+      return null;
+    }
+  }
 
-//   async findLikeCommentByUser(commentId: string, userId: string | null) {
-//     const likeModel: Like | null = await this.likeModel.findOne({
-//       $and: [{ userId: userId }, { commentId: commentId }],
-//     });
-//     return likeModel;
-//   }
+  async findLikeCommentByUser(commentId: string, userId: string | null) {
+    const likeModel: Like | null = await this.likeModel.findOne({
+      $and: [{ userId: userId }, { commentId: commentId }],
+    });
+    return likeModel;
+  }
 
   async findCommentByPostId(
     postId: string,
@@ -93,14 +93,16 @@ const items: CommentViewModel[] = await Promise.all(
     };
   }
 
-//   async findCommentByCommentId(commentId: string, userId?: ObjectId | null) {
-// 	if(!ObjectId.isValid(commentId)) return null
-//     const commentById: CommentClass | null = await this.commentModel.findOne({
-//       _id: new ObjectId(commentId),
-//     });
-//     if (!commentById) {
-//       return null;
-//     }
-// 	return commentById
-//   }
+  async findCommentByCommentId(commentId: string, userId?: ObjectId | null) {
+	const query = `
+		SELECT "content", "userId", "userLogin", "createdAt", "postId", "likesCount", "dislikesCount", "myStatus"
+			FROM public."Comments"
+			WHERE "id" = $1
+	`
+    const commentById: CommentClass | null = (await this.dataSource.query(query, [commentId]))[0]
+    if (!commentById) {
+      return null;
+    }
+	return commentById
+  }
 }

@@ -53,19 +53,35 @@ export class LikesRepository {
 		return updateLikeStatus
 	}
 
-	// async findLikeCommentByUser(commentId: string, userId: string) {
-	// 	return this.likeModel.findOne({userId,  commentId}).lean() //
-	// }
+	async findLikeByCommentIdByUserId(commentId: string, userId: string) {
+		const query = `
+			SELECT "content", "userId", "userLogin", "createdAt", "postId", "likesCount", "dislikesCount", "myStatus"
+				FROM public."Comments"
+				WHERE "id" = $1 AND "userId" = $2
+		`
+		const findLike = await (this.dataSource.query(query, [commentId, userId]))[0]
+		if(!findLike) return false
+		return findLike
+	}
 
-	// async saveLikeForComment(commentId: string, userId: string, likeStatus: string) {
-	// 	const saveResult = await this.likeModel.create({commentId: commentId, userId: userId, myStatus: likeStatus, postId: null})
-	// 	const usesrComment = await this.likeModel.findOne({userId: userId, commentId: commentId}).lean() //
-	// }
+	async saveLikeForComment(commentId: string, userId: string, likeStatus: string) {
+		const query = `
+			UPDATE public."Comments"
+				SET "myStatus"=$1
+				WHERE "id" = $2 AND "userId" = $3
+		`
+		const saveResult = await this.dataSource.query(query, [likeStatus, commentId, userId])
+	}
 
-	// async updateLikeStatusForComment(commentId: string, userId: string, likeStatus: string){
-	// 	const saveResult = await this.likeModel.updateOne({commentId: commentId, userId: userId}, {myStatus: likeStatus})
-	// 	return saveResult
-	// }
+	async updateLikeStatusForComment(commentId: string, userId: string, likeStatus: string){
+		const query = `
+			UPDATE public."Comments"
+				SET "myStatus"=$1
+				WHERE "id" = $2 AND "userId" = $3
+		`
+		const saveResult = (await this.dataSource.query(query, [likeStatus, commentId, userId]))[0]
+		return saveResult
+	}
 
 	async getNewLike(postId: string, blogId: string) {
 		const query = `

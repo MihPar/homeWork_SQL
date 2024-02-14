@@ -5,10 +5,12 @@ export class Comment {
   public createdAt: string;
   public likesCount: number;
   public dislikesCount: number;
+  
   constructor(
     public content: string,
     public postId: string,
     public commentatorInfo: CommentatorInfoType,
+	public myStatus: LikeStatusEnum
   ) {
     this.createdAt = new Date().toISOString();
     this.likesCount = 0;
@@ -28,8 +30,9 @@ export class CommentClass extends Comment {
 	  content: string,
 	  postId: string,
 	  commentatorInfo: CommentatorInfoType,
+	  myStatus: LikeStatusEnum
 	) {
-	  super(content, postId, commentatorInfo);
+	  super(content, postId, commentatorInfo, myStatus);
 	}
 		id: string
 		content: string
