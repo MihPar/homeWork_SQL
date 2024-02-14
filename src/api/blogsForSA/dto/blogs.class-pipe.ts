@@ -1,6 +1,7 @@
-import { IsMongoId, IsNotEmpty, IsString, IsUUID, IsUrl, MaxLength } from "class-validator";
+import { IsMongoId, IsNotEmpty, IsString, IsUUID, IsUrl, MaxLength, Validate } from "class-validator";
 import { Transform, TransformFnParams } from "class-transformer";
 import { applyDecorators } from "@nestjs/common";
+import { CustomIdValidation } from "../../auth/adapter/customIdValidation";
 
 const Trim = () => Transform(({value}: TransformFnParams) => value?.trim())
 
@@ -37,6 +38,7 @@ export class inputModelUpdataPost {
 	@IsString()
 	@Trim()
 	@IsUUID()
+	@Validate(CustomIdValidation)
 	blogId: string
 
 	@IsString()
