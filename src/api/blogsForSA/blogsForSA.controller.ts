@@ -177,6 +177,7 @@ export class BlogsControllerForSA {
 	@Param() dto: inputModelUpdataPost, 
 	@UserIdDecorator() userId: string | null
 	) {
+	if(!dto.blogId && !dto.postId) throw new NotFoundException("404")
 	const blog = await this.blogsQueryRepositoryForSA.findBlogById(dto.blogId);
 	if(!blog) throw new NotFoundException("404")
 	if(userId !== blog.userId) throw new ForbiddenException("This user does not have access in blog, 403")
