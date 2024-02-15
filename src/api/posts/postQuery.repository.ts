@@ -14,7 +14,6 @@ export class PostsQueryRepository {
     postId: string,
     userId?: string | null
   ): Promise<PostsViewModel | null> {
-    // if (!ObjectId.isValid(postId)) return null;
     const query1 = `
 		select *
 			from public."Posts"
@@ -24,15 +23,15 @@ export class PostsQueryRepository {
     const post: PostClass | null = (
       await this.dataSource.query(query1, [postId])
     )[0];
-    // const query2 = `
-	// 		select *
-	// 			from public."NewestLikes" 
-	// 				where "postId" = $1
-	// 				order by "addedAt" desc
-	// 				limit 3 offset 0
-	// 	`;
-    // const newestLikes = await this.dataSource.query(query2, [postId])[0];
-    return post ? PostClass.getPostsViewModelForSA(post) : null;
+    const query2 = `
+			select *
+				from public."NewestLikes" 
+					where "postId" = $1
+					order by "addedAt" desc
+					limit 3 offset 0
+		`;
+    const newestLikes = await this.dataSource.query(query2, [postId])[0];
+    return post ? PostClass.getPostsViewModelForSA(post, newestLikes) : null;
   }
 
   async findAllPosts(

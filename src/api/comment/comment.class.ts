@@ -1,4 +1,5 @@
 import { LikeStatusEnum } from "../likes/likes.emun";
+import { likeInfoType } from "../likes/likes.type";
 import { CommentViewModel, CommentatorInfoType } from "./comment.type";
 
 export class Comment {
@@ -10,7 +11,7 @@ export class Comment {
     public content: string,
     public postId: string,
     public commentatorInfo: CommentatorInfoType,
-	public myStatus: LikeStatusEnum
+	likesInfo: likeInfoType
   ) {
     this.createdAt = new Date().toISOString();
     this.likesCount = 0;
@@ -30,9 +31,9 @@ export class CommentClass extends Comment {
 	  content: string,
 	  postId: string,
 	  commentatorInfo: CommentatorInfoType,
-	  myStatus: LikeStatusEnum
+	  likesInfo: likeInfoType
 	) {
-	  super(content, postId, commentatorInfo, myStatus);
+	  super(content, postId, commentatorInfo, likesInfo);
 	}
 		id: string
 		content: string
@@ -41,6 +42,7 @@ export class CommentClass extends Comment {
 		createdAt: string
 		likesCount: number
 		dislikesCount: number
+		myStatus: string
 
 		getNewComment(myStatus: LikeStatusEnum): CommentViewModel {
 			return {
@@ -58,7 +60,7 @@ export class CommentClass extends Comment {
 		
 		static getNewComments(comment: CommentClass, myStatus: LikeStatusEnum): CommentViewModel {
 			return {
-			  id: comment.id!.toString(),
+			  id: comment.id,
 			  content: comment.content,
 			  commentatorInfo: comment.commentatorInfo,
 			  createdAt: comment.createdAt,

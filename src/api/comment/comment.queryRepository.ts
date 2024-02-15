@@ -5,7 +5,7 @@ import { PaginationType } from '../../types/pagination.types';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource, ObjectId } from 'typeorm';
 import { CommentClass } from './comment.class';
-import { commentDBToView } from '../../helpers';
+import { commentByPostView, commentDBToView } from '../../helpers';
 
 @Injectable()
 export class CommentQueryRepository {
@@ -17,30 +17,32 @@ export class CommentQueryRepository {
     commentId: string,
     userId: string | null,
   ): Promise<CommentViewModel | null> {
-	if(!ObjectId.isValid(commentId)) return null
     try {
-      const commentById: CommentClass | null = await this.commentModel.findOne({
-        _id: new ObjectId(commentId),
-      });
-      if (!commentById) {
+		const query = `
+			select *
+				from public."Comments"
+				where "id" = $1
+		`
+      const findCommentById: CommentClass | null = (await this.dataSource.query(query, [commentId]))[0]
+      if (!findCommentById) {
         return null;
       }
-      const findLike: Like | null = await this.findLikeCommentByUser(
-        commentId,
-        userId,
-      );
-      return commentDBToView(commentById, findLike?.myStatus ?? null);
+    //   const findLike: Like | null = await this.findLikeCommentByUser(
+    //     commentId,
+    //     userId,
+    //   );
+      return commentDBToView(findCommentById);
     } catch (e) {
       return null;
     }
   }
 
-  async findLikeCommentByUser(commentId: string, userId: string | null) {
-    const likeModel: Like | null = await this.likeModel.findOne({
-      $and: [{ userId: userId }, { commentId: commentId }],
-    });
-    return likeModel;
-  }
+//   async findLikeCommentByUser(commentId: string, userId: string | null) {
+//     const likeModel: Like | null = await this.likeModel.findOne({
+//       $and: [{ userId: userId }, { commentId: commentId }],
+//     });
+//     return likeModel;
+//   }
 
   async findCommentByPostId(
     postId: string,
@@ -53,13 +55,12 @@ export class CommentQueryRepository {
 	const query1 = `
 		select *
 			from public."Comments"
-			where "postid" = $1
-			order by $2 ${sortDirection}
-			limit $3 offset $4
+			where "id" = $1
+			order by "${sortBy}" ${sortDirection}
+			limit $2 offset $3
 	`
 const commentByPostId = (await this.dataSource.query(query1, [
     postId,
-    sortBy,
     +pageSize,
     (+pageNumber - 1) * +pageSize,
   ]))[0]
@@ -67,20 +68,14 @@ const commentByPostId = (await this.dataSource.query(query1, [
   const count = `
   	select count(*)
   		from from public."Comments"
-		where "postId" = $1
+		where "id" = $1
   `
 const totalCount = (await this.dataSource.query(count, [postId]))[0].count
 const pagesCount: number = Math.ceil(totalCount / +pageSize);
 
-const query2 = `
-  	select p."likesCount", p."dislikesCount", p."myStatus"
-  		from "Posts" as p
-		where p."postId" = $1
-`
-const likeStatus = (await this.dataSource.query(query2, [postId]))[0]
 const items: CommentViewModel[] = await Promise.all(
       commentByPostId.map(async (item) => {
-        const commnent = commentDBToView(item, likeStatus);
+        const commnent = commentDBToView(item);
         return commnent;
       }),
     );
@@ -93,9 +88,9 @@ const items: CommentViewModel[] = await Promise.all(
     };
   }
 
-  async findCommentByCommentId(commentId: string, userId?: ObjectId | null) {
+  async findCommentByCommentId(commentId: string, userId?: string | null) {
 	const query = `
-		SELECT "content", "userId", "userLogin", "createdAt", "postId", "likesCount", "dislikesCount", "myStatus"
+		SELECT *
 			FROM public."Comments"
 			WHERE "id" = $1
 	`
@@ -104,5 +99,16 @@ const items: CommentViewModel[] = await Promise.all(
       return null;
     }
 	return commentById
+  }
+
+  async getCommentsByPostId(id: string): Promise<CommentClass | null> {
+	const query = `
+		select *
+			from public."Comments"
+			where "id" = $1
+	`
+	const getCommentsById = (await this.dataSource.query(query, [id]))[0]
+	if(!getCommentsById) return null
+	return getCommentsById
   }
 }

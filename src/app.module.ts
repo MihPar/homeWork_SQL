@@ -70,6 +70,8 @@ import { DeleteBlogByIdForSAUseCase } from './api/blogsForSA/use-case/deleteBlog
 import { CreateNewPostForBlogUseCase } from './api/blogsForSA/use-case/createNewPostForBlog-use-case';
 import { PostController } from './api/posts/post.controller';
 import { CommentQueryRepository } from './api/comment/comment.queryRepository';
+import { UpdateLikestatusUseCase } from './api/comment/use-case/updateLikeStatus-use-case';
+import { UpdateCommentByCommentIdUseCase } from './api/comment/use-case/updateCommentByCommentId-use-case';
 
 const userCases = [
   RecoveryPasswordUseCase,
@@ -100,7 +102,9 @@ const userCases = [
   CreateNewBlogForSAUseCase,
   UpdateBlogForSAUseCase,
   DeleteBlogByIdForSAUseCase,
-  CreateNewPostForBlogUseCase
+  CreateNewPostForBlogUseCase,
+  UpdateLikestatusUseCase,
+  UpdateCommentByCommentIdUseCase
 ];
 
 const gards = [

@@ -90,7 +90,7 @@ export class PostsRepository {
     } else if (likeStatus === "Dislike") {
       let dislike = "Dislike";
       const query = `
-			UPDATE public."Posts"
+			UPDATE public."Comments"
 				SET "likesCount"=${1}
 				WHERE "id" = $1 AND "myStatus" = ${dislike}
 		`;
@@ -98,7 +98,7 @@ export class PostsRepository {
     } else {
       let like = "Like";
       const query = `
-			UPDATE public."Posts"
+			UPDATE public."Comments"
 				SET "dislikesCount"=${1}
 				WHERE "id" = $1 AND "myStatus" = ${like}
 		`;
@@ -112,7 +112,7 @@ export class PostsRepository {
     } else if (likeStatus === "Dislike") {
       let dislike = "Dislike";
       const query = `
-			UPDATE public."Posts"
+			UPDATE public."Comments"
 				SET "likesCount"=${-1}
 				WHERE "id" = $1 AND "myStatus" = ${dislike}
 		`;
@@ -120,7 +120,7 @@ export class PostsRepository {
     } else {
       let like = "Like";
       const query = `
-			UPDATE public."Posts"
+			UPDATE public."Comments"
 				SET "dislikesCount"=${-1}
 				WHERE "id" = $1 AND "myStatus" = ${like}
 		`;

@@ -30,11 +30,12 @@ export class CreateNewCommentByPostIdUseCase
     const newComment: CommentClass = new CommentClass(
       command.inputModelContent.content,
       command.postId,
-      { userId, userLogin }
+      { userId, userLogin },
+	  {likesCount: 0, dislikesCount: 0, myStatus: LikeStatusEnum.None}
     );
     const createNewCommentawait: CommentClass | null =
       await this.commentRepository.createNewCommentPostId(newComment);
     if (!createNewCommentawait) throw new NotFoundException("404");
-    return createNewCommentawait.getNewComment(LikeStatusEnum.None);
+    return CommentClass.getNewComments(createNewCommentawait, LikeStatusEnum.None);
   }
 }

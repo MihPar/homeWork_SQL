@@ -18,7 +18,7 @@ export class LikesRepository {
 	async findLikePostById(postId: string): Promise<Like | null> {
 		const query = `
 			select *
-				from "Posts"
+				from public."Comments"
 				where "id" = $1
 		`
 		return (this.dataSource.query(query, [postId]))[0]
@@ -26,7 +26,7 @@ export class LikesRepository {
 
 	async saveLikeForPost(postId: string, likeStatus: string): Promise<string> {
 		const query1 = `
-			UPDATE public."Posts"
+			UPDATE public."Comments"
 				SET "myStatus"=${likeStatus}
 				WHERE "id" = $1
 		`
@@ -45,7 +45,7 @@ export class LikesRepository {
 
 	async updateLikeStatusForPost(postId: string, likeStatus: string) {
 		const query1 = `
-			UPDATE public."Posts"
+			UPDATE public."Comments"
 				SET "myStatus"=${likeStatus}
 				WHERE "id" = $1
 		`
@@ -55,7 +55,7 @@ export class LikesRepository {
 
 	async findLikeByCommentIdByUserId(commentId: string, userId: string) {
 		const query = `
-			SELECT "content", "userId", "userLogin", "createdAt", "postId", "likesCount", "dislikesCount", "myStatus"
+			SELECT *
 				FROM public."Comments"
 				WHERE "id" = $1 AND "userId" = $2
 		`
@@ -86,7 +86,7 @@ export class LikesRepository {
 	async getNewLike(postId: string, blogId: string) {
 		const query = `
 			select *
-				from "NewestLike"
+				from public."NewestLike"
 				where "postId" = $1
 				order by "addedAt" = desc
 				limit 3 offset 0

@@ -1,6 +1,8 @@
 import { InjectDataSource } from "@nestjs/typeorm";
 import { DataSource } from "typeorm";
 import { CommentClass } from "./comment.class";
+import { zip } from "rxjs";
+import { LikeStatusEnum } from "../likes/likes.emun";
 
 export class CommentRepository {
 	constructor(
@@ -53,41 +55,59 @@ export class CommentRepository {
 		} 
 	}
 
-	// async updateComment(commentId: string, content: string) {
-	// 	const updateOne = await this.commentModel.updateOne(
-	// 	  { _id: new ObjectId(commentId) },
-	// 	  { $set: { content: content } }
-	// 	);
-	// 	return updateOne.matchedCount === 1;
-	//   }
+	async updateComment(commentId: string, content: string): Promise<boolean> {
+		const query = `
+			UPDATE public."Comments"
+				SET "content" = $1
+				WHERE "id" = $2
+		`
+		const updateOne = (await this.dataSource.query(query, [content, commentId]))[0]
+		if(!updateOne) return false
+		return true
+	  }
 
-	//   async deleteComment(commentId: string): Promise<boolean> {
-	// 	try {
-	// 	  const deleteComment = await this.commentModel.deleteOne({
-	// 		_id: new ObjectId(commentId),
-	// 	  }).exec()
-	// 	  return deleteComment.deletedCount === 1;
-	// 	} catch (err) {
-	// 	  return false; 
-	// 	}
-	//   }
+	  async deleteCommentByCommentId(commentId: string): Promise<boolean> {
+		try {
+			const query = `
+				DELETE FROM public."Comments"
+					WHERE "id" = $1
+			`
+		  const deleteComment = await this.dataSource.query(query, [commentId])
+		  return true
+		} catch (err) {
+		  return false; 
+		}
+	  }
 
 	  async createNewCommentPostId(newComment: CommentClass): Promise<CommentClass | null> {
 		try {
 			const query1 = `
 				INSERT INTO public."Comments"(
-					"content", "userId", "userLogin", "createdAt", "postId")
-					VALUES ('${newComment.content}', '${newComment.commentatorInfo.userId}', '${newComment.commentatorInfo.userLogin}', '${newComment.createdAt}', '${newComment.postId}');
-			`
-			const createComments = (await this.dataSource.query(query1))[0]
-			if(!createComments) return null
-			const query2 = `
-					select *
-						from public."Comments"
-						where "postId' = $1
-			`
-			const getComment = (await this.dataSource.query(query2, [newComment.postId]))[0]
-			return getComment
+					"content", "userId", "userLogin", "createdAt", "postId", "likesCount", "dislikesCount", "myStatus")
+						VALUES ($1, $2, $3, $4, $5, $6, $7, $8);
+						returning *
+			`;
+      const createComments = (
+        await this.dataSource.query(query1, [
+          newComment.content,
+          newComment.commentatorInfo.userId,
+          newComment.commentatorInfo.userLogin,
+          newComment.createdAt,
+          newComment.postId,
+		  newComment.likesCount,
+		  newComment.dislikesCount,
+		  newComment.myStatus
+        ])
+      )[0];
+      if (!createComments) return null;
+    //   const query2 = `
+	// 				select *
+	// 					from public."Comments"
+	// 					where "postId' = $1
+	// 		`;
+	// 		const getComment = (await this.dataSource.query(query2, [newComment.postId]))[0]
+			// return getComment
+			return createComments
 		} catch (error) {
 			console.log(error, 'error in create post');
 			return null;

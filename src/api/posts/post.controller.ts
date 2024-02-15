@@ -33,6 +33,7 @@ import { PostsViewModel } from './posts.type';
 import { CreateNewCommentByPostIdCommnad } from '../comment/use-case/createNewCommentByPotsId-use-case';
 import { SkipThrottle } from '@nestjs/throttler';
 import { UpdateLikeStatusCommand } from './use-case/updateLikeStatus-use-case';
+import { CommentClass } from '../comment/comment.class';
 
 // @SkipThrottle()
 @Controller('posts')
@@ -57,6 +58,8 @@ export class PostController {
 	if(!userId) return null
     const findPost = await this.postsQueryRepository.findPostById(dto.postId);
     if (!findPost) throw new NotFoundException('404')
+	const findCommentByPostId: CommentClass | null = await this.commentQueryRepository.getCommentsByPostId(dto.postId)
+	if(!findCommentByPostId) throw new NotFoundException('404')
 	const commnad = new UpdateLikeStatusCommand(status, dto.postId, userId, user)
 	const result = await this.commandBus.execute(commnad)
     if (!result) throw new NotFoundException('404')
@@ -78,11 +81,11 @@ export class PostController {
       sortDirection: string;
     },
   ) {
-    const isExistPots = await this.postsQueryRepository.findPostById(dto.postId);
+    const isExistPots: PostsViewModel | null = await this.postsQueryRepository.findPostById(dto.postId);
     if (!isExistPots) throw new NotFoundException('Blogs by id not found');
     const commentByPostsId: PaginationType<CommentViewType> | null =
       await this.commentQueryRepository.findCommentByPostId(
-        dto.postId,
+        isExistPots.id,
         (query.pageNumber || '1'),
         (query.pageSize || '10'),
         (query.sortBy || 'createdAt'),

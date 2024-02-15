@@ -6,21 +6,38 @@ import { InputModelClassCreateBody } from "./api/users/user.class";
 
 export const commentDBToView = (
   item: CommentClass,
-  myStatus: LikeStatusEnum | null
 ): CommentViewModel => {
   return {
-    id: item.id!.toString(),
+    id: item.id,
     content: item.content,
     commentatorInfo: item.commentatorInfo,
     createdAt: item.createdAt,
     likesInfo: {
       likesCount: item?.likesCount || 0,
       dislikesCount: item?.dislikesCount || 0,
-      myStatus: myStatus || LikeStatusEnum.None,
+      myStatus: item.myStatus || LikeStatusEnum.None,
     },
   };
 };
 
+export const commentByPostView = (
+	item: CommentClass,
+    myStatus?: LikeStatusEnum | null
+  ): CommentViewModel => {
+	return {
+	  id: item.id,
+	  content: item.content,
+	  commentatorInfo: item.commentatorInfo,
+	  createdAt: item.createdAt,
+	  likesInfo: {
+		likesCount: item?.likesCount || 0,
+		dislikesCount: item?.dislikesCount || 0,
+		myStatus: item.myStatus || LikeStatusEnum.None,
+	  },
+	};
+  };
+
+  
 export const createAddUser = async (server: any, body: InputModelClassCreateBody) => {
 	const createUser = await request(server)
 	  .post(`/users`)
