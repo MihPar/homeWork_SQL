@@ -73,7 +73,7 @@ export class PostClass extends Posts {
 		  extendedLikesInfo: {
 			  dislikesCount: post.dislikesCount, 
 			  likesCount: post.likesCount, 
-			  myStatus: post.myStatus,
+			  myStatus: post.myStatus || LikeStatusEnum.None,
 			  newestLikes: newestLikes ? newestLikes.map(l => ({
 				  addedAt: l.addedAt,
 				  login: l.login,
