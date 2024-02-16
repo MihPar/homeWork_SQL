@@ -42,7 +42,7 @@ export class CommentClass extends Comment {
 		createdAt: string
 		likesCount: number
 		dislikesCount: number
-		myStatus: string
+		myStatus: LikeStatusEnum
 
 		getNewComment(myStatus: LikeStatusEnum): CommentViewModel {
 			return {

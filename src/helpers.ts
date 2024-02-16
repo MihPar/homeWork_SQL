@@ -15,7 +15,7 @@ export const commentDBToView = (
     likesInfo: {
       likesCount: item?.likesCount || 0,
       dislikesCount: item?.dislikesCount || 0,
-      myStatus: item.myStatus || LikeStatusEnum.None,
+      myStatus: item.myStatus
     },
   };
 };

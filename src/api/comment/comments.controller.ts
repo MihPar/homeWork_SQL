@@ -2,7 +2,6 @@ import { Body, Controller, Delete, ForbiddenException, Get, HttpCode, NotFoundEx
 import { CommentQueryRepository } from './comment.queryRepository';
 import { CommentViewModel } from './comment.type';
 import { InputModelContent, InputModelLikeStatusClass, inputModelCommentId, inputModelId } from './dto/comment.class-pipe';
-import { CommentService } from './comment.service';
 import { CommentRepository } from './comment.repository';
 import { CommandBus } from '@nestjs/cqrs';
 import { SkipThrottle } from '@nestjs/throttler';
@@ -21,7 +20,6 @@ import { UpdateCommentByCommentIdCommand } from './use-case/updateCommentByComme
 export class CommentsController {
   constructor(
     protected commentQueryRepository: CommentQueryRepository,
-    protected commentService: CommentService,
 	protected commentRepository: CommentRepository,
 	protected commandBus: CommandBus
   ) {}
