@@ -98,11 +98,12 @@ const items: CommentViewModel[] = await Promise.all(
 			FROM public."Comments"
 			WHERE "id" = $1
 	`
-    const commentById: CommentClass | null = (await this.dataSource.query(query, [commentId]))[0]
+    const commentById = (await this.dataSource.query(query, [commentId]))[0]
     if (!commentById) {
       return null;
     }
-	return commentById
+	
+	return {...commentById, commentatorInfo: {userId: commentById.userId, userLogin: commentById.userLogin}}
   }
 
   async getCommentsByPostId(id: string): Promise<CommentClass | null> {
