@@ -5,6 +5,7 @@ import { DataSource, ObjectId } from "typeorm";
 import { InjectDataSource } from "@nestjs/typeorm";
 import { PostClass, Posts } from "./post.class";
 import { LikeStatusEnum } from "../likes/likes.emun";
+import { query } from "express";
 
 @Injectable()
 export class PostsQueryRepository {
@@ -14,15 +15,17 @@ export class PostsQueryRepository {
     postId: string,
     userId?: string | null
   ): Promise<PostsViewModel | null> {
-    const query1 = `
-		select *
-			from public."Posts"
-			where "id" = $1
+	// console.log("try")
+    const queryPost = `
+		SELECT *
+			FROM public."Posts"
+			WHERE "id" = $1
 	  `;
-
     const post: PostClass | null = (
-      await this.dataSource.query(query1, [postId])
+      await this.dataSource.query(queryPost, [postId])
     )[0];
+     console.log("post: ", post)
+
     // const query2 = `
 	// 		select *
 	// 			from public."NewestLikes" 
@@ -60,8 +63,8 @@ export class PostsQueryRepository {
     const pagesCount: number = Math.ceil(+totalCount / +pageSize);
     const query2 = `
 		select *
-			from "NewestLiks"
-			where "postId' = $1
+			from "NewestLikes"
+			where "postId" = $1
 			order by "addedAt" desc
 			limit 3 offset 0
 	`;
@@ -73,7 +76,6 @@ export class PostsQueryRepository {
       items: await Promise.all(
         allPosts.map(async (post) => {
           const newestLikes = await this.dataSource.query(query2, [post.id]);
-
           return PostClass.getPostsViewModelForSA(post, newestLikes);
         })
       ),

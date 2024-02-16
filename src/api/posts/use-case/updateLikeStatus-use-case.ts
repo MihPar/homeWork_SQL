@@ -18,7 +18,6 @@ export class UpdateLikeStatusCommand {
 @CommandHandler(UpdateLikeStatusCommand)
 export class UpdateLikeStatusUseCase implements ICommandHandler<UpdateLikeStatusCommand> {
 	constructor(
-		@InjectDataSource() protected dataSource: DataSource,
 		protected readonly likesRepository: LikesRepository,
 		protected readonly postsRepository: PostsRepository
 	) {}
