@@ -23,7 +23,7 @@ export class CommentQueryRepository {
 				from public."Comments"
 				where "id" = $1
 		`
-      const findCommentById: CommentClass | null = (await this.dataSource.query(query, [commentId]))[0]
+      const findCommentById = (await this.dataSource.query(query, [commentId]))[0]
       if (!findCommentById) {
         return null;
       }
@@ -31,7 +31,8 @@ export class CommentQueryRepository {
     //     commentId,
     //     userId,
     //   );
-      return commentByPostView(findCommentById);
+	const viewModelComment = {...findCommentById, commentatorInfo: {userId: findCommentById.userId, userLogin: findCommentById.userLogin}}
+      return commentByPostView(viewModelComment);
     } catch (e) {
       return null;
     }

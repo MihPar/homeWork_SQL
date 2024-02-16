@@ -95,6 +95,7 @@ export class CommentsController {
   ) {
     const getCommentById: CommentViewModel | null =
       await this.commentQueryRepository.findCommentById(dto.id, userId);
+	//   console.log("getCommentById: ", getCommentById)
     if (!getCommentById) throw new NotFoundException('Blogs by id not found');
     return getCommentById;
   }
