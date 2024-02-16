@@ -10,7 +10,7 @@ export interface LikesInfoViewModel {
 export type NewestLikesType = {
     addedAt: string,
     userId: string,
-    login: string
+    login: string,
 }
 
 export interface LikesInfoModel {

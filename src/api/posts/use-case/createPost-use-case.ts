@@ -27,7 +27,7 @@ export class CreatePostUseCase implements ICommandHandler<CreatePostCommand> {
 				command.inputModelPost.content,
 				command.inputModelPost.blogId,
 				command.blogName,
-				0, 0, LikeStatusEnum.None
+				0, 0
 			);
 			const createPost: PostClass | null = await this.postsRepository.createNewPosts(newPost);
 			if(!createPost) {

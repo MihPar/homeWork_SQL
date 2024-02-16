@@ -18,6 +18,7 @@ export class Like {
 		public addedAT: string,
 		public userId: string,
 		public login: string,
-		public postId: string
+		public postId: string,
+		public myStatus: LikeStatusEnum,
 	) {}
   }

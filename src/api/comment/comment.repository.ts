@@ -9,10 +9,10 @@ export class CommentRepository {
 		@InjectDataSource() protected dataSource: DataSource
 	) {}
 
-	// async deleteAllComments() {
-	// 	const deletedAll = await this.commentModel.deleteMany({});
-	// 	return deletedAll.deletedCount === 1;
-	// }
+	async deleteAllComments() {
+		const deletedAll = await this.dataSource.query(`delete from public."Comments"`);
+		return true
+	}
 
 
 	async increase(commentId: string, likeStatus: string){

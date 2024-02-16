@@ -14,7 +14,6 @@ export class Posts {
 	  public blogName: string,
 	  public likesCount: number,
 	  public dislikesCount: number,
-	  public myStatus: LikeStatusEnum
 	) {
 	  this.createdAt = new Date().toISOString();
 	  this.extendedLikesInfo = {
@@ -33,19 +32,10 @@ export class PostClass extends Posts {
 		blogName: string,
 		likesCount: number, 
 		dislikesCount: number, 
-		myStatus: LikeStatusEnum
 	) {
-		super(title, shortDescription, content, blogId, blogName, likesCount, dislikesCount, myStatus);
+		super(title, shortDescription, content, blogId, blogName, likesCount, dislikesCount);
 	}
 	id: string;
-  	title: string;
-  	shortDescription: string;
- 	content: string;
-  	blogId: string;
- 	blogName: string;
-  	createdAt: string;
-  	likesCount: number
-	dislikesCount: number
 	myStatus: LikeStatusEnum
 
 	  static getPostsViewModel(post: PostClass,
@@ -59,8 +49,8 @@ export class PostClass extends Posts {
 		  blogName: post.blogName,
 		  createdAt: post.createdAt,
 		  extendedLikesInfo: {
-			  dislikesCount: post.dislikesCount, 
-			  likesCount: post.likesCount, 
+			  dislikesCount: post.dislikesCount,
+			  likesCount: post.likesCount,
 			  myStatus: post.myStatus,
 			  newestLikes: newestLikes.map(l => ({
 				  addedAt: l.addedAt,

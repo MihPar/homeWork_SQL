@@ -13,8 +13,8 @@ export class PostsRepository {
     try {
       const query = `
 			INSERT INTO public."Posts"(
-				"blogId", "title", "shortDescription", "content", "blogName", "createdAt", "likesCount", "dislikesCount", "myStatus")
-				VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+				"blogId", "title", "shortDescription", "content", "blogName", "createdAt", "likesCount", "dislikesCount")
+				VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 				returning *
 		`;
       const resultNewPost = (
@@ -27,7 +27,6 @@ export class PostsRepository {
           newPost.createdAt,
           newPost.likesCount,
           newPost.dislikesCount,
-          newPost.myStatus,
         ])
       )[0];
 
@@ -192,7 +191,7 @@ export class PostsRepository {
   async createNewestLikes(newest: NewestLikesClass) {
     const query = `
 		INSERT INTO public."NewestLikes"(
-			"addedAt", "userId", "login", "postId")
+			"addedAt", "userId", "login", "postId", "myStatus")
 			VALUES ($1, $2, $3, $4)
 			returning *
 	`;
@@ -202,6 +201,7 @@ export class PostsRepository {
         newest.userId,
         newest.login,
         newest.postId,
+		newest.myStatus
       ])
     )[0];
 	return createNewest

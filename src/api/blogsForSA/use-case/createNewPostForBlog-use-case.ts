@@ -31,7 +31,7 @@ export class CreateNewPostForBlogUseCase
       command.inputDataModel.content,
       command.blogId,
       command.blogName,
-      0, 0, LikeStatusEnum.None
+      0, 0
     );
     const createPost: PostClass | null = await this.postsRepository.createNewPosts(newPost)
 	if (!createPost) return null;
@@ -41,15 +41,16 @@ export class CreateNewPostForBlogUseCase
 //     new Date().toISOString(),
 //     command.userId,
 //     command.blogName,
-//     createPost.id
+//     createPost.id,
+// 	LikeStatusEnum.None
 //   );
 //   const createNewestLikes =
 //     await this.postsRepository.createNewestLikes(newest);
-  // const newestLike = await this.postsRepository.findNewestLike(createPost.id)
+//   const newestLike = await this.postsRepository.findNewestLike(createPost.id)
 //   console.log(
 //     "return post: ",
 //     PostClass.getPostsViewModelForSA(createPost, createNewestLikes)
 //   );
-	return PostClass.getPostsViewModelForSA(createPost);
+	return PostClass.getPostsViewModelForSA(createPost)
   }
 }

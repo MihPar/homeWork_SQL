@@ -31,7 +31,6 @@ export class UpdateOldPostUseCase implements ICommandHandler<UpdateOldPostComman
 			findPostById.blogName,
 			findPostById.likesCount,
 			findPostById.dislikesCount,
-			LikeStatusEnum.Like
 			)
 			const updatPostById: PostClass = await this.postsRepository.updatePost(
 				newPost, findNewestLike
