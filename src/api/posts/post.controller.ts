@@ -93,6 +93,7 @@ export class PostController {
         (query.sortDirection || 'desc'),
         userId,
       );
+	  console.log("commentByPostsId: ", commentByPostsId)
     if (!commentByPostsId) throw new NotFoundException('Blogs by id not found 404');
     return commentByPostsId;
   }

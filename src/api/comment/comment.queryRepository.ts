@@ -56,30 +56,33 @@ export class CommentQueryRepository {
 	const query1 = `
 		select *
 			from public."Comments"
-			where "id" = $1
+			where "postId" = $1
 			order by "${sortBy}" ${sortDirection}
 			limit $2 offset $3
 	`
-const commentByPostId = (await this.dataSource.query(query1, [
+const commentByPostId = await this.dataSource.query(query1, [
     postId,
     +pageSize,
     (+pageNumber - 1) * +pageSize,
-  ]))[0]
-
+  ])
+// console.log("commentByPostId: ", commentByPostId)
   const count = `
   	select count(*)
-  		from from public."Comments"
+  		from public."Comments"
 		where "id" = $1
   `
-const totalCount = (await this.dataSource.query(count, [postId]))[0].count
-const pagesCount: number = Math.ceil(totalCount / +pageSize);
+//   console.log("commentByPostId.id: ", commentByPostId.id)
+const totalCount = (await this.dataSource.query(count, [commentByPostId.id]))[0].count
+const pagesCount: number = Math.ceil(+totalCount / +pageSize);
 
 const items: CommentViewModel[] = await Promise.all(
       commentByPostId.map(async (item) => {
-        const commnent = commentByPostView(item);
-        return commnent;
-      }),
+		const distracrure = {...item, commentatorInfo: {userId: item.userId, userLogin: item.userLogin}}
+		return commentByPostView(distracrure)
+	})
     );
+	// console.log("items: ", items)
+
     return {
       pagesCount: pagesCount,
       page: +pageNumber,
