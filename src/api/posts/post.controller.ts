@@ -58,10 +58,8 @@ export class PostController {
 	) {
 	if(!userId) return null
     const findPost = await this.postsQueryRepository.findPostById(dto.postId);
-	// console.log("findPost: ", findPost)
     if (!findPost) throw new NotFoundException('404')
 	const findCommentByPostId: CommentClass | null = await this.commentQueryRepository.getCommentsByPostId(dto.postId)
-// console.log("findCommentByPostId: ", findCommentByPostId)
 	if(!findCommentByPostId) throw new NotFoundException('404')
 	const commnad = new UpdateLikeStatusCommand(status, dto.postId, userId, user)
 	const result = await this.commandBus.execute(commnad)
@@ -95,7 +93,6 @@ export class PostController {
         (query.sortDirection || 'desc'),
         userId,
       );
-	//   console.log("commentByPostsId: ", commentByPostsId)
     if (!commentByPostsId) throw new NotFoundException('Blogs by id not found 404');
     return commentByPostsId;
   }

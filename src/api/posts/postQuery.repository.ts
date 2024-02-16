@@ -24,7 +24,7 @@ export class PostsQueryRepository {
     const post: PostClass | null = (
       await this.dataSource.query(queryPost, [postId])
     )[0];
-     console.log("post: ", post)
+    //  console.log("post: ", post)
 
     // const query2 = `
 	// 		select *

@@ -70,14 +70,15 @@ import { DeleteBlogByIdForSAUseCase } from './api/blogsForSA/use-case/deleteBlog
 import { CreateNewPostForBlogUseCase } from './api/blogsForSA/use-case/createNewPostForBlog-use-case';
 import { PostController } from './api/posts/post.controller';
 import { CommentQueryRepository } from './api/comment/comment.queryRepository';
-import { UpdateLikestatusUseCase } from './api/comment/use-case/updateLikeStatus-use-case';
 import { UpdateCommentByCommentIdUseCase } from './api/comment/use-case/updateCommentByCommentId-use-case';
 import { CommentRepository } from './api/comment/comment.repository';
 import { CommentsController } from './api/comment/comments.controller';
 import { DeleteAllCommentsUseCase } from './api/comment/use-case/deleteAllComments-use-case';
 import { CreateNewCommentByPostIdUseCase } from './api/comment/use-case/createNewCommentByPotsId-use-case';
+import { UpdateLikestatusForCommentUseCase } from './api/comment/use-case/updateLikeStatus-use-case';
+import { UpdateLikeStatusForPostUseCase } from './api/posts/use-case/updateLikeStatus-use-case';
 
-const userCases = [
+const useCases = [
   RecoveryPasswordUseCase,
   NewPasswordUseCase,
   CreateLoginUseCase,
@@ -107,10 +108,11 @@ const userCases = [
   UpdateBlogForSAUseCase,
   DeleteBlogByIdForSAUseCase,
   CreateNewPostForBlogUseCase,
-  UpdateLikestatusUseCase,
   UpdateCommentByCommentIdUseCase,
   DeleteAllCommentsUseCase,
-  CreateNewCommentByPostIdUseCase
+  CreateNewCommentByPostIdUseCase,
+  UpdateLikestatusForCommentUseCase,
+  UpdateLikeStatusForPostUseCase
 ];
 
 const gards = [
@@ -170,7 +172,7 @@ const repositories = [AuthRepository, DeviceRepository, DeviceQueryRepository, U
 
   providers: [
     ...repositories,
-    ...userCases,
+    ...useCases,
 	...gards,
 	...repositories,
 	...manager,

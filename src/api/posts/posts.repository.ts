@@ -87,19 +87,19 @@ export class PostsRepository {
     } else if (likeStatus === "Dislike") {
       let dislike = "Dislike";
       const query = `
-			UPDATE public."Comments"
+			UPDATE public."Posts"
 				SET "likesCount"=${1}
 				WHERE "id" = $1 AND "myStatus" = ${dislike}
 		`;
-      return await this.dataSource.query(query, [postId]);
+      return (await this.dataSource.query(query, [postId]))[0]
     } else {
       let like = "Like";
       const query = `
-			UPDATE public."Comments"
+			UPDATE public."Posts"
 				SET "dislikesCount"=${1}
 				WHERE "id" = $1 AND "myStatus" = ${like}
 		`;
-      return await this.dataSource.query(query, [postId]);
+      return (await this.dataSource.query(query, [postId]))[0]
     }
   }
 
@@ -109,19 +109,19 @@ export class PostsRepository {
     } else if (likeStatus === "Dislike") {
       let dislike = "Dislike";
       const query = `
-			UPDATE public."Comments"
+			UPDATE public."Posts"
 				SET "likesCount"=${-1}
 				WHERE "id" = $1 AND "myStatus" = ${dislike}
 		`;
-      return await this.dataSource.query(query, [postId]);
+      return (await this.dataSource.query(query, [postId]))[0]
     } else {
       let like = "Like";
       const query = `
-			UPDATE public."Comments"
+			UPDATE public."Posts"
 				SET "dislikesCount"=${-1}
 				WHERE "id" = $1 AND "myStatus" = ${like}
 		`;
-      return await this.dataSource.query(query, [postId]);
+      return (await this.dataSource.query(query, [postId]))[0]
     }
 
     // return await this.postModel.updateOne(

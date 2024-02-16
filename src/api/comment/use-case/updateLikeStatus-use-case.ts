@@ -13,7 +13,7 @@ export class UpdateLikestatusCommand {
 }
 
 @CommandHandler(UpdateLikestatusCommand)
-export class UpdateLikestatusUseCase implements ICommandHandler<UpdateLikestatusCommand> {
+export class UpdateLikestatusForCommentUseCase implements ICommandHandler<UpdateLikestatusCommand> {
 	constructor(
 		protected readonly likesRepository: LikesRepository,
 		protected readonly commentRepositoriy: CommentRepository

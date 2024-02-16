@@ -3,8 +3,6 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { LikesRepository } from "../../likes/likes.repository";
 import { PostsRepository } from "../posts.repository";
 import { UserClass } from '../../users/user.class';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
 
 export class UpdateLikeStatusCommand {
 	constructor(
@@ -16,13 +14,12 @@ export class UpdateLikeStatusCommand {
 }
 
 @CommandHandler(UpdateLikeStatusCommand)
-export class UpdateLikeStatusUseCase implements ICommandHandler<UpdateLikeStatusCommand> {
+export class UpdateLikeStatusForPostUseCase implements ICommandHandler<UpdateLikeStatusCommand> {
 	constructor(
 		protected readonly likesRepository: LikesRepository,
 		protected readonly postsRepository: PostsRepository
 	) {}
 	async execute(command: UpdateLikeStatusCommand): Promise<boolean | void | null> {
-		
 		// const userLogin = command.user.userName;
 		// if(!command.userId) return null
 		// const userId = command.userId
