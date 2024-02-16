@@ -32,6 +32,7 @@ export class CommentQueryRepository {
     //     userId,
     //   );
 	const viewModelComment = {...findCommentById, commentatorInfo: {userId: findCommentById.userId, userLogin: findCommentById.userLogin}}
+	console.log(commentByPostView(viewModelComment))
       return commentByPostView(viewModelComment);
     } catch (e) {
       return null;
@@ -65,14 +66,12 @@ const commentByPostId = await this.dataSource.query(query1, [
     +pageSize,
     (+pageNumber - 1) * +pageSize,
   ])
-// console.log("commentByPostId: ", commentByPostId)
   const count = `
   	select count(*)
   		from public."Comments"
-		where "id" = $1
+		where "postId" = $1
   `
-//   console.log("commentByPostId.id: ", commentByPostId.id)
-const totalCount = (await this.dataSource.query(count, [commentByPostId.id]))[0].count
+const totalCount = (await this.dataSource.query(count, [postId]))[0].count
 const pagesCount: number = Math.ceil(+totalCount / +pageSize);
 
 const items: CommentViewModel[] = await Promise.all(
@@ -81,7 +80,6 @@ const items: CommentViewModel[] = await Promise.all(
 		return commentByPostView(distracrure)
 	})
     );
-	// console.log("items: ", items)
 
     return {
       pagesCount: pagesCount,
