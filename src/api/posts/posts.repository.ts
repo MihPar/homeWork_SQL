@@ -58,7 +58,6 @@ export class PostsRepository {
         id,
       ])
     )[0];
-	// console.log("result: ", result)
     return result[0];
   }
 
@@ -66,7 +65,6 @@ export class PostsRepository {
     id: string,
     blogId: string
   ): Promise<boolean> {
-	// console.log("try3")
     const query = `
 		delete from "Posts"
 			where "id" = $1 and "blogId" = $2
@@ -153,15 +151,12 @@ export class PostsRepository {
 
   async findNewestLike(id: string) {
     try {
-      // console.log("try")
       const query = `
 			select *
 				from public."NewestLikes"
 				where "postId" = $1
 		`;
-      // console.log("query: ", query)
       const findNewestLike = (await this.dataSource.query(query, [id]))[0];
-    //   console.log("findNewestLike1111: ", findNewestLike);
       return findNewestLike;
     } catch (erro) {
       return null;

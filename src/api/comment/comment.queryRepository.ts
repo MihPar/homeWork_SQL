@@ -31,7 +31,7 @@ export class CommentQueryRepository {
     //     commentId,
     //     userId,
     //   );
-      return commentDBToView(findCommentById);
+      return commentByPostView(findCommentById);
     } catch (e) {
       return null;
     }
@@ -75,7 +75,7 @@ const pagesCount: number = Math.ceil(totalCount / +pageSize);
 
 const items: CommentViewModel[] = await Promise.all(
       commentByPostId.map(async (item) => {
-        const commnent = commentDBToView(item);
+        const commnent = commentByPostView(item);
         return commnent;
       }),
     );

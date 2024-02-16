@@ -1,3 +1,4 @@
+import { CommentViewType } from './../comment/comment.type';
 import {
 	BadRequestException,
   Body,
@@ -26,7 +27,7 @@ import { UserClass } from '../users/user.class';
 import { CheckRefreshTokenForPost } from './guards/bearer.authForPost';
 import { InputModelLikeStatusClass } from '../comment/dto/comment.class-pipe';
 import { CheckRefreshTokenForGet } from './guards/bearer.authGetComment';
-import { CommentViewModel, CommentViewType } from '../comment/comment.type';
+import { CommentViewModel } from '../comment/comment.type';
 import { CommentQueryRepository } from '../comment/comment.queryRepository';
 import { Posts } from './post.class';
 import { PostsViewModel } from './posts.type';
@@ -105,10 +106,9 @@ export class PostController {
   	@UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string | null
 	) {
-		console.log("try")
     const post: PostsViewModel | null = await this.postsQueryRepository.findPostById(dto.postId)
     if (!post) throw new NotFoundException('Blogs by id not found 404')
-	const command = new CreateNewCommentByPostIdCommnad(dto.postId, inputModelContent, user, userId)
+	const command = new CreateNewCommentByPostIdCommnad(dto.postId, inputModelContent, user)
 	const createNewCommentByPostId: CommentViewModel | null = await this.commandBus.execute(command)
 	return createNewCommentByPostId
   }
@@ -158,7 +158,6 @@ export class PostController {
     @Param() dto: InputModelClassPostId, 
 	@UserIdDecorator() userId: string | null,
   ) {
-	// console.log("try")
     const getPostById: PostsViewModel | null =
       await this.postsQueryRepository.findPostById(dto.postId, userId);
     if (!getPostById) {

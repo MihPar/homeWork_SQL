@@ -112,7 +112,6 @@ export class BlogsControllerForSA {
     @Body(new ValidationPipe({ validateCustomDecorators: true })) inputDataModel: bodyPostsModelClass,
 	@UserIdDecorator() userId: string,
   ) {
-	// console.log("try")
     const findBlog: BlogsViewTypeWithUserId | null = await this.blogsQueryRepositoryForSA.findBlogById(dto.blogId);
     if(!findBlog) throw new NotFoundException("404")
 	if(userId !== findBlog.userId) throw new ForbiddenException("This user does not have access in blog, 403")

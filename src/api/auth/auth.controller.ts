@@ -100,7 +100,6 @@ export class AuthController {
 			httpOnly: true,
 			secure: true,
 		});
-		console.log("res.cookie: ", res.cookie)
 		return {accessToken: result.newToken};
 		}
 
@@ -108,7 +107,6 @@ export class AuthController {
 	@Post("registration-confirmation")
 	// @UseGuards(Ratelimits)
 	async createRegistrationConfirmation(@Body() inputDateRegConfirm: InputDateReqConfirmClass) {
-		console.log("registration-confirmation")
 		const command = new RegistrationConfirmationCommand(inputDateRegConfirm)
 		const registrationConfirmation =  await this.commandBus.execute(command)
 		if(!registrationConfirmation) throw new BadRequestException([{ message: "bed request", field: "code" }])
@@ -121,7 +119,6 @@ export class AuthController {
 	async creteRegistration(@Req() req: Request, @Body() inputDataReq: InputDataReqClass) {
 		const command = new RegistrationCommand(inputDataReq)
 		const user = await this.commandBus.execute(command)
-		// console.log("user: ", user)
 		  if (!user) throw new BadRequestException("400")
 		  return
 	}

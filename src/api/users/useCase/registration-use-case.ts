@@ -14,39 +14,40 @@ export class RegistrationCommand {
 }
 
 @CommandHandler(RegistrationCommand)
-export class RegistrationUseCase implements ICommandHandler<RegistrationCommand> {
+export class RegistrationUseCase
+  implements ICommandHandler<RegistrationCommand>
+{
   constructor(
     protected readonly usersRepository: UsersRepository,
     protected readonly emailManager: EmailManager,
-	protected readonly generateHashAdapter: GenerateHashAdapter,
-	protected readonly usersQueryRepository: UsersQueryRepository
+    protected readonly generateHashAdapter: GenerateHashAdapter,
+    protected readonly usersQueryRepository: UsersQueryRepository
   ) {}
-  async execute(command: RegistrationCommand): Promise<UserViewType | null> {
+  async execute(command: RegistrationCommand) {
     const passwordHash = await this.generateHashAdapter._generateHash(
-      command.inputDataReq.password,
+      command.inputDataReq.password
     );
-    const newUser = new UserClass()
-	newUser.userName = command.inputDataReq.login
-	newUser.email = command.inputDataReq.email
-	newUser.passwordHash = passwordHash
-	newUser.confirmationCode = uuidv4()
-	newUser.expirationDate = add(new Date(), {
+    const newUser = new UserClass(
+      command.inputDataReq.login,
+      command.inputDataReq.email,
+      passwordHash,
+	  new Date().toISOString(),
+      uuidv4(),
+      add(new Date(), {
         hours: 1,
         minutes: 10,
       }).toISOString()
-	newUser.isConfirmed = false
-	newUser.createdAt = new Date().toISOString()
+    );
     const userId: string = await this.usersRepository.createUser(newUser);
     try {
       await this.emailManager.sendEamilConfirmationMessage(
         newUser.email,
-        newUser.confirmationCode,
+        newUser.confirmationCode
       );
     } catch (error) {
-      console.log(error, 'error with send mail');
+      console.log(error, "error with send mail");
     }
-	// console.log("newUser: ", newUser)
-	newUser.id = userId
+    newUser.id = userId;
     return newUser.getViewUser();
   }
 }

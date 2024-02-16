@@ -47,10 +47,6 @@ export class CreateNewPostForBlogUseCase
 //   const createNewestLikes =
 //     await this.postsRepository.createNewestLikes(newest);
 //   const newestLike = await this.postsRepository.findNewestLike(createPost.id)
-//   console.log(
-//     "return post: ",
-//     PostClass.getPostsViewModelForSA(createPost, createNewestLikes)
-//   );
 	return PostClass.getPostsViewModelForSA(createPost)
   }
 }

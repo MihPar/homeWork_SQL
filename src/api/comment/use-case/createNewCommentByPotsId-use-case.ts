@@ -12,7 +12,6 @@ export class CreateNewCommentByPostIdCommnad {
     public postId: string,
     public inputModelContent: InputModelContentePostClass,
     public user: UserClass,
-    public userId: string | null
   ) {}
 }
 
@@ -25,13 +24,12 @@ export class CreateNewCommentByPostIdUseCase
     command: CreateNewCommentByPostIdCommnad
   ): Promise<CommentViewModel | null> {
     const userLogin = command.user.userName;
-    if (!command.userId) return null;
-    const userId = command.userId;
+    if (!command.user.id) return null;
+    const userId = command.user.id;
     const newComment: CommentClass = new CommentClass(
       command.inputModelContent.content,
       command.postId,
-      { userId, userLogin },
-	  {likesCount: 0, dislikesCount: 0, myStatus: LikeStatusEnum.None}
+      { userId, userLogin }
     );
     const createNewCommentawait: CommentClass | null =
       await this.commentRepository.createNewCommentPostId(newComment);

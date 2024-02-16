@@ -73,7 +73,6 @@ export class UsersQueryRepository {
 			WHERE "userName" = '${loginOrEmail}' OR "email" = '${loginOrEmail}'
 		`)
     )[0];
-    // console.log("user: ", user)
     return user;
   }
 
@@ -85,7 +84,6 @@ export class UsersQueryRepository {
 				WHERE "email" = '${email}'
 		`)
     )[0];
-    // console.log("user by email: ", user)
     return user;
   }
 
@@ -108,12 +106,10 @@ export class UsersQueryRepository {
 			FROM public."Users"
 			WHERE "confirmationCode" = '${recoveryCode}'
 		`);
-    // console.log("result: ", result);
     return result[0];
   }
 
   async findUserByConfirmation(code: string): Promise<UserClass | null> {
-	// console.log("findUserByConfirmation: ")
     const user: UserClass | null = (
       await this.dataSource.query(`
 		SELECT *
@@ -123,16 +119,15 @@ export class UsersQueryRepository {
         [code]
       )
     )[0];
-	// console.log("user: ", user)
     return user;
   }
 
-  async findUserById(userId: string): Promise<UserClass | null> {
+  async findUserById(id: string): Promise<UserClass | null> {
     let user: UserClass | null = (
       await this.dataSource.query(`
 			SELECT *
 				FROM public."Users"
-				WHERE "id" = '${userId}'
+				WHERE "id" = '${id}'
 		`)
     )[0];
     return user;

@@ -5,7 +5,8 @@ import { LikeStatusEnum } from "./api/likes/likes.emun";
 import { InputModelClassCreateBody } from "./api/users/user.class";
 
 export const commentDBToView = (
-  item: CommentClass,
+  item: CommentClass, 
+  myStatus: LikeStatusEnum | null
 ): CommentViewModel => {
   return {
     id: item.id,
@@ -15,7 +16,7 @@ export const commentDBToView = (
     likesInfo: {
       likesCount: item?.likesCount || 0,
       dislikesCount: item?.dislikesCount || 0,
-      myStatus: item.myStatus
+      myStatus: myStatus || LikeStatusEnum.None
     },
   };
 };
@@ -32,7 +33,7 @@ export const commentByPostView = (
 	  likesInfo: {
 		likesCount: item?.likesCount || 0,
 		dislikesCount: item?.dislikesCount || 0,
-		myStatus: item.myStatus || LikeStatusEnum.None,
+		myStatus: myStatus || LikeStatusEnum.None,
 	  },
 	};
   };

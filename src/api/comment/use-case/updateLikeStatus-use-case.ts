@@ -20,7 +20,7 @@ export class UpdateLikestatusUseCase implements ICommandHandler<UpdateLikestatus
 
 	) {}
 	async execute(command: UpdateLikestatusCommand): Promise<boolean> {
-		const findLike: CommentClass = await this.likesRepository.findLikeByCommentIdByUserId(command.id.commentId, command.userId)
+		const findLike = await this.likesRepository.findLikeByCommentIdByUserId(command.id.commentId, command.userId)
 	if(!findLike) {
 		await this.likesRepository.saveLikeForComment(command.id.commentId, command.userId, command.status.likeStatus)
 		const resultCheckLikeOrDislike = await this.commentRepositoriy.increase(command.id.commentId, command.status.likeStatus)

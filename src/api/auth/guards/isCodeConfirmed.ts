@@ -16,9 +16,7 @@ import { UserClass } from '../../users/user.class';
 	async canActivate(context: ExecutionContext): Promise<boolean> {
 	  const req = context.switchToHttp().getRequest();
 	  const code = req.body.code;
-//   console.log("IsConfirmed")
 	const user: UserClass | null = await this.usersQueryRepository.findUserByConfirmation(code)
-	// console.log("user: ", user)
 	
 	if(!user) {
 		throw new BadRequestException([{message: 'Incorrect code!', field: 'code'}])

@@ -43,7 +43,6 @@ export class BlogsController {
         (query.pageNumber || '1'),
         (query.pageSize || '10'),
       );
-	//   console.log("getAllBlogs: ", getAllBlogs)
     return getAllBlogs;
   }
 
@@ -87,7 +86,6 @@ export class BlogsController {
         dto.blogId,
       );
     if (!getPosts) throw new NotFoundException('Blogs by id not found');
-	// console.log("getPosts: ", getPosts)
     return getPosts;
   }
 
@@ -111,7 +109,6 @@ export class BlogsController {
   async getBlogsById(
     @Param() dto: inputModelClass,
   ): Promise<BlogsViewType | null> {
-	// console.log("try")
     const blogById: BlogsViewType | null =
       await this.blogsQueryRepository.findBlogById(dto.blogId);
     if (!blogById) throw new NotFoundException('Blogs by id not found 404');

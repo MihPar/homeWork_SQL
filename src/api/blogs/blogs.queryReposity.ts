@@ -60,7 +60,6 @@ export class BlogsQueryRepository {
 			WHERE "id" = $1
 	`
   	const blog: BlogClass | null = (await this.dataSource.query(query, [blogId]))[0]
-	// console.log(blog)
   	return blog ? BlogClass.createNewBlogForSA(blog) : null;
     }
 }

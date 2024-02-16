@@ -21,5 +21,5 @@ export interface LikesInfoModel {
 export type likeInfoType = {
 	likesCount: number
     dislikesCount: number
-    myStatus: LikeStatusEnum
+	myStatus: LikeStatusEnum
 }

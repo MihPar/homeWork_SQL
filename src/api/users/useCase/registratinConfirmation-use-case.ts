@@ -20,7 +20,6 @@ export class RegistrationConfirmationUseCase
     const user = await this.usersQueryRepository.findUserByConfirmation(
       command.inputDateRegConfirm.code,
     );
-	// console.log("user: ", user)
 	if(user!.isConfirmed) {
 		throw new BadRequestException([{message: 'Incorrect code!', field: 'code'}])
 	}

@@ -48,14 +48,17 @@ export class dtoType {
 }
 
 export class UserClass {
-  id: string;
-  userName: string;
-  email: string;
-  passwordHash: string;
-  createdAt: string;
-  confirmationCode: string;
-  expirationDate: string;
-  isConfirmed: boolean;
+	constructor(
+		public userName: string,
+		public email: string,
+		public passwordHash: string,
+		public createdAt: string,
+		public confirmationCode: string,
+		public expirationDate: string,
+		public isConfirmed: boolean = false
+	){}
+	id: string
+ 
 
   getViewUser(): UserViewType {
     return {

@@ -36,7 +36,7 @@ export class CheckRefreshTokenForGet implements CanActivate {
         req['user'] = resultAuth;
         return true;
       }
-      return true;
+      return false;
     } else {
       return true;
     }

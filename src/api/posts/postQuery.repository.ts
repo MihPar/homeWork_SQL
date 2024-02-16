@@ -23,15 +23,15 @@ export class PostsQueryRepository {
     const post: PostClass | null = (
       await this.dataSource.query(query1, [postId])
     )[0];
-    const query2 = `
-			select *
-				from public."NewestLikes" 
-					where "postId" = $1
-					order by "addedAt" desc
-					limit 3 offset 0
-		`;
-    const newestLikes = await this.dataSource.query(query2, [postId])[0];
-    return post ? PostClass.getPostsViewModelForSA(post, newestLikes) : null;
+    // const query2 = `
+	// 		select *
+	// 			from public."NewestLikes" 
+	// 				where "postId" = $1
+	// 				order by "addedAt" desc
+	// 				limit 3 offset 0
+	// 	`;
+    // const newestLikes = await this.dataSource.query(query2, [postId])[0];
+    return post ? PostClass.getPostsViewModelForSA(post) : null;
   }
 
   async findAllPosts(
@@ -52,7 +52,6 @@ export class PostsQueryRepository {
       (+pageNumber - 1) * +pageSize,
     ]);
 
-	// console.log(allPosts)
     const count = `
 		select count(*)
 			from "Posts"
@@ -96,14 +95,12 @@ export class PostsQueryRepository {
 			ORDER BY "${sortBy}" ${sortDirection}
 			LIMIT $2 OFFSET $3
 	`;
-	// console.log("qeury1: ", query1)
     const findPostsByBlogId = await this.dataSource.query(query1, [
       blogId,
       +pageSize,
       (+pageNumber - 1) * +pageSize,
     ]);
 
-	// console.log("findPostsByBlogId: ", findPostsByBlogId)
     const count = `
   		SELECT count(*)
   			FROM public."Posts"
@@ -128,7 +125,6 @@ export class PostsQueryRepository {
          PostClass.getPostsViewModelForSA(post)
       ),
     };
-	// console.log("result: ", result)
     return result;
   }
 }

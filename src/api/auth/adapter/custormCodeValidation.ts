@@ -15,9 +15,7 @@ export class CustomCodeValidation implements ValidatorConstraintInterface {
 	protected readonly usersQueryRepository: UsersQueryRepository
 	) {}
   async validate(value: string): Promise<boolean> {
-	console.log("CustomCodeValidation")
     const user: UserClass | null = await this.usersQueryRepository.findUserByConfirmation(value);
-	console.log("user: ", user)
     if (user) {
       throw new BadRequestException([{ message: "code already exists", field: "code" }]);
     } if(user!.isConfirmed) {

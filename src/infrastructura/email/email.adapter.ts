@@ -13,7 +13,6 @@ export class EmailAdapter {
 			pass: "ldhkcdcybmrbxaew",
 		  },
 		});
-		// console.log("recoveryCode: ", code);
 		await transporter.sendMail({
 			from: "Mihail <mpara7274@gmail.com>", // sender address
 			to: email, // list of receivers

@@ -20,26 +20,36 @@ export class CreateNewUserUseCase implements ICommandHandler<CreateNewUserComman
   ) {}
   async execute(command: CreateNewUserCommand): Promise<UserViewType | null> {
     const passwordHash = await this.generateHashAdapter._generateHash(
-      command.body.password,
+      command.body.password
     );
-    const newUser = new UserClass();
-	newUser.userName = command.body.login,
-	newUser.email = command.body.email,
-	newUser.passwordHash = passwordHash,
-	newUser.createdAt = new Date().toISOString()
-	newUser.confirmationCode = uuidv4(),
-	newUser.expirationDate = add(new Date(), { hours: 1, minutes: 10 }).toISOString()
-	newUser.isConfirmed = false
+    const newUser = new UserClass(
+      command.body.login,
+      command.body.email,
+      passwordHash,
+      new Date().toISOString(),
+	  uuidv4(),
+      add(new Date(), { hours: 1, minutes: 10 }).toISOString(),
+    );
+    // newUser.userName = command.body.login,
+    // newUser.email = command.body.email,
+    // newUser.passwordHash = passwordHash,
+    // newUser.createdAt = new Date().toISOString()
+    // newUser.confirmationCode = uuidv4(),
+    newUser.expirationDate = add(new Date(), {
+      hours: 1,
+      minutes: 10,
+    }).toISOString();
+    newUser.isConfirmed = false;
     const userId: string = await this.usersRepository.createUser(newUser);
     try {
       await this.emailManager.sendEamilConfirmationMessage(
         newUser.email,
-        newUser.confirmationCode,
+        newUser.confirmationCode
       );
     } catch (error) {
-      console.log(error, 'error with send mail');
+      console.log(error, "error with send mail");
     }
-	newUser.id = userId
-	return newUser.getViewUser()
+    newUser.id = userId;
+    return newUser.getViewUser();
   }
 }

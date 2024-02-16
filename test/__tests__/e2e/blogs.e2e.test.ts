@@ -259,7 +259,6 @@ describe("/blogs", () => {
               "I am a programmere and work at backend, I like javascript!!!",
             blogId: blogId,
           })
-		//   console.log(createPostByBlogId.body)
           expect(createPostByBlogId.status).toBe(HTTP_STATUS.CREATED_201)
 		  
 
