@@ -46,7 +46,7 @@ export class CommentQueryRepository {
 //     return likeModel;
 //   }
 
-  async findCommentByPostId(
+  async findCommentsByPostId(
     postId: string,
     pageNumber: string,
     pageSize: string,
@@ -54,24 +54,25 @@ export class CommentQueryRepository {
     sortDirection: string,
     userId: string | null,
   ): Promise<PaginationType<CommentViewModel> | null> {
-	const query1 = `
+	const queryFindComment = `
 		select *
 			from public."Comments"
 			where "postId" = $1
 			order by "${sortBy}" ${sortDirection}
 			limit $2 offset $3
 	`
-const commentByPostId = await this.dataSource.query(query1, [
+const commentByPostId = await this.dataSource.query(queryFindComment, [
     postId,
     +pageSize,
     (+pageNumber - 1) * +pageSize,
   ])
-  const count = `
+//   console.log("commentByPostId: ", commentByPostId)
+  const queryCount = `
   	select count(*)
   		from public."Comments"
 		where "postId" = $1
   `
-const totalCount = (await this.dataSource.query(count, [postId]))[0].count
+const totalCount = (await this.dataSource.query(queryCount, [postId]))[0].count
 const pagesCount: number = Math.ceil(+totalCount / +pageSize);
 
 const items: CommentViewModel[] = await Promise.all(

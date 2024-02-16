@@ -85,15 +85,15 @@ export class PostController {
     const isExistPots: PostsViewModel | null = await this.postsQueryRepository.findPostById(dto.postId);
     if (!isExistPots) throw new NotFoundException('Blogs by id not found');
     const commentByPostsId: PaginationType<CommentViewType> | null =
-      await this.commentQueryRepository.findCommentByPostId(
-        isExistPots.id,
+      await this.commentQueryRepository.findCommentsByPostId(
+        dto.postId,
         (query.pageNumber || '1'),
         (query.pageSize || '10'),
         (query.sortBy || 'createdAt'),
         (query.sortDirection || 'desc'),
         userId,
       );
-	  console.log("commentByPostsId: ", commentByPostsId)
+	//   console.log("commentByPostsId: ", commentByPostsId)
     if (!commentByPostsId) throw new NotFoundException('Blogs by id not found 404');
     return commentByPostsId;
   }
