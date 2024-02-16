@@ -59,13 +59,13 @@ export class PostsQueryRepository {
 	`;
     const totalCount = (await this.dataSource.query(count))[0].count;
     const pagesCount: number = Math.ceil(+totalCount / +pageSize);
-    // const query2 = `
-	// 	select *
-	// 		from "NewestLiks"
-	// 		where "postId' = $1
-	// 		order by "addedAt" desc
-	// 		limit 3 offset 0
-	// `;
+    const query2 = `
+		select *
+			from "NewestLiks"
+			where "postId' = $1
+			order by "addedAt" desc
+			limit 3 offset 0
+	`;
     let result: PaginationType<Posts> = {
       pagesCount: pagesCount,
       page: +pageNumber,
@@ -73,9 +73,9 @@ export class PostsQueryRepository {
       totalCount: +totalCount,
       items: await Promise.all(
         allPosts.map(async (post) => {
-        //   const newestLikes = await this.dataSource.query(query2, [post.id]);
+          const newestLikes = await this.dataSource.query(query2, [post.id]);
 
-          return PostClass.getPostsViewModelForSA(post);
+          return PostClass.getPostsViewModelForSA(post, newestLikes);
         })
       ),
     };
