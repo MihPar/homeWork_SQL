@@ -39,7 +39,7 @@ export class LikesRepository {
 	async updateLikeStatusForPost(postId: string, likeStatus: string) {
 		const query1 = `
 			UPDATE public."NewestLikes"
-				SET "myStatus"=${likeStatus}
+				SET "myStatus"=${likeStatus}, "addedAt"=${new Date().toISOString()}
 				WHERE "postId" = $1
 		`
 		const updateLikeStatus = (await this.dataSource.query(query1, [postId]))[0]
@@ -60,7 +60,7 @@ export class LikesRepository {
 	async saveLikeForComment(commentId: string, userId: string, likeStatus: string) {
 		const query = `
 			UPDATE public."NewestLikes"
-				SET "myStatus"=$1
+				SET "myStatus"=$1, "addedAt"=${new Date().toISOString()}
 				WHERE "id" = $2 AND "userId" = $3
 		`
 		const saveResult = await this.dataSource.query(query, [likeStatus, commentId, userId])
@@ -69,7 +69,7 @@ export class LikesRepository {
 	async updateLikeStatusForComment(commentId: string, userId: string, likeStatus: string){
 		const query = `
 			UPDATE public."NewestLikes"
-				SET "myStatus"=$1
+				SET "myStatus"=$1, "addedAt"=${new Date().toISOString()}
 				WHERE "id" = $2 AND "userId" = $3
 		`
 		const saveResult = (await this.dataSource.query(query, [likeStatus, commentId, userId]))[0]
