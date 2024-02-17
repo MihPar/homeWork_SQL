@@ -82,6 +82,28 @@ export class PostClass extends Posts {
 		  };
 	  }
 
+	  static getPostsViewModelSAMyOwnStatus(post: PostClass,
+		newestLikes: NewestLikesType[], myOwnStatus: any): PostsViewModel {
+		return {
+		  id: post.id,
+		  title: post.title,
+		  shortDescription: post.shortDescription,
+		  content: post.content,
+		  blogId: post.blogId,
+		  blogName: post.blogName,
+		  createdAt: post.createdAt,
+		  extendedLikesInfo: {
+			  dislikesCount: post.dislikesCount, 
+			  likesCount: post.likesCount, 
+			  myStatus: myOwnStatus?.myStatus || LikeStatusEnum.None,
+			  newestLikes: newestLikes ? newestLikes.map(l => ({
+				  addedAt: l.addedAt,
+				  login: l.login,
+				  userId: l.userId
+			  })) : []},
+		  };
+	  }
+
 	  static updatePresentPost(post: PostClass, newData: bodyPostsModelClass): PostClass {
 		  post.title = newData.title,
 		  post.shortDescription = newData.shortDescription,

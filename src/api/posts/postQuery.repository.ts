@@ -21,20 +21,31 @@ export class PostsQueryRepository {
 			FROM public."Posts"
 			WHERE "id" = $1
 	  `;
-    const post: PostClass | null = (
-      await this.dataSource.query(queryPost, [postId])
-    )[0];
-    //  console.log("post: ", post)
+    const post: PostClass | null = 
+     ( await this.dataSource.query(queryPost, [postId]))[0]
+    
+    //  console.log("post: ", post, postId)
 
-    // const query2 = `
-	// 		select *
-	// 			from public."NewestLikes" 
-	// 				where "postId" = $1
-	// 				order by "addedAt" desc
-	// 				limit 3 offset 0
-	// 	`;
-    // const newestLikes = await this.dataSource.query(query2, [postId])[0];
-    return post ? PostClass.getPostsViewModelForSA(post) : null;
+    const query2 = `
+			select *
+				from public."NewestLikes" 
+					where "postId" = $1
+					order by "addedAt" desc
+					limit 3 offset 0
+		`;
+    const newestLikes = await this.dataSource.query(query2, [postId])[0];
+
+	const query3 = `
+			select *
+				from public."NewestLikes" 
+					where "postId" = $1 and "userId" = $2
+					order by "addedAt" desc
+					limit 1 offset 0
+		`;
+
+	const myOwnStatus = await this.dataSource.query(query3, [postId, userId])[0];
+
+    return post ? PostClass.getPostsViewModelSAMyOwnStatus(post, newestLikes, myOwnStatus) : null;
   }
 
   async findAllPosts(
