@@ -57,7 +57,9 @@ export class PostController {
     @UserIdDecorator() userId: string | null,
 	) {
 	if(!userId) return null
+	// console.log("try")
     const findPost = await this.postsQueryRepository.findPostById(dto.postId);
+	// console.log("findPost: ", findPost)
     if (!findPost) throw new NotFoundException('404')
 	// const findCommentByPostId: CommentClass | null = await this.commentQueryRepository.getCommentsByPostId(dto.postId)
 	// if(!findCommentByPostId) throw new NotFoundException('404')

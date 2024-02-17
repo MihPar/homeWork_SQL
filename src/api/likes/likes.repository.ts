@@ -15,13 +15,13 @@ export class LikesRepository {
     // 	return deleteAllLikes.deletedCount === 1;
 	// }
 
-	async findLikePostById(postId: string): Promise<Like | null> {
+	async findLikeByPostId(postId: string): Promise<Like | null> {
 		const query = `
 			select *
 				from public."Posts"
 				where "id" = $1
 		`
-		console.log("(this.dataSource.query(query, [postId]))[0]: ", (await this.dataSource.query(query, [postId]))[0])
+		// console.log("(this.dataSource.query(query, [postId]))[0]: ", (await this.dataSource.query(query, [postId]))[0])
 		return (await this.dataSource.query(query, [postId]))[0]
 	}
 
@@ -32,7 +32,7 @@ export class LikesRepository {
 				WHERE "postId" = $1
 		`
 		const saveLikeForPost = (await this.dataSource.query(query1, [postId]))[0]
-		console.log("saveLikeForPost: ", saveLikeForPost.addedAt)
+		// console.log("saveLikeForPost: ", saveLikeForPost.addedAt)
 
 		// const saveResult = await this.likeModel.create({postId, userId, myStatus: likeStatus, login: userLogin, addedAt: new Date().toISOString()})
 		return saveLikeForPost.id

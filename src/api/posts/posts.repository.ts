@@ -81,47 +81,75 @@ export class PostsRepository {
     return true;
   }
 
-  async increase(postId: string, likeStatus: string) {
+  async increase(postId: string, likeStatus: string): Promise<boolean> {
     if (likeStatus === LikeStatusEnum.None) {
-      return;
+		return true
     } else if (likeStatus === "Dislike") {
       let dislike = "Dislike";
-      const query = `
+      const updateLikesCountQuery = `
 			UPDATE public."Posts"
 				SET "likesCount"=${1}
-				WHERE "id" = $1 AND "myStatus" = ${dislike}
+				WHERE "id" = $1
 		`;
-      return (await this.dataSource.query(query, [postId]))[0]
+      const updateLikeCount = (await this.dataSource.query(updateLikesCountQuery, [postId]))[0]
+	  const updateMyStatusQuery = `
+			update public."NewestLikes"
+				set "myStatus" = $1
+		`
+	  const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [dislike]))[0]
+	  if(!updateLikeCount[0] && !updateMyStatus[0]) return false
+	  return  true
     } else {
       let like = "Like";
-      const query = `
+      const updateLikesCountQuery = `
 			UPDATE public."Posts"
 				SET "dislikesCount"=${1}
-				WHERE "id" = $1 AND "myStatus" = ${like}
+				WHERE "id" = $1
 		`;
-      return (await this.dataSource.query(query, [postId]))[0]
+    const updateLikeCount = (await this.dataSource.query(updateLikesCountQuery, [postId]))[0]
+	const updateMyStatusQuery = `
+			update public."NewestLikes"
+				set "myStatus" = $1
+		`
+	const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [like]))[0]
+	if(!updateLikeCount[0] && !updateMyStatus[0]) return false
+	  return  true
     }
   }
 
   async decrease(postId: string, likeStatus: string) {
     if (likeStatus === LikeStatusEnum.None) {
-      return;
+      return true
     } else if (likeStatus === "Dislike") {
       let dislike = "Dislike";
-      const query = `
+      const updateLikesCountQuery = `
 			UPDATE public."Posts"
 				SET "likesCount"=${-1}
-				WHERE "id" = $1 AND "myStatus" = ${dislike}
+				WHERE "id" = $1 
 		`;
-      return (await this.dataSource.query(query, [postId]))[0]
+      const updateLikeCount = (await this.dataSource.query(updateLikesCountQuery, [postId]))[0]
+	  const updateMyStatusQuery =`
+			update public."NewestLikes"
+						set "myStatus" = $1
+		`
+		const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [dislike]))[0]
+	if(!updateLikeCount[0] && !updateMyStatus[0]) return false
+	  return  true
     } else {
       let like = "Like";
-      const query = `
+      const updateLikesCountQuery = `
 			UPDATE public."Posts"
 				SET "dislikesCount"=${-1}
-				WHERE "id" = $1 AND "myStatus" = ${like}
+				WHERE "id" = $1
 		`;
-      return (await this.dataSource.query(query, [postId]))[0]
+	const updateLikeCount = (await this.dataSource.query(updateLikesCountQuery, [postId]))[0]
+	const updateMyStatusQuery =`
+		update public."NewestLikes"
+					set "myStatus" = $1
+	`
+	const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [like]))[0]
+	if(!updateLikeCount[0] && !updateMyStatus[0]) return false
+	  return  true
     }
 
     // return await this.postModel.updateOne(

@@ -24,7 +24,8 @@ export class UpdateLikeStatusForPostUseCase implements ICommandHandler<UpdateLik
 		// if(!command.userId) return null
 		// const userId = command.userId
 		// console.log('Try')
-		const findLike = await this.likesRepository.findLikePostById(command.postId)
+		const findLike = await this.likesRepository.findLikeByPostId(command.postId)
+		// console.log("findLike: ", findLike)
 	if(!findLike) {
 		await this.likesRepository.saveLikeForPost(command.postId, command.status.likeStatus)
 		const resultCheckListOrDislike = await this.postsRepository.increase(command.postId, command.status.likeStatus)
@@ -32,12 +33,14 @@ export class UpdateLikeStatusForPostUseCase implements ICommandHandler<UpdateLik
 	} 
 	
 	if((findLike.myStatus === 'Dislike' || findLike.myStatus === 'Like') && command.status.likeStatus === 'None'){
+		// console.log("try")
 		await this.likesRepository.updateLikeStatusForPost(command.postId, command.status.likeStatus)
 		const resultCheckListOrDislike = await this.postsRepository.decrease(command.postId, findLike.myStatus)
 		return true
 	}
 
 	if(findLike.myStatus === 'None' && (command.status.likeStatus === 'Dislike' || command.status.likeStatus === 'Like')) {
+		// console.log("try")
 		await this.likesRepository.updateLikeStatusForPost(command.postId, command.status.likeStatus)
 		const resultCheckListOrDislike = await this.postsRepository.increase(command.postId, command.status.likeStatus)
 		return true
