@@ -49,7 +49,7 @@ export class PostController {
 
   @Put(':postId/like-status')
   @HttpCode(204)
-  @UseGuards(CheckRefreshTokenForPost)
+  @UseGuards(CheckRefreshTokenForGet)
   async updateLikeStatus(
 	@Param() dto: InputModelClassPostId, 
 	@Body() status: InputModelLikeStatusClass,
