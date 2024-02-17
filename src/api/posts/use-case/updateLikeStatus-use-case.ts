@@ -23,6 +23,7 @@ export class UpdateLikeStatusForPostUseCase implements ICommandHandler<UpdateLik
 		// const userLogin = command.user.userName;
 		// if(!command.userId) return null
 		// const userId = command.userId
+		// console.log('Try')
 		const findLike = await this.likesRepository.findLikePostById(command.postId)
 	if(!findLike) {
 		await this.likesRepository.saveLikeForPost(command.postId, command.status.likeStatus)

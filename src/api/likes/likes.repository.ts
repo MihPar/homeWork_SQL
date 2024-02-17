@@ -21,7 +21,8 @@ export class LikesRepository {
 				from public."Posts"
 				where "id" = $1
 		`
-		return (this.dataSource.query(query, [postId]))[0]
+		console.log("(this.dataSource.query(query, [postId]))[0]: ", (await this.dataSource.query(query, [postId]))[0])
+		return (await this.dataSource.query(query, [postId]))[0]
 	}
 
 	async saveLikeForPost(postId: string, likeStatus: string): Promise<string> {
