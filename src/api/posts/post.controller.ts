@@ -59,8 +59,8 @@ export class PostController {
 	if(!userId) return null
     const findPost = await this.postsQueryRepository.findPostById(dto.postId);
     if (!findPost) throw new NotFoundException('404')
-	const findCommentByPostId: CommentClass | null = await this.commentQueryRepository.getCommentsByPostId(dto.postId)
-	if(!findCommentByPostId) throw new NotFoundException('404')
+	// const findCommentByPostId: CommentClass | null = await this.commentQueryRepository.getCommentsByPostId(dto.postId)
+	// if(!findCommentByPostId) throw new NotFoundException('404')
 	const commnad = new UpdateLikeStatusCommand(status, dto.postId, userId, user)
 	const result = await this.commandBus.execute(commnad)
     if (!result) throw new NotFoundException('404')
