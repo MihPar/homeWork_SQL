@@ -157,10 +157,11 @@ export class PostController {
   ) {
 	// console.log("userId: ", userId)
     const getPostById: PostsViewModel | null =
-      await this.postsQueryRepository.findPostById(dto.postId, userId, user);
+      await this.postsQueryRepository.findPostById(dto.postId, userId);
     if (!getPostById) {
       throw new NotFoundException('Post by id not found');
     }
+	console.log("getPostById: ", getPostById)
     return getPostById;
   }
 

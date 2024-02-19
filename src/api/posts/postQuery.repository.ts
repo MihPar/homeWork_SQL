@@ -15,9 +15,16 @@ export class PostsQueryRepository {
   async findPostById(
     postId: string,
     userId?: string | null,
-	user?: UserClass
   ): Promise<PostsViewModel | null> {
-	const userLogin = user?.userName
+	
+	const getUserNameQuery = `
+		select u."userName"
+			from public."Users" as u
+			where "id"=$1
+	`
+	const getUserName = (await this.dataSource.query(getUserNameQuery, [userId]))[0]
+	const userLogin = getUserName.userName
+
     const queryPost = `
 		SELECT *
 			FROM public."Posts"
@@ -60,7 +67,7 @@ export class PostsQueryRepository {
 		}
 		// console.log("myStatus: ", myStatus)
 		// console.log("userId: ", userId)
-    return post ? PostClass.getPostsViewModelSAMyOwnStatus(post, newestLikes, myStatus) : null;
+    return post ? PostClass.getPostsViewModelSAMyOwnStatus(post, newestLikes, myStatus, userLogin) : null;
   }
 
   async findAllPosts(
