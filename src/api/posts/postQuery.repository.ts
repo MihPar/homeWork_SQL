@@ -33,8 +33,8 @@ export class PostsQueryRepository {
 					order by "addedAt" desc
 					limit 3 offset 0
 		`;
-    const newestLikes = await this.dataSource.query(NewestLikesQuery, [postId, LikeStatusEnum.Like])[0];
-	// console.log("newestLikes: ", newestLikes)
+    const newestLikes = (await this.dataSource.query(NewestLikesQuery, [postId, LikeStatusEnum.Like]))[0];
+	console.log("newestLikes: ", newestLikes)
 
 	const LikesQuery = `
 			select *
@@ -43,7 +43,7 @@ export class PostsQueryRepository {
 		`;
 		let myStatus: LikeStatusEnum = LikeStatusEnum.None;
 		if(userId) {
-			const myOwnStatus = await this.dataSource.query(LikesQuery, [postId, userId])[0];
+			const myOwnStatus = (await this.dataSource.query(LikesQuery, [postId, userId]))[0];
 			myStatus = myOwnStatus ? (myOwnStatus.myStatus as LikeStatusEnum) : LikeStatusEnum.None
 			// console.log("firstMyStatus: ", myStatus)
 		}
