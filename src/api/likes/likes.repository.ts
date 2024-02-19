@@ -29,10 +29,10 @@ export class LikesRepository {
 		const createAddedAt = new Date().toISOString()
 		const query1 = `
 			UPDATE public."Likes"
-				SET "myStatus"=$1, "addedAt"=$2, "userId"=$3, "login"=$4
-				WHERE "postId" = $5
+				SET "myStatus"=$1, "addedAt"=$2, "login"=$3
+				WHERE "postId" = $4 AND "userId"=$5
 		`
-		const saveLikeForPost = (await this.dataSource.query(query1, [likeStatus, createAddedAt, userId, login, postId]))[0]
+		const saveLikeForPost = (await this.dataSource.query(query1, [likeStatus, createAddedAt, login, postId, userId]))[0]
 		// console.log("saveLikeForPost: ", saveLikeForPost)
 
 		// const saveResult = await this.likeModel.create({postId, userId, myStatus: likeStatus, login: userLogin, addedAt: new Date().toISOString()})
