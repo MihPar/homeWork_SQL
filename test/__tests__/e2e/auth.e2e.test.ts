@@ -4,12 +4,10 @@ import { v4 as uuidv4 } from "uuid";
 import { HttpStatus, INestApplication } from "@nestjs/common";
 import { UserViewType } from "../../../src/api/users/user.type";
 import { Test, TestingModule } from "@nestjs/testing";
-import { AppModule } from "../../../src/modules/app.module";
 import { appSettings } from "../../../src/setting";
-import { HTTP_STATUS } from "../../../src/utils/utils";
-import { AuthController } from "../../../src/api/auth/auth.controller";
-import { NewPasswordUseCase } from "../../../src/api/users/use-case/createNewPassword-use-case";
-import { aDescribe } from "../../../src/helpers/helpers";
+import { NewPasswordUseCase } from "../../../src/api/auth/useCase.ts/createNewPassword-use-case";
+import { AppModule } from "../../../src/app.module";
+import { aDescribe } from "../../../src/helpers";
 
 dotenv.config();
 

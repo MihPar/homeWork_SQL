@@ -15,24 +15,25 @@ export class LikesRepository {
     // 	return deleteAllLikes.deletedCount === 1;
 	// }
 
-	async findLikeByPostId(postId: string): Promise<Like | null> {
+	async findLikeByPostId(postId: string, userId: string): Promise<Like | null> {
 		const query = `
 			select *
-				from public."Posts"
-				where "id" = $1
+				from public."Likes"
+				where "postId" = $1 and "userId" = $2
 		`
 		// console.log("(this.dataSource.query(query, [postId]))[0]: ", (await this.dataSource.query(query, [postId]))[0])
-		return (await this.dataSource.query(query, [postId]))[0]
+		return (await this.dataSource.query(query, [postId, userId]))[0]
 	}
 
-	async saveLikeForPost(postId: string, likeStatus: string): Promise<string> {
+	async saveLikeForPost(postId: string, userId: string, likeStatus: string, login: string): Promise<string> {
+		const createAddedAt = new Date().toISOString()
 		const query1 = `
-			UPDATE public."NewestLikes"
-				SET "myStatus"=${likeStatus}, "addedAt"=${new Date().toISOString()}
-				WHERE "postId" = $1
+			UPDATE public."Likes"
+				SET "myStatus"=$1, "addedAt"=$2, "userId"=$3, "login"=$4
+				WHERE "postId" = $5
 		`
-		const saveLikeForPost = (await this.dataSource.query(query1, [postId]))[0]
-		// console.log("saveLikeForPost: ", saveLikeForPost.addedAt)
+		const saveLikeForPost = (await this.dataSource.query(query1, [likeStatus, createAddedAt, userId, login, postId]))[0]
+		// console.log("saveLikeForPost: ", saveLikeForPost)
 
 		// const saveResult = await this.likeModel.create({postId, userId, myStatus: likeStatus, login: userLogin, addedAt: new Date().toISOString()})
 		return saveLikeForPost.id
@@ -40,7 +41,7 @@ export class LikesRepository {
 
 	async updateLikeStatusForPost(postId: string, likeStatus: string) {
 		const query1 = `
-			UPDATE public."NewestLikes"
+			UPDATE public."Likes"
 				SET "myStatus"=${likeStatus}, "addedAt"=${new Date().toISOString()}
 				WHERE "postId" = $1
 		`
@@ -51,7 +52,7 @@ export class LikesRepository {
 	async findLikeByCommentIdByUserId(commentId: string, userId: string) {
 		const query = `
 			SELECT *
-				FROM public."NewestLikes"
+				FROM public."Likes"
 				WHERE "id" = $1 AND "userId" = $2
 		`
 		const findLike = await (this.dataSource.query(query, [commentId, userId]))[0]
@@ -60,33 +61,35 @@ export class LikesRepository {
 	}
 
 	async saveLikeForComment(commentId: string, userId: string, likeStatus: string) {
+		const createAddedAt = new Date().toISOString()
 		const query = `
-			UPDATE public."NewestLikes"
-				SET "myStatus"=$1, "addedAt"=${new Date().toISOString()}
-				WHERE "id" = $2 AND "userId" = $3
+			UPDATE public."Likes"
+				SET "myStatus"=$1, "addedAt"=$2
+				WHERE "id" = $3 AND "userId" = $4
 		`
-		const saveResult = await this.dataSource.query(query, [likeStatus, commentId, userId])
+		const saveResult = await this.dataSource.query(query, [likeStatus, createAddedAt, commentId, userId])
 	}
 
 	async updateLikeStatusForComment(commentId: string, userId: string, likeStatus: string){
+		const createAddedAt = new Date().toISOString()
 		const query = `
-			UPDATE public."NewestLikes"
-				SET "myStatus"=$1, "addedAt"=${new Date().toISOString()}
-				WHERE "id" = $2 AND "userId" = $3
+			UPDATE public."Likes"
+				SET "myStatus"=$1, "addedAt"=$2
+				WHERE "id" = $3 AND "userId" = $4
 		`
-		const saveResult = (await this.dataSource.query(query, [likeStatus, commentId, userId]))[0]
+		const saveResult = (await this.dataSource.query(query, [likeStatus, createAddedAt, commentId, userId]))[0]
 		return saveResult
 	}
 
 	async getNewLike(postId: string, blogId: string) {
-		const query = `
+		const NewestLikesQuery = `
 			select *
-				from public."NewestLike"
+				from public."Likes"	
 				where "postId" = $1
 				order by "addedAt" = desc
 				limit 3 offset 0
 		`
-		const newestLike = (await this.dataSource.query(query, [postId]))[0]
+		const newestLike = (await this.dataSource.query(NewestLikesQuery, [postId]))[0]
 		// const newestLikes = await this.likeModel
 		// 	  .find({ postId }) //
 		// 	  .sort({ addedAt: -1 })

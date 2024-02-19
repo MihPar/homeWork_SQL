@@ -2,12 +2,12 @@ import request from 'supertest';
 import dotenv from 'dotenv';
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppModule } from '../../../../src/modules/app.module';
 import { appSettings } from '../../../../src/setting';
 import { HTTP_STATUS } from '../../../../src/utils/utils';
 import { PostsViewModel } from '../../../../src/api/posts/posts.type';
 import { InputModelClassCreateBody } from '../../../../src/api/users/user.class';
-import { createAddUser, createToken } from '../../../../src/helpers/helpers';
+import { AppModule } from '../../../../src/app.module';
+import { createAddUser, createToken } from '../../../../src/helpers';
 dotenv.config();
 
 

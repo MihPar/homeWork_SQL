@@ -88,12 +88,12 @@ export class PostsRepository {
       let dislike = "Dislike";
       const updateLikesCountQuery = `
 			UPDATE public."Posts"
-				SET "likesCount"=${1}
+				SET "dislikesCount" = "dislikesCount" + 1
 				WHERE "id" = $1
 		`;
       const updateLikeCount = (await this.dataSource.query(updateLikesCountQuery, [postId]))[0]
 	  const updateMyStatusQuery = `
-			update public."NewestLikes"
+			update public."Likes"
 				set "myStatus" = $1
 		`
 	  const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [dislike]))[0]
@@ -103,12 +103,12 @@ export class PostsRepository {
       let like = "Like";
       const updateLikesCountQuery = `
 			UPDATE public."Posts"
-				SET "dislikesCount"=${1}
+				SET "likesCount" = "likesCount" + 1
 				WHERE "id" = $1
 		`;
     const updateLikeCount = (await this.dataSource.query(updateLikesCountQuery, [postId]))[0]
 	const updateMyStatusQuery = `
-			update public."NewestLikes"
+			update public."Likes"
 				set "myStatus" = $1
 		`
 	const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [like]))[0]
@@ -124,12 +124,12 @@ export class PostsRepository {
       let dislike = "Dislike";
       const updateLikesCountQuery = `
 			UPDATE public."Posts"
-				SET "likesCount"=${-1}
+				SET "dislikesCount" = "dislikesCount" - 1
 				WHERE "id" = $1 
 		`;
       const updateLikeCount = (await this.dataSource.query(updateLikesCountQuery, [postId]))[0]
 	  const updateMyStatusQuery =`
-			update public."NewestLikes"
+			update public."Likes"
 						set "myStatus" = $1
 		`
 		const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [dislike]))[0]
@@ -139,13 +139,13 @@ export class PostsRepository {
       let like = "Like";
       const updateLikesCountQuery = `
 			UPDATE public."Posts"
-				SET "dislikesCount"=${-1}
+				SET "likesCount" = "likesCount" - 1
 				WHERE "id" = $1
 		`;
 	const updateLikeCount = (await this.dataSource.query(updateLikesCountQuery, [postId]))[0]
 	const updateMyStatusQuery =`
-		update public."NewestLikes"
-					set "myStatus" = $1
+		update public."Likes"
+				set "myStatus" = $1
 	`
 	const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [like]))[0]
 	if(!updateLikeCount[0] && !updateMyStatus[0]) return false
@@ -181,7 +181,7 @@ export class PostsRepository {
     try {
       const query = `
 			select *
-				from public."NewestLikes"
+				from public."Likes"
 				where "postId" = $1
 		`;
       const findNewestLike = (await this.dataSource.query(query, [id]))[0];
@@ -213,7 +213,7 @@ export class PostsRepository {
 
   async createNewestLikes(newest: NewestLikesClass) {
     const query = `
-		INSERT INTO public."NewestLikes"(
+		INSERT INTO public."Likes"(
 			"addedAt", "userId", "login", "postId", "myStatus")
 			VALUES ($1, $2, $3, $4)
 			returning *

@@ -26,24 +26,24 @@ export class PostsQueryRepository {
     
     //  console.log("post: ", post)
 
-    const query2 = `
+    const NewestLikesQuery = `
 			select *
-				from public."NewestLikes" 
+				from public."Likes" 
 					where "postId" = $1
 					order by "addedAt" desc
 					limit 3 offset 0
 		`;
-    const newestLikes = await this.dataSource.query(query2, [postId])[0];
+    const newestLikes = await this.dataSource.query(NewestLikesQuery, [postId])[0];
 
-	const query3 = `
+	const LikesQuery = `
 			select *
-				from public."NewestLikes" 
+				from public."Likes" 
 					where "postId" = $1 and "userId" = $2
 					order by "addedAt" desc
 					limit 1 offset 0
 		`;
 
-	const myOwnStatus = await this.dataSource.query(query3, [postId, userId])[0];
+	const myOwnStatus = await this.dataSource.query(LikesQuery, [postId, userId])[0];
 
     return post ? PostClass.getPostsViewModelSAMyOwnStatus(post, newestLikes, myOwnStatus) : null;
   }
@@ -55,26 +55,26 @@ export class PostsQueryRepository {
     sortDirection: string,
     userId?: string | null
   ): Promise<PaginationType<Posts>> {
-    const query1 = `
+    const getPostQuery = `
 			select *
 				from "Posts"
 				order by "${sortBy}" ${sortDirection}
 				limit $1 offset $2
 		`;
-    const allPosts = await this.dataSource.query(query1, [
+    const allPosts = await this.dataSource.query(getPostQuery, [
       +pageSize,
       (+pageNumber - 1) * +pageSize,
     ]);
 
-    const count = `
+    const countQuery = `
 		select count(*)
 			from "Posts"
 	`;
-    const totalCount = (await this.dataSource.query(count))[0].count;
+    const totalCount = (await this.dataSource.query(countQuery))[0].count;
     const pagesCount: number = Math.ceil(+totalCount / +pageSize);
-    const query2 = `
+    const NewestLikesQuery = `
 		select *
-			from "NewestLikes"
+			from "Likes"
 			where "postId" = $1
 			order by "addedAt" desc
 			limit 3 offset 0
@@ -86,7 +86,7 @@ export class PostsQueryRepository {
       totalCount: +totalCount,
       items: await Promise.all(
         allPosts.map(async (post) => {
-          const newestLikes = await this.dataSource.query(query2, [post.id]);
+          const newestLikes = await this.dataSource.query(NewestLikesQuery, [post.id]);
           return PostClass.getPostsViewModelForSA(post, newestLikes);
         })
       ),
@@ -101,25 +101,25 @@ export class PostsQueryRepository {
     sortDirection: string,
     blogId: string,
   ): Promise<PaginationType<Posts>> {
-    const query1 = `
+    const GetPostsQuery = `
 		SELECT *
 			FROM public."Posts"
 			WHERE "blogId" = $1
 			ORDER BY "${sortBy}" ${sortDirection}
 			LIMIT $2 OFFSET $3
 	`;
-    const findPostsByBlogId = await this.dataSource.query(query1, [
+    const findPostsByBlogId = await this.dataSource.query(GetPostsQuery, [
       blogId,
       +pageSize,
       (+pageNumber - 1) * +pageSize,
     ]);
 
-    const count = `
+    const countQuery = `
   		SELECT count(*)
   			FROM public."Posts"
   			WHERE "blogId" = $1
   `;
-    const totalCount = (await this.dataSource.query(count, [blogId]))[0].count;
+    const totalCount = (await this.dataSource.query(countQuery, [blogId]))[0].count;
     const pagesCount: number = Math.ceil(+totalCount / +pageSize);
 
     // const query2 = `

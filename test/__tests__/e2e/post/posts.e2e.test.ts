@@ -1,11 +1,11 @@
+import { HTTP_STATUS } from './../../../../src/utils/utils';
 import request from 'supertest';
 import dotenv from 'dotenv';
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppModule } from '../../../../src/modules/app.module';
 import { appSettings } from '../../../../src/setting';
-import { HTTP_STATUS } from '../../../../src/utils/utils';
 import { PostsViewModel } from '../../../../src/api/posts/posts.type';
+import { AppModule } from '../../../../src/app.module';
 dotenv.config();
 
 export function createErrorsMessageTest(fields: string[]) {

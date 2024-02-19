@@ -20,14 +20,14 @@ export class UpdateLikeStatusForPostUseCase implements ICommandHandler<UpdateLik
 		protected readonly postsRepository: PostsRepository
 	) {}
 	async execute(command: UpdateLikeStatusCommand): Promise<boolean | void | null> {
-		// const userLogin = command.user.userName;
-		// if(!command.userId) return null
-		// const userId = command.userId
+		const userLogin = command.user.userName
+		if(!command.userId) return null
+		const userId = command.userId
 		// console.log('Try')
-		const findLike = await this.likesRepository.findLikeByPostId(command.postId)
+		const findLike = await this.likesRepository.findLikeByPostId(command.postId, command.userId!)
 		// console.log("findLike: ", findLike)
 	if(!findLike) {
-		await this.likesRepository.saveLikeForPost(command.postId, command.status.likeStatus)
+		await this.likesRepository.saveLikeForPost(command.postId, userId, command.status.likeStatus, userLogin)
 		const resultCheckListOrDislike = await this.postsRepository.increase(command.postId, command.status.likeStatus)
 		return true
 	} 

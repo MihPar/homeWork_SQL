@@ -1,16 +1,16 @@
-import { stopDb } from "../../db/db";
 import request from "supertest";
-import { initApp } from "../../settings";
-import { HTTP_STATUS } from "../../utils/utils";
 import dotenv from "dotenv";
-import mongoose from "mongoose";
-import { UserViewType } from "../../types/userTypes";
+import { INestApplication } from "@nestjs/common";
+import { Test, TestingModule } from "@nestjs/testing";
+import { AppModule } from "../../../src/app.module";
+import { appSettings } from "../../../src/setting";
+import { HTTP_STATUS } from "../../../src/utils/utils";
+import { UserViewType } from "../../../src/api/users/user.type";
 dotenv.config();
 
 const mongoURI = process.env.MONGO_URL || "mongodb://0.0.0.0:27017";
 let dbName = process.env.mongoDBName || "mongoose-example";
 
-const app = initApp();
 
 export function createErrorsMessageTest(fields: string[]) {
   const errorsMessages: any = [];
@@ -23,29 +23,31 @@ export function createErrorsMessageTest(fields: string[]) {
   return { errorsMessages: errorsMessages };
 }
 
-describe("/users", () => {
+describe("/blogs", () => {
+	let app: INestApplication;
+	let server: any;
   beforeAll(async () => {
-    // await runDb()
-    await mongoose.connect(mongoURI);
+	const moduleFixture: TestingModule = await Test.createTestingModule({
+		imports: [AppModule],
+	  }).compile();
+  
+	  app = moduleFixture.createNestApplication();
+	  appSettings(app);
+  
+	  await app.init();
+	  server = app.getHttpServer();
 
-    const wipeAllRes = await request(app).delete("/testing/all-data").send();
+    const wipeAllRes = await request(server).delete("/testing/all-data").send();
     expect(wipeAllRes.status).toBe(HTTP_STATUS.NO_CONTENT_204);
-
-    const getUsers = await request(app).get("/users").auth("admin", "qwerty");
-    expect(getUsers.status).toBe(HTTP_STATUS.OK_200);
-
-    expect(getUsers.body.items).toHaveLength(0);
   });
 
   afterAll(async () => {
-    //await stop()
-    await stopDb();
+    await app.close();
   });
 
   afterAll((done) => {
     done();
   });
-
   const blogsValidationErrRes = {
     errorsMessages: expect.arrayContaining([
       {

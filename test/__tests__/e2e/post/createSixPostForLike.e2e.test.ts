@@ -1,12 +1,12 @@
 import request from "supertest";
 import dotenv from "dotenv";
-import { stopDb } from "../../../db/db";
-import mongoose from "mongoose";
-import { HTTP_STATUS } from "../../../utils/utils";
-import { initApp } from "../../../settings";
+import { HTTP_STATUS } from "../../../../src/utils/utils";
+import { INestApplication } from "@nestjs/common";
+import { Test, TestingModule } from "@nestjs/testing";
+import { AppModule } from "../../../../src/app.module";
+import { appSettings } from "../../../../src/setting";
 dotenv.config();
 
-const app = initApp();
 
 const mongoURI = process.env.MONGO_URL || "mongodb://0.0.0.0:27017";
 let dbName = process.env.mongoDBName || "mongoose-example";
@@ -23,20 +23,30 @@ export function createErrorsMessageTest(fields: string[]) {
 }
 
 describe("/blogs", () => {
+	let app: INestApplication;
+	let server: any;
   beforeAll(async () => {
-    await mongoose.connect(mongoURI);
-    const wipeAllRes = await request(app).delete("/testing/all-data").send();
+	const moduleFixture: TestingModule = await Test.createTestingModule({
+		imports: [AppModule],
+	  }).compile();
+  
+	  app = moduleFixture.createNestApplication();
+	  appSettings(app);
+  
+	  await app.init();
+	  server = app.getHttpServer();
+
+    const wipeAllRes = await request(server).delete("/testing/all-data").send();
     expect(wipeAllRes.status).toBe(HTTP_STATUS.NO_CONTENT_204);
   });
 
   afterAll(async () => {
-    await stopDb();
+    await app.close();
   });
 
   afterAll((done) => {
     done();
   });
-
   const blogsValidationErrRes = {
     errorsMessages: expect.arrayContaining([
       {
@@ -83,13 +93,18 @@ describe("/blogs", () => {
         password: "qwerty",
         email: "mpara7473@gmail.com",
       };
-      const createUser = await request(app)
+
+	  const createUser = await request(app)
         .post(`/users`)
         .auth("admin", "qwerty")
         .send(user);
 
-      userLogin = createUser.body.login;
+		userLogin = createUser.body.login;
       userId = createUser.body.id;
+
+console.log("createUser: ", createUser.body.id)
+
+
       expect(createUser.body).toStrictEqual({
         id: expect.any(String),
         login: user.login,
