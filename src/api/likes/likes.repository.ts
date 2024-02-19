@@ -18,7 +18,7 @@ export class LikesRepository {
 	async findLikeByPostId(postId: string, userId: string): Promise<Like | null> {
 		const query = `
 			select *
-				from public."Likes"
+				from public."PostLikes"
 				where "postId" = $1 and "userId" = $2
 		`
 		// console.log("(this.dataSource.query(query, [postId]))[0]: ", (await this.dataSource.query(query, [postId]))[0])
@@ -28,8 +28,8 @@ export class LikesRepository {
 	async saveLikeForPost(postId: string, userId: string, likeStatus: string, login: string): Promise<string> {
 		const createAddedAt = new Date().toISOString()
 		const query1 = `
-			UPDATE public."Likes"
-				SET "myStatus"=$1, "addedAt"=$2, "login"=$3
+			UPDATE public."PostLikes"
+				SET "myStatus"=$1, "addedAt"=$2
 				WHERE "postId" = $4 AND "userId"=$5
 		`
 		const saveLikeForPost = (await this.dataSource.query(query1, [likeStatus, createAddedAt, login, postId, userId]))[0]
@@ -41,7 +41,7 @@ export class LikesRepository {
 
 	async updateLikeStatusForPost(postId: string, likeStatus: string) {
 		const query1 = `
-			UPDATE public."Likes"
+			UPDATE public."PostLikes"
 				SET "myStatus"=${likeStatus}, "addedAt"=${new Date().toISOString()}
 				WHERE "postId" = $1
 		`
@@ -52,7 +52,7 @@ export class LikesRepository {
 	async findLikeByCommentIdByUserId(commentId: string, userId: string) {
 		const query = `
 			SELECT *
-				FROM public."Likes"
+				FROM public."PostLikes"
 				WHERE "id" = $1 AND "userId" = $2
 		`
 		const findLike = await (this.dataSource.query(query, [commentId, userId]))[0]
@@ -63,7 +63,7 @@ export class LikesRepository {
 	async saveLikeForComment(commentId: string, userId: string, likeStatus: string) {
 		const createAddedAt = new Date().toISOString()
 		const query = `
-			UPDATE public."Likes"
+			UPDATE public."CommentLikes"
 				SET "myStatus"=$1, "addedAt"=$2
 				WHERE "id" = $3 AND "userId" = $4
 		`
@@ -73,7 +73,7 @@ export class LikesRepository {
 	async updateLikeStatusForComment(commentId: string, userId: string, likeStatus: string){
 		const createAddedAt = new Date().toISOString()
 		const query = `
-			UPDATE public."Likes"
+			UPDATE public."CommentLikes"
 				SET "myStatus"=$1, "addedAt"=$2
 				WHERE "id" = $3 AND "userId" = $4
 		`
@@ -84,7 +84,7 @@ export class LikesRepository {
 	async getNewLike(postId: string, blogId: string) {
 		const NewestLikesQuery = `
 			select *
-				from public."Likes"	
+				from public."PostLikes"	
 				where "postId" = $1
 				order by "addedAt" = desc
 				limit 3 offset 0

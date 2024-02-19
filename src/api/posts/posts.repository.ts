@@ -93,7 +93,7 @@ export class PostsRepository {
 		`;
       const updateLikeCount = (await this.dataSource.query(updateLikesCountQuery, [postId]))[0]
 	  const updateMyStatusQuery = `
-			update public."Likes"
+			update public."PostLikes"
 				set "myStatus" = $1
 				where "postId"=$2 and "userId"=$3
 		`
@@ -109,7 +109,7 @@ export class PostsRepository {
 		`;
     const updateLikeCount = (await this.dataSource.query(updateLikesCountQuery, [postId]))[0]
 	const updateMyStatusQuery = `
-			update public."Likes"
+			update public."PostLikes"
 				set "myStatus" = $1
 				where "postId"=$2 and "userId"=$3
 		`
@@ -131,7 +131,7 @@ export class PostsRepository {
 		`;
       const updateLikeCount = (await this.dataSource.query(updateLikesCountQuery, [postId]))[0]
 	  const updateMyStatusQuery =`
-			update public."Likes"
+			update public."PostLikes"
 					set "myStatus" = $1
 					where "postId"=$2 and "userId"=$3
 		`
@@ -147,7 +147,7 @@ export class PostsRepository {
 		`;
 	const updateLikeCount = (await this.dataSource.query(updateLikesCountQuery, [postId]))[0]
 	const updateMyStatusQuery =`
-		update public."Likes"
+		update public."PostLikes"
 				set "myStatus" = $1
 				where "postId"=$2 and "userId"=$3
 	`
@@ -185,7 +185,7 @@ export class PostsRepository {
     try {
       const query = `
 			select *
-				from public."Likes"
+				from public."PostLikes"
 				where "postId" = $1
 		`;
       const findNewestLike = (await this.dataSource.query(query, [id]))[0];

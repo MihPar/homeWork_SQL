@@ -25,7 +25,7 @@ export class CommentRepository {
 			`
 		const updateLikecount = await this.dataSource.query(updateLikeCountQuery, [commentId])
 		const updateLikeStatus = `
-			update puclic."Likes"
+			update puclic."CommentLikes"
 				set "myStatus"=$1
 				where "commentId"=$2 and "userId"=$3
 		`
@@ -40,7 +40,7 @@ export class CommentRepository {
 			`
 			const updatelikeCount = await this.dataSource.query(updatelikeCountQuery, [commentId])
 			const updateLikeStatus = `
-				update public."Likes"
+				update public."CommentLikes"
 					set "myStatus"=$1
 					where "commentId"=$2 and "userId"=$3
 			`
@@ -61,7 +61,7 @@ export class CommentRepository {
 			`
 			const updateLikeCount = await this.dataSource.query(updateLikeCountQuery, [commentId])
 			const updateLikesQuery = `
-				UPDATE public."Likes"
+				UPDATE public."CommentLikes"
 					SET "myStatus"=$1
 					WHERE "commentId" = $1 AND "userId'=$3
 			`
@@ -76,7 +76,7 @@ export class CommentRepository {
 			`
 			const updateLikeCount = await this.dataSource.query(updateLikeCountQuery, [commentId])
 			const updateLikesQuery = `
-				update public."Likes"
+				update public."CommentLikes"
 					set "myStatus"=$1
 					where "commentId"=$2 and "userId"=$3
 			`

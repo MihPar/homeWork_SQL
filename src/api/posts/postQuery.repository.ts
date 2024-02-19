@@ -23,7 +23,7 @@ export class PostsQueryRepository {
     const post: PostClass | null = (await this.dataSource.query(queryPost, [postId]))[0]
     const NewestLikesQuery = `
 			select *
-				from public."Likes" 
+				from public."PostLikes" 
 					where "postId" = $1 and "myStatus" = $2
 					order by "addedAt" desc
 					limit 3 offset 0
@@ -33,7 +33,7 @@ export class PostsQueryRepository {
 
 	const LikesQuery = `
 			select *
-				from public."Likes" 
+				from public."PostLikes" 
 					where "postId" = $1 and "userId" = $2
 		`;
 		let myStatus: LikeStatusEnum = LikeStatusEnum.None;
@@ -70,7 +70,7 @@ export class PostsQueryRepository {
     const pagesCount: number = Math.ceil(+totalCount / +pageSize);
     const NewestLikesQuery = `
 		select *
-			from "Likes"
+			from "PostLikes"
 			where "postId" = $1
 			order by "addedAt" desc
 			limit 3 offset 0
