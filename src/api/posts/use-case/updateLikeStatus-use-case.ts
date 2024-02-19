@@ -3,6 +3,8 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { LikesRepository } from "../../likes/likes.repository";
 import { PostsRepository } from "../posts.repository";
 import { UserClass } from '../../users/user.class';
+import { PostsQueryRepository } from '../postQuery.repository';
+import { NotFoundException } from '@nestjs/common';
 
 export class UpdateLikeStatusCommand {
 	constructor(
@@ -17,15 +19,20 @@ export class UpdateLikeStatusCommand {
 export class UpdateLikeStatusForPostUseCase implements ICommandHandler<UpdateLikeStatusCommand> {
 	constructor(
 		protected readonly likesRepository: LikesRepository,
-		protected readonly postsRepository: PostsRepository
+		protected readonly postsRepository: PostsRepository,
+		protected readonly postsQueryRepository: PostsQueryRepository
 	) {}
 	async execute(command: UpdateLikeStatusCommand): Promise<boolean | void | null> {
+	if(!command.userId) return null
+
+		const findPost = await this.postsQueryRepository.getPostById(command.postId, command.userId);
+    if (!findPost) throw new NotFoundException('404')
+
 		const userLogin = command.user.userName
 		if(!command.userId) return null
 		const userId = command.userId
-		// console.log('Try')
+		console.log('userId: ', userId)
 		const findLike = await this.likesRepository.findLikeByPostId(command.postId, command.userId!)
-		// console.log("findLike: ", findLike)
 	if(!findLike) {
 		await this.likesRepository.saveLikeForPost(command.postId, userId, command.status.likeStatus, userLogin)
 		const resultCheckListOrDislike = await this.postsRepository.increase(command.postId, command.status.likeStatus, userId)

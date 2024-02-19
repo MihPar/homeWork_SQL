@@ -32,7 +32,6 @@ export class CommentQueryRepository {
     //     userId,
     //   );
 	const viewModelComment = {...findCommentById, commentatorInfo: {userId: findCommentById.userId, userLogin: findCommentById.userLogin}}
-	console.log(commentByPostView(viewModelComment))
       return commentByPostView(viewModelComment);
     } catch (e) {
       return null;

@@ -56,10 +56,6 @@ export class PostController {
 	@UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string | null,
 	) {
-	if(!userId) return null
-    const findPost = await this.postsQueryRepository.findPostById(dto.postId, userId);
-	// console.log("findPost: ", findPost)
-    if (!findPost) throw new NotFoundException('404')
 	const commnad = new UpdateLikeStatusCommand(status, dto.postId, userId, user)
 	const result = await this.commandBus.execute(commnad)
     if (!result) throw new NotFoundException('404')
@@ -157,6 +153,7 @@ export class PostController {
     @Param() dto: InputModelClassPostId, 
 	@UserIdDecorator() userId: string | null,
   ) {
+	// console.log("userId: ", userId)
     const getPostById: PostsViewModel | null =
       await this.postsQueryRepository.findPostById(dto.postId, userId);
     if (!getPostById) {

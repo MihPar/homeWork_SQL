@@ -21,15 +21,26 @@ export class PostsQueryRepository {
 			WHERE "id" = $1
 	  `;
     const post: PostClass | null = (await this.dataSource.query(queryPost, [postId]))[0]
-    const NewestLikesQuery = `
+	// console.log("post: ", post)
+
+    const newestLikesQuery = `
 			select *
 				from public."PostLikes" 
-					where "postId" = $1 and "myStatus" = $2
+					where "postId" = $1 and "myStatus" = 'Like'
 					order by "addedAt" desc
-					limit 3 offset 0
+					limit 3 
 		`;
-    const newestLikes = (await this.dataSource.query(NewestLikesQuery, [postId, LikeStatusEnum.Like]))[0];
-	// console.log("newestLikes: ", newestLikes)
+    const newestLikes = await this.dataSource.query(newestLikesQuery, [postId])
+	console.log("newestLikes: ", newestLikes)
+
+	// const likeCount = (await this.dataSource.query(
+    // `
+	// 	select count(*) 
+	// 		from public."PostLikes" 
+	// 		where "postId" = $1 and "myStatus" = 'Like'
+	// 		`,
+	// 		[postId]
+  	// ))[0].count
 
 	const LikesQuery = `
 			select *
@@ -41,6 +52,8 @@ export class PostsQueryRepository {
 			const myOwnStatus = (await this.dataSource.query(LikesQuery, [postId, userId]))[0];
 			myStatus = myOwnStatus ? (myOwnStatus.myStatus as LikeStatusEnum) : LikeStatusEnum.None
 		}
+		// console.log(postId, "userId: ", userId)
+		// console.log("userId: ", userId)
     return post ? PostClass.getPostsViewModelSAMyOwnStatus(post, newestLikes, myStatus) : null;
   }
 
@@ -135,5 +148,19 @@ export class PostsQueryRepository {
       ),
     };
     return result;
+  }
+
+  async getPostById(
+    postId: string,
+    userId?: string | null
+  ): Promise<PostsViewModel | boolean> {
+    const queryPost = `
+		SELECT *
+			FROM public."Posts"
+			WHERE "id" = $1
+	  `;
+    const post: PostClass | null = (await this.dataSource.query(queryPost, [postId]))[0]
+	if(!post) return false
+	return true
   }
 }

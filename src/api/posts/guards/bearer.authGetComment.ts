@@ -30,12 +30,15 @@ export class CheckRefreshTokenForGet implements CanActivate {
 			payload = null
 		}
 	}
+	// console.log("payload:", payload)
+
     if (payload) {
       const resultAuth = await this.usersQueryRepository.findUserById(payload.userId);
       if (resultAuth) {
         req['user'] = resultAuth;
         return true;
       }
+	  
       return false;
     } else {
       return true;

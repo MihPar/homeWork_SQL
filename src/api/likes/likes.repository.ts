@@ -22,7 +22,9 @@ export class LikesRepository {
 				where "postId" = $1 and "userId" = $2
 		`
 		// console.log("(this.dataSource.query(query, [postId]))[0]: ", (await this.dataSource.query(query, [postId]))[0])
-		return (await this.dataSource.query(query, [postId, userId]))[0]
+		const findLike = (await this.dataSource.query(query, [postId, userId]))[0]
+		if(!findLike) return null
+		return findLike
 	}
 
 	async saveLikeForPost(postId: string, userId: string, likeStatus: string, login: string): Promise<string> {
@@ -33,9 +35,6 @@ export class LikesRepository {
 				WHERE "postId" = $3 AND "userId"=$4
 		`
 		const saveLikeForPost = (await this.dataSource.query(saveLikeForPostQuery, [likeStatus, createAddedAt, postId, userId]))[0]
-		// console.log("saveLikeForPost: ", saveLikeForPost)
-
-		// const saveResult = await this.likeModel.create({postId, userId, myStatus: likeStatus, login: userLogin, addedAt: new Date().toISOString()})
 		return saveLikeForPost.id
 	}
 
@@ -65,7 +64,7 @@ export class LikesRepository {
 		const query = `
 			UPDATE public."CommentLikes"
 				SET "myStatus"=$1, "addedAt"=$2
-				WHERE "id" = $3 AND "userId" = $4
+				WHERE "commentId" = $3 AND "userId" = $4
 		`
 		const saveResult = await this.dataSource.query(query, [likeStatus, createAddedAt, commentId, userId])
 	}

@@ -25,7 +25,7 @@ export class CommentRepository {
 			`
 		const updateLikecount = await this.dataSource.query(updateLikeCountQuery, [commentId])
 		const updateLikeStatus = `
-			update puclic."CommentLikes"
+			update public."CommentLikes"
 				set "myStatus"=$1
 				where "commentId"=$2 and "userId"=$3
 		`
