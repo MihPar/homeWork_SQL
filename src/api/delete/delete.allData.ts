@@ -7,6 +7,8 @@ import { DeleteAllBlogsCommnad } from "../blogs/use-case/deletAllBlogs-use-case"
 import { DeleteAllPostsComand } from "../posts/use-case/deleteAllPosts-use-case";
 import { DeleteAllBlogsForSACommnad } from "../blogsForSA/use-case/deletAllBlogs-use-case";
 import { DeleteAllCommentsCommand } from "../comment/use-case/deleteAllComments-use-case";
+import { DeleteAllPostLikesCommand } from "../likes/use-case/deleteAllPostLikes-use-case";
+import { DeleteAllCommentLikesCommand } from "../likes/use-case/deleteAllCommentLikes-use-case copy";
 
 // @SkipThrottle()
 @Controller('testing/all-data')
@@ -17,6 +19,8 @@ export class DeleteAllDataController {
 	@Delete()
 	@HttpCode(204)
 	async deleteAllData() {
+		await this.commandBus.execute(new DeleteAllPostLikesCommand())
+		await this.commandBus.execute(new DeleteAllCommentLikesCommand())
 		await this.commandBus.execute(new DeleteAllCommentsCommand())
 		await this.commandBus.execute(new DeleteAllPostsComand())
 		await this.commandBus.execute(new DeleteAllBlogsCommnad())

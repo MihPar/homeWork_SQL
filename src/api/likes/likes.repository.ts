@@ -10,10 +10,19 @@ export class LikesRepository {
 		@InjectDataSource() protected dataSource: DataSource
 	) {}
 
-	// async deleteLikes() {
-	// 	const deleteAllLikes = await this.likeModel.deleteMany({});
-    // 	return deleteAllLikes.deletedCount === 1;
-	// }
+	async deletePostLikes() {
+		const deleteAllLikes = await this.dataSource.query(`
+			DELETE FROM public."PostLikes"
+		`);
+    	return true
+	}
+
+	async deleteCommentLikes() {
+		const deleteAllLikes = await this.dataSource.query(`
+			DELETE FROM public."CommentLikes"
+		`);
+    	return true
+	}
 
 	async findLikeByPostId(postId: string, userId: string): Promise<Like | null> {
 		const query = `
