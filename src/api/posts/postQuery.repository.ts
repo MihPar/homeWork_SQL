@@ -48,7 +48,7 @@ export class PostsQueryRepository {
 					where "postId" = $1 and "userId" = $2
 		`;
 		let myStatus: LikeStatusEnum = LikeStatusEnum.None;
-		console.log("userId: ", userId)
+		// console.log("userId: ", userId)
 		if(userId) {
 			const userLike = (await this.dataSource.query(LikesQuery, [postId, userId]))[0];
 			
