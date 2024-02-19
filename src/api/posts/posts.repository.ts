@@ -98,7 +98,7 @@ export class PostsRepository {
 	// 			where "postId"=$2 and "userId"=$3
 	// 	`
 	//   const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [dislike, postId, userId]))[0]
-	  if(!updateLikeCount[0]) return false
+	  if(!updateLikeCount) return false
 	  return  true
     } else {
       let like = "Like";
@@ -114,7 +114,7 @@ export class PostsRepository {
 	// 			where "postId"=$2 and "userId"=$3
 	// 	`
 	// const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [like, postId, userId]))[0]
-	if(!updateLikeCount[0]) return false
+	if(!updateLikeCount) return false
 	  return  true
     }
   }
@@ -136,7 +136,7 @@ export class PostsRepository {
 	// 				where "postId"=$2 and "userId"=$3
 	// 	`
 	// 	const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [dislike, postId, userId]))[0]
-	if(!updateLikeCount[0]) return false
+	if(!updateLikeCount) return false
 	  return  true
     } else {
       let like = "Like";
@@ -152,7 +152,7 @@ export class PostsRepository {
 	// 			where "postId"=$2 and "userId"=$3
 	// `
 	// const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [like, postId, userId]))[0]
-	if(!updateLikeCount[0]) return false
+	if(!updateLikeCount) return false
 	  return  true
     }
 

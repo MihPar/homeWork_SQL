@@ -77,6 +77,8 @@ import { DeleteAllCommentsUseCase } from './api/comment/use-case/deleteAllCommen
 import { CreateNewCommentByPostIdUseCase } from './api/comment/use-case/createNewCommentByPotsId-use-case';
 import { UpdateLikestatusForCommentUseCase } from './api/comment/use-case/updateLikeStatus-use-case';
 import { UpdateLikeStatusForPostUseCase } from './api/posts/use-case/updateLikeStatus-use-case';
+import { DeleteAllPostLikesUseCase } from './api/likes/use-case/deleteAllPostLikes-use-case';
+import { DeleteAllCommentLikesUseCase } from './api/likes/use-case/deleteAllCommentLikes-use-case copy';
 
 const useCases = [
   RecoveryPasswordUseCase,
@@ -112,7 +114,9 @@ const useCases = [
   DeleteAllCommentsUseCase,
   CreateNewCommentByPostIdUseCase,
   UpdateLikestatusForCommentUseCase,
-  UpdateLikeStatusForPostUseCase
+  UpdateLikeStatusForPostUseCase,
+  DeleteAllPostLikesUseCase,
+  DeleteAllCommentLikesUseCase
 ];
 
 const gards = [

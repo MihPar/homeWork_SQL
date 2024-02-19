@@ -117,7 +117,6 @@ export class CommentRepository {
 				INSERT INTO public."Comments"(
 					"content", "userId", "userLogin", "createdAt", "postId", "likesCount", "dislikesCount")
 						VALUES ($1, $2, $3, $4, $5, $6, $7)
-						returning *
 			`;
       const createComments = (
         await this.dataSource.query(query1, [
@@ -130,15 +129,15 @@ export class CommentRepository {
 		  newComment.dislikesCount,
         ])
       )[0];
-	//   console.log('createComments: ', createComments)
-	//   const query2 = `
-	// 	select *
-	// 		from "Comments"
-	// 		where "id" = $1
-	//   `
-	//   const getComment = (await this.dataSource.query(query2, [newComment.id]))[0]
-      if (!createComments) return null;
-			return {...createComments, commentatorInfo: {userId: createComments.userId, userLogin: createComments.userLogin}} 
+	  console.log('createComments: ', createComments)
+	  const query2 = `
+		select *
+			from "Comments"
+			where "id" = $1
+	  `
+	  const getComment = (await this.dataSource.query(query2, [newComment.id]))[0]
+      if (!getComment) return null;
+			return {...getComment, commentatorInfo: {userId: getComment.userId, userLogin: getComment.userLogin}} 
 		} catch (error) {
 			console.log(error, 'error in create post');
 			return null;

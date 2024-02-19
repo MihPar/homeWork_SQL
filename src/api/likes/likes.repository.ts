@@ -48,12 +48,13 @@ export class LikesRepository {
 	}
 
 	async updateLikeStatusForPost(postId: string, likeStatus: string) {
+		const addedAt = new Date().toISOString()
 		const query1 = `
 			UPDATE public."PostLikes"
-				SET "myStatus"=${likeStatus}, "addedAt"=${new Date().toISOString()}
-				WHERE "postId" = $1
+				SET "myStatus"=$1, "addedAt"=$2
+				WHERE "postId" = $3
 		`
-		const updateLikeStatus = (await this.dataSource.query(query1, [postId]))[0]
+		const updateLikeStatus = (await this.dataSource.query(query1, [likeStatus, addedAt, postId]))[0]
 		return updateLikeStatus
 	}
 
