@@ -45,9 +45,11 @@ export class PostsQueryRepository {
 		if(userId) {
 			const myOwnStatus = await this.dataSource.query(LikesQuery, [postId, userId])[0];
 			myStatus = myOwnStatus ? (myOwnStatus.myStatus as LikeStatusEnum) : LikeStatusEnum.None
+			// console.log("firstMyStatus: ", myStatus)
 		}
  
-	console.log("myOwnStatus:", myStatus)
+	// console.log("myOwnStatus:", myStatus)
+	// console.log("userId:", userId)
 
     return post ? PostClass.getPostsViewModelSAMyOwnStatus(post, newestLikes, myStatus) : null;
   }
