@@ -83,7 +83,7 @@ export class PostClass extends Posts {
 	  }
 
 	  static getPostsViewModelSAMyOwnStatus(post: PostClass,
-		newestLikes: NewestLikesType[], myOwnStatus: LikeStatusEnum, userLogin: string): PostsViewModel {
+		newestLikes: NewestLikesType[], myOwnStatus: LikeStatusEnum): PostsViewModel {
 		return {
 		  id: post.id,
 		  title: post.title,
@@ -98,7 +98,7 @@ export class PostClass extends Posts {
 			  myStatus: myOwnStatus || LikeStatusEnum.None,
 			  newestLikes: newestLikes ? newestLikes.map(l => ({
 				  addedAt: l.addedAt,
-				  login: userLogin,
+				  login: l.login,
 				  userId: l.userId
 			  })) : []},
 		  };

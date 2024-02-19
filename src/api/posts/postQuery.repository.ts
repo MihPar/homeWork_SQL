@@ -60,7 +60,7 @@ export class PostsQueryRepository {
 		}
 		// console.log("myStatus: ", myStatus)
 		// console.log("userId: ", userId)
-    return post ? PostClass.getPostsViewModelSAMyOwnStatus(post, newestLikes, myStatus, userLogin!) : null;
+    return post ? PostClass.getPostsViewModelSAMyOwnStatus(post, newestLikes, myStatus) : null;
   }
 
   async findAllPosts(
