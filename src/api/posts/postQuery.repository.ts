@@ -29,7 +29,7 @@ export class PostsQueryRepository {
 					limit 3 offset 0
 		`;
     const newestLikes = (await this.dataSource.query(NewestLikesQuery, [postId, LikeStatusEnum.Like]))[0];
-	console.log("newestLikes: ", newestLikes)
+	// console.log("newestLikes: ", newestLikes)
 
 	const LikesQuery = `
 			select *

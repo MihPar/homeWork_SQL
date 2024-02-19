@@ -58,6 +58,7 @@ export class PostController {
 	) {
 	if(!userId) return null
     const findPost = await this.postsQueryRepository.findPostById(dto.postId, userId);
+	// console.log("findPost: ", findPost)
     if (!findPost) throw new NotFoundException('404')
 	const commnad = new UpdateLikeStatusCommand(status, dto.postId, userId, user)
 	const result = await this.commandBus.execute(commnad)
