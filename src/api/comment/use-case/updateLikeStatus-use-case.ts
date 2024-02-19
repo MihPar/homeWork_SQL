@@ -3,6 +3,8 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { CommentRepository } from "../comment.repository";
 import { LikesRepository } from "../../likes/likes.repository";
 import { CommentClass } from "../comment.class";
+import { CommentQueryRepository } from "../comment.queryRepository";
+import { NotFoundException } from "@nestjs/common";
 
 export class UpdateLikestatusCommand {
 	constructor(
@@ -16,11 +18,17 @@ export class UpdateLikestatusCommand {
 export class UpdateLikestatusForCommentUseCase implements ICommandHandler<UpdateLikestatusCommand> {
 	constructor(
 		protected readonly likesRepository: LikesRepository,
-		protected readonly commentRepositoriy: CommentRepository
+		protected readonly commentRepositoriy: CommentRepository,
+		protected readonly commentQueryRepository: CommentQueryRepository
 
 	) {}
 	async execute(command: UpdateLikestatusCommand): Promise<boolean> {
-		const findLike = await this.likesRepository.findLikeByCommentIdByUserId(command.id.commentId, command.userId)
+		// console.log("userId: ", command.userId)
+		const findCommentById: CommentClass | null =
+      await this.commentQueryRepository.findCommentByCommentId(command.id.commentId, command.userId);
+	  console.log("findCommentById: ", findCommentById)
+    if (!findCommentById) throw new NotFoundException('404');
+		const findLike = await this.likesRepository.findLikeByCommentIdBy(command.id.commentId, command.userId)
 	if(!findLike) {
 		await this.likesRepository.saveLikeForComment(command.id.commentId, command.userId, command.status.likeStatus)
 		const resultCheckLikeOrDislike = await this.commentRepositoriy.increase(command.id.commentId, command.status.likeStatus, command.userId)

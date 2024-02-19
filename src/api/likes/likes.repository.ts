@@ -58,10 +58,10 @@ export class LikesRepository {
 		return updateLikeStatus
 	}
 
-	async findLikeByCommentIdByUserId(commentId: string, userId: string) {
+	async findLikeByCommentIdBy(commentId: string, userId: string) {
 		const query = `
 			SELECT *
-				FROM public."PostLikes"
+				FROM public."CommentLikes"
 				WHERE "id" = $1 AND "userId" = $2
 		`
 		const findLike = await (this.dataSource.query(query, [commentId, userId]))[0]
@@ -72,11 +72,11 @@ export class LikesRepository {
 	async saveLikeForComment(commentId: string, userId: string, likeStatus: string) {
 		const createAddedAt = new Date().toISOString()
 		const query = `
-			UPDATE public."CommentLikes"
-				SET "myStatus"=$1, "addedAt"=$2
-				WHERE "commentId" = $3 AND "userId" = $4
+			INSERT INTO public."CommentLikes"("myStatus", "addedAt", "commentId", "userId")
+				VALUES ($1, $2, $3, $4)
+				RETURNING *
 		`
-		const saveResult = await this.dataSource.query(query, [likeStatus, createAddedAt, commentId, userId])
+		const saveResult = (await this.dataSource.query(query, [likeStatus, createAddedAt, commentId, userId]))[0]
 	}
 
 	async updateLikeStatusForComment(commentId: string, userId: string, likeStatus: string){

@@ -33,9 +33,6 @@ export class CommentsController {
     @UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string,
   ) {
-    const findCommentById: CommentClass | null =
-      await this.commentQueryRepository.findCommentByCommentId(id.commentId);
-    if (!findCommentById) throw new NotFoundException('404');
     // const findLike = await this.commentQueryRepository.findLikeCommentByUser(
     //   id.commentId,
     //   userId,
@@ -46,7 +43,8 @@ export class CommentsController {
     // );
 
 	const command = new UpdateLikestatusCommand(status, id, userId)
-	await this.commandBus.execute(command)
+	const updateLikeStatus = await this.commandBus.execute(command)
+	if (!updateLikeStatus) throw new NotFoundException('404')
 	return 
   }
 
@@ -97,6 +95,7 @@ export class CommentsController {
       await this.commentQueryRepository.findCommentById(dto.id, userId);
 	//   console.log("getCommentById: ", getCommentById)
     if (!getCommentById) throw new NotFoundException('Blogs by id not found');
+	// console.log("getCommentById: ", getCommentById)
     return getCommentById;
   }
 }

@@ -6,6 +6,7 @@ import { InjectDataSource } from "@nestjs/typeorm";
 import { PostClass, Posts } from "./post.class";
 import { LikeStatusEnum } from "../likes/likes.emun";
 import { query } from "express";
+import { UserClass } from "../users/user.class";
 
 @Injectable()
 export class PostsQueryRepository {
@@ -13,8 +14,10 @@ export class PostsQueryRepository {
 
   async findPostById(
     postId: string,
-    userId?: string | null
+    userId?: string | null,
+	user?: UserClass
   ): Promise<PostsViewModel | null> {
+	const userLogin = user?.userName
     const queryPost = `
 		SELECT *
 			FROM public."Posts"
@@ -57,7 +60,7 @@ export class PostsQueryRepository {
 		}
 		// console.log("myStatus: ", myStatus)
 		// console.log("userId: ", userId)
-    return post ? PostClass.getPostsViewModelSAMyOwnStatus(post, newestLikes, myStatus) : null;
+    return post ? PostClass.getPostsViewModelSAMyOwnStatus(post, newestLikes, myStatus, userLogin!) : null;
   }
 
   async findAllPosts(

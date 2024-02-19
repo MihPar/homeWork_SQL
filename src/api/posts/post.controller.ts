@@ -59,7 +59,7 @@ export class PostController {
 	const commnad = new UpdateLikeStatusCommand(status, dto.postId, userId, user)
 	const result = await this.commandBus.execute(commnad)
     if (!result) throw new NotFoundException('404')
-	return result
+	return
   }
 
   @Get(':postId/comments')
@@ -153,10 +153,11 @@ export class PostController {
   async getPostById(
     @Param() dto: InputModelClassPostId, 
 	@UserIdDecorator() userId: string | null,
+	@UserDecorator() user: UserClass
   ) {
 	// console.log("userId: ", userId)
     const getPostById: PostsViewModel | null =
-      await this.postsQueryRepository.findPostById(dto.postId, userId);
+      await this.postsQueryRepository.findPostById(dto.postId, userId, user);
     if (!getPostById) {
       throw new NotFoundException('Post by id not found');
     }
