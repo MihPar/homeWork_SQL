@@ -31,11 +31,11 @@ export class CreateNewCommentByPostIdUseCase
       command.postId,
       { userId, userLogin }
     );
-    const createNewCommentawait: CommentClass | null =
+    const createNewComment: CommentClass | null =
       await this.commentRepository.createNewCommentPostId(newComment);
-	//   console.log("createNewCommentawait: ", createNewCommentawait)
-    if (!createNewCommentawait) throw new NotFoundException("404");
+	//   console.log("createNewComment: ", createNewComment)
+    if (!createNewComment) throw new NotFoundException("404");
 	// console.log(CommentClass.getNewComments(createNewCommentawait, LikeStatusEnum.None))
-    return CommentClass.getNewComments(createNewCommentawait, LikeStatusEnum.None);
+    return CommentClass.getNewComments(createNewComment, LikeStatusEnum.None);
   }
 }

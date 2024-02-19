@@ -55,7 +55,7 @@ export class PostsQueryRepository {
 // console.log("userLike: ", userLike)
 			myStatus = userLike ? (userLike.myStatus as LikeStatusEnum) : LikeStatusEnum.None
 		}
-		// console.log(postId, "userId: ", userId)
+		// console.log("myStatus: ", myStatus)
 		// console.log("userId: ", userId)
     return post ? PostClass.getPostsViewModelSAMyOwnStatus(post, newestLikes, myStatus) : null;
   }
