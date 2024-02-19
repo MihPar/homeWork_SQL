@@ -29,23 +29,27 @@ export class PostsQueryRepository {
     const NewestLikesQuery = `
 			select *
 				from public."Likes" 
-					where "postId" = $1
+					where "postId" = $1 and "myStatus" = $2
 					order by "addedAt" desc
 					limit 3 offset 0
 		`;
-    const newestLikes = await this.dataSource.query(NewestLikesQuery, [postId])[0];
+    const newestLikes = await this.dataSource.query(NewestLikesQuery, [postId, LikeStatusEnum.Like])[0];
+	// console.log("newestLikes: ", newestLikes)
 
 	const LikesQuery = `
 			select *
 				from public."Likes" 
 					where "postId" = $1 and "userId" = $2
-					order by "addedAt" desc
-					limit 1 offset 0
 		`;
+		let myStatus: LikeStatusEnum = LikeStatusEnum.None;
+		if(userId) {
+			const myOwnStatus = await this.dataSource.query(LikesQuery, [postId, userId])[0];
+			myStatus = myOwnStatus ? (myOwnStatus.myStatus as LikeStatusEnum) : LikeStatusEnum.None
+		}
+ 
+	console.log("myOwnStatus:", myStatus)
 
-	const myOwnStatus = await this.dataSource.query(LikesQuery, [postId, userId])[0];
-
-    return post ? PostClass.getPostsViewModelSAMyOwnStatus(post, newestLikes, myOwnStatus) : null;
+    return post ? PostClass.getPostsViewModelSAMyOwnStatus(post, newestLikes, myStatus) : null;
   }
 
   async findAllPosts(

@@ -1,8 +1,6 @@
 import { InjectDataSource } from "@nestjs/typeorm";
 import { DataSource } from "typeorm";
 import { CommentClass } from "./comment.class";
-import { zip } from "rxjs";
-import { LikeStatusEnum } from "../likes/likes.emun";
 
 export class CommentRepository {
 	constructor(
