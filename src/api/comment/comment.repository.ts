@@ -21,17 +21,17 @@ export class CommentRepository {
 		} else if(likeStatus === "Dislike") {
 			const query = `
 				UPDATE public."Comments"
-					SET "dislikesCount"=$1
-					WHERE "id" = $2
+					SET "dislikesCount"="dislikesCount" + 1
+					WHERE "id" = $1
 			`
-			return await this.dataSource.query(query, [1, commentId])
+			return await this.dataSource.query(query, [commentId])
 		} else if(likeStatus === "Like") {
 			const query = `
 				UPDATE public."Comments"
-					SET "likesCount"=$1
-					WHERE "id" = $2
+					SET "likesCount"="likesCount" + 1
+					WHERE "id" = $1
 			`
-			return await this.dataSource.query(query, [1, commentId])
+			return await this.dataSource.query(query, [commentId])
 		} 
 	}
 
@@ -41,17 +41,17 @@ export class CommentRepository {
 		} else if(likeStatus === 'Dislike') {
 			const query = `
 				UPDATE public."Comments"
-					SET "dislikesCount"=$1
-					WHERE "id" = $2
+					SET "dislikesCount"="dislikesCount" - 1
+					WHERE "id" = $1
 			`
-			return await this.dataSource.query(query, [-1, commentId])
+			return await this.dataSource.query(query, [commentId])
 		} else if(likeStatus === "Like") {
 			const query = `
 				UPDATE public."Comments"
-					SET "likesCount"=$1
-					WHERE "id" = $2
+					SET "likesCount"="likesCount" - 1
+					WHERE "id" = $1
 			`
-			return await this.dataSource.query(query, [1, commentId])
+			return await this.dataSource.query(query, [commentId])
 		} 
 	}
 
