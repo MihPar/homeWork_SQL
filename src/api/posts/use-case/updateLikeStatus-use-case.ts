@@ -28,34 +28,34 @@ export class UpdateLikeStatusForPostUseCase implements ICommandHandler<UpdateLik
 		// console.log("findLike: ", findLike)
 	if(!findLike) {
 		await this.likesRepository.saveLikeForPost(command.postId, userId, command.status.likeStatus, userLogin)
-		const resultCheckListOrDislike = await this.postsRepository.increase(command.postId, command.status.likeStatus)
+		const resultCheckListOrDislike = await this.postsRepository.increase(command.postId, command.status.likeStatus, userId)
 		return true
 	} 
 	
 	if((findLike.myStatus === 'Dislike' || findLike.myStatus === 'Like') && command.status.likeStatus === 'None'){
 		// console.log("try")
 		await this.likesRepository.updateLikeStatusForPost(command.postId, command.status.likeStatus)
-		const resultCheckListOrDislike = await this.postsRepository.decrease(command.postId, findLike.myStatus)
+		const resultCheckListOrDislike = await this.postsRepository.decrease(command.postId, findLike.myStatus, userId)
 		return true
 	}
 
 	if(findLike.myStatus === 'None' && (command.status.likeStatus === 'Dislike' || command.status.likeStatus === 'Like')) {
 		// console.log("try")
 		await this.likesRepository.updateLikeStatusForPost(command.postId, command.status.likeStatus)
-		const resultCheckListOrDislike = await this.postsRepository.increase(command.postId, command.status.likeStatus)
+		const resultCheckListOrDislike = await this.postsRepository.increase(command.postId, command.status.likeStatus, userId)
 		return true
 	}
 
 	if(findLike.myStatus === 'Dislike' && command.status.likeStatus === 'Like') {
 		await this.likesRepository.updateLikeStatusForPost(command.postId, command.status.likeStatus)
-		const changeDislikeOnLike = await this.postsRepository.increase(command.postId, command.status.likeStatus)
-		const changeLikeOnDislike = await this.postsRepository.decrease(command.postId, findLike.myStatus)
+		const changeDislikeOnLike = await this.postsRepository.increase(command.postId, command.status.likeStatus, userId)
+		const changeLikeOnDislike = await this.postsRepository.decrease(command.postId, findLike.myStatus, userId)
 		return true
 	}
 	if(findLike.myStatus === 'Like' && command.status.likeStatus === 'Dislike') {
 		await this.likesRepository.updateLikeStatusForPost(command.postId, command.status.likeStatus)
-		const changeLikeOnDislike = await this.postsRepository.decrease(command.postId, findLike.myStatus)
-		const changeDislikeOnLike = await this.postsRepository.increase(command.postId, command.status.likeStatus)
+		const changeLikeOnDislike = await this.postsRepository.decrease(command.postId, findLike.myStatus, userId)
+		const changeDislikeOnLike = await this.postsRepository.increase(command.postId, command.status.likeStatus, userId)
 		return true
 	}
 	return true

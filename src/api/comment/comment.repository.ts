@@ -13,44 +13,78 @@ export class CommentRepository {
 	}
 
 
-	async increase(commentId: string, likeStatus: string){
+	async increase(commentId: string, likeStatus: string, userId: string){
 		if(likeStatus !== 'Dislike' && likeStatus !== 'Like') {
 			return
 		} else if(likeStatus === "Dislike") {
-			const query = `
+			const dislike = "Dislike"
+			const updateLikeCountQuery = `
 				UPDATE public."Comments"
 					SET "dislikesCount"="dislikesCount" + 1
 					WHERE "id" = $1
 			`
-			return await this.dataSource.query(query, [commentId])
+		const updateLikecount = await this.dataSource.query(updateLikeCountQuery, [commentId])
+		const updateLikeStatus = `
+			update puclic."Likes"
+				set "myStatus"=$1
+				where "commentId"=$2 and "userId"=$3
+		`
+		const updateLikes = await this.dataSource.query(updateLikeStatus, [likeStatus, commentId, userId])
+		if(!updateLikecount && !updateLikes) return false
+		return true
 		} else if(likeStatus === "Like") {
-			const query = `
+			const updatelikeCountQuery = `
 				UPDATE public."Comments"
 					SET "likesCount"="likesCount" + 1
 					WHERE "id" = $1
 			`
-			return await this.dataSource.query(query, [commentId])
+			const updatelikeCount = await this.dataSource.query(updatelikeCountQuery, [commentId])
+			const updateLikeStatus = `
+				update public."Likes"
+					set "myStatus"=$1
+					where "commentId"=$2 and "userId"=$3
+			`
+			const updateLikes = await this.dataSource.query(updateLikeStatus, [likeStatus, commentId, userId])
+		if(!updatelikeCount && !updateLikes) return false
+			return true
 		} 
 	}
 
-	async decrease(commentId: string, likeStatus: string){
+	async decrease(commentId: string, likeStatus: string, userId: string){
 		if(likeStatus !== 'Dislike' && likeStatus !== 'Like') {
 			return
 		} else if(likeStatus === 'Dislike') {
-			const query = `
+			const updateLikeCountQuery = `
 				UPDATE public."Comments"
 					SET "dislikesCount"="dislikesCount" - 1
 					WHERE "id" = $1
 			`
-			return await this.dataSource.query(query, [commentId])
+			const updateLikeCount = await this.dataSource.query(updateLikeCountQuery, [commentId])
+			const updateLikesQuery = `
+				UPDATE public."Likes"
+					SET "myStatus"=$1
+					WHERE "commentId" = $1 AND "userId'=$3
+			`
+			const updateLike = await this.dataSource.query(updateLikesQuery, [likeStatus, commentId, userId])
+			if(!updateLikeCount && !updateLike) return false
+				return true
 		} else if(likeStatus === "Like") {
-			const query = `
+			const updateLikeCountQuery = `
 				UPDATE public."Comments"
 					SET "likesCount"="likesCount" - 1
 					WHERE "id" = $1
 			`
-			return await this.dataSource.query(query, [commentId])
+			const updateLikeCount = await this.dataSource.query(updateLikeCountQuery, [commentId])
+			const updateLikesQuery = `
+				update public."Likes"
+					set "myStatus"=$1
+					where "commentId"=$2 and "userId"=$3
+			`
+			const updateLike = await this.dataSource.query(updateLikesQuery, [likeStatus, commentId, userId])
+			if(!updateLikeCount && !updateLike) return false
+				return true
 		} 
+		
 	}
 
 	async updateComment(commentId: string, content: string): Promise<boolean> {

@@ -81,7 +81,7 @@ export class PostsRepository {
     return true;
   }
 
-  async increase(postId: string, likeStatus: string): Promise<boolean> {
+  async increase(postId: string, likeStatus: string, userId): Promise<boolean> {
     if (likeStatus === LikeStatusEnum.None) {
 		return true
     } else if (likeStatus === "Dislike") {
@@ -95,8 +95,9 @@ export class PostsRepository {
 	  const updateMyStatusQuery = `
 			update public."Likes"
 				set "myStatus" = $1
+				where "postId"=$2 and "userId"=$3
 		`
-	  const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [dislike]))[0]
+	  const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [dislike, postId, userId]))[0]
 	  if(!updateLikeCount[0] && !updateMyStatus[0]) return false
 	  return  true
     } else {
@@ -110,14 +111,15 @@ export class PostsRepository {
 	const updateMyStatusQuery = `
 			update public."Likes"
 				set "myStatus" = $1
+				where "postId"=$2 and "userId"=$3
 		`
-	const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [like]))[0]
+	const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [like, postId, userId]))[0]
 	if(!updateLikeCount[0] && !updateMyStatus[0]) return false
 	  return  true
     }
   }
 
-  async decrease(postId: string, likeStatus: string) {
+  async decrease(postId: string, likeStatus: string, userId) {
     if (likeStatus === LikeStatusEnum.None) {
       return true
     } else if (likeStatus === "Dislike") {
@@ -130,9 +132,10 @@ export class PostsRepository {
       const updateLikeCount = (await this.dataSource.query(updateLikesCountQuery, [postId]))[0]
 	  const updateMyStatusQuery =`
 			update public."Likes"
-						set "myStatus" = $1
+					set "myStatus" = $1
+					where "postId"=$2 and "userId"=$3
 		`
-		const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [dislike]))[0]
+		const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [dislike, postId, userId]))[0]
 	if(!updateLikeCount[0] && !updateMyStatus[0]) return false
 	  return  true
     } else {
@@ -146,8 +149,9 @@ export class PostsRepository {
 	const updateMyStatusQuery =`
 		update public."Likes"
 				set "myStatus" = $1
+				where "postId"=$2 and "userId"=$3
 	`
-	const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [like]))[0]
+	const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [like, postId, userId]))[0]
 	if(!updateLikeCount[0] && !updateMyStatus[0]) return false
 	  return  true
     }

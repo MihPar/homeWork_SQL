@@ -15,17 +15,12 @@ export class PostsQueryRepository {
     postId: string,
     userId?: string | null
   ): Promise<PostsViewModel | null> {
-	// console.log("try")
     const queryPost = `
 		SELECT *
 			FROM public."Posts"
 			WHERE "id" = $1
 	  `;
-    const post: PostClass | null = 
-     ( await this.dataSource.query(queryPost, [postId]))[0]
-    
-    //  console.log("post: ", post)
-
+    const post: PostClass | null = (await this.dataSource.query(queryPost, [postId]))[0]
     const NewestLikesQuery = `
 			select *
 				from public."Likes" 
@@ -45,12 +40,7 @@ export class PostsQueryRepository {
 		if(userId) {
 			const myOwnStatus = (await this.dataSource.query(LikesQuery, [postId, userId]))[0];
 			myStatus = myOwnStatus ? (myOwnStatus.myStatus as LikeStatusEnum) : LikeStatusEnum.None
-			// console.log("firstMyStatus: ", myStatus)
 		}
- 
-	// console.log("myOwnStatus:", myStatus)
-	// console.log("userId:", userId)
-
     return post ? PostClass.getPostsViewModelSAMyOwnStatus(post, newestLikes, myStatus) : null;
   }
 
