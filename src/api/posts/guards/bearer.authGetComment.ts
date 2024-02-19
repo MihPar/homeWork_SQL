@@ -20,6 +20,7 @@ export class CheckRefreshTokenForGet implements CanActivate {
     const req: Request = context.switchToHttp().getRequest();
 	let token
 	let payload
+	// console.log("req.headers.authorization", req.headers.authorization)
 	if (!req.headers.authorization) {
 		req.user = null
 	} else {

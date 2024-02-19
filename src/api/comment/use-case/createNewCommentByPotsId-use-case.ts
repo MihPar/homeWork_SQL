@@ -33,7 +33,9 @@ export class CreateNewCommentByPostIdUseCase
     );
     const createNewCommentawait: CommentClass | null =
       await this.commentRepository.createNewCommentPostId(newComment);
+	//   console.log("createNewCommentawait: ", createNewCommentawait)
     if (!createNewCommentawait) throw new NotFoundException("404");
+	// console.log(CommentClass.getNewComments(createNewCommentawait, LikeStatusEnum.None))
     return CommentClass.getNewComments(createNewCommentawait, LikeStatusEnum.None);
   }
 }

@@ -99,7 +99,6 @@ export class PostController {
 	@Param() dto: InputModelClassPostId, 
 	@Body(new ValidationPipe({ validateCustomDecorators: true })) inputModelContent: InputModelContentePostClass,
   	@UserDecorator() user: UserClass,
-    @UserIdDecorator() userId: string | null
 	) {
     const post: PostsViewModel | null = await this.postsQueryRepository.findPostById(dto.postId)
     if (!post) throw new NotFoundException('Blogs by id not found 404')

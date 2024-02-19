@@ -92,13 +92,13 @@ export class PostsRepository {
 				WHERE "id" = $1
 		`;
       const updateLikeCount = (await this.dataSource.query(updateLikesCountQuery, [postId]))[0]
-	  const updateMyStatusQuery = `
-			update public."PostLikes"
-				set "myStatus" = $1
-				where "postId"=$2 and "userId"=$3
-		`
-	  const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [dislike, postId, userId]))[0]
-	  if(!updateLikeCount[0] && !updateMyStatus[0]) return false
+	//   const updateMyStatusQuery = `
+	// 		update public."PostLikes"
+	// 			set "myStatus" = $1
+	// 			where "postId"=$2 and "userId"=$3
+	// 	`
+	//   const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [dislike, postId, userId]))[0]
+	  if(!updateLikeCount[0]) return false
 	  return  true
     } else {
       let like = "Like";
@@ -108,13 +108,13 @@ export class PostsRepository {
 				WHERE "id" = $1
 		`;
     const updateLikeCount = (await this.dataSource.query(updateLikesCountQuery, [postId]))[0]
-	const updateMyStatusQuery = `
-			update public."PostLikes"
-				set "myStatus" = $1
-				where "postId"=$2 and "userId"=$3
-		`
-	const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [like, postId, userId]))[0]
-	if(!updateLikeCount[0] && !updateMyStatus[0]) return false
+	// const updateMyStatusQuery = `
+	// 		update public."PostLikes"
+	// 			set "myStatus" = $1
+	// 			where "postId"=$2 and "userId"=$3
+	// 	`
+	// const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [like, postId, userId]))[0]
+	if(!updateLikeCount[0]) return false
 	  return  true
     }
   }
@@ -130,13 +130,13 @@ export class PostsRepository {
 				WHERE "id" = $1 
 		`;
       const updateLikeCount = (await this.dataSource.query(updateLikesCountQuery, [postId]))[0]
-	  const updateMyStatusQuery =`
-			update public."PostLikes"
-					set "myStatus" = $1
-					where "postId"=$2 and "userId"=$3
-		`
-		const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [dislike, postId, userId]))[0]
-	if(!updateLikeCount[0] && !updateMyStatus[0]) return false
+	//   const updateMyStatusQuery =`
+	// 		update public."PostLikes"
+	// 				set "myStatus" = $1
+	// 				where "postId"=$2 and "userId"=$3
+	// 	`
+	// 	const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [dislike, postId, userId]))[0]
+	if(!updateLikeCount[0]) return false
 	  return  true
     } else {
       let like = "Like";
@@ -146,13 +146,13 @@ export class PostsRepository {
 				WHERE "id" = $1
 		`;
 	const updateLikeCount = (await this.dataSource.query(updateLikesCountQuery, [postId]))[0]
-	const updateMyStatusQuery =`
-		update public."PostLikes"
-				set "myStatus" = $1
-				where "postId"=$2 and "userId"=$3
-	`
-	const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [like, postId, userId]))[0]
-	if(!updateLikeCount[0] && !updateMyStatus[0]) return false
+	// const updateMyStatusQuery =`
+	// 	update public."PostLikes"
+	// 			set "myStatus" = $1
+	// 			where "postId"=$2 and "userId"=$3
+	// `
+	// const updateMyStatus = (await this.dataSource.query(updateMyStatusQuery, [like, postId, userId]))[0]
+	if(!updateLikeCount[0]) return false
 	  return  true
     }
 

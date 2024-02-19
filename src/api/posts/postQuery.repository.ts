@@ -31,7 +31,7 @@ export class PostsQueryRepository {
 					limit 3 
 		`;
     const newestLikes = await this.dataSource.query(newestLikesQuery, [postId])
-	console.log("newestLikes: ", newestLikes)
+	// console.log("newestLikes: ", newestLikes)
 
 	// const likeCount = (await this.dataSource.query(
     // `
@@ -48,9 +48,12 @@ export class PostsQueryRepository {
 					where "postId" = $1 and "userId" = $2
 		`;
 		let myStatus: LikeStatusEnum = LikeStatusEnum.None;
+		console.log("userId: ", userId)
 		if(userId) {
-			const myOwnStatus = (await this.dataSource.query(LikesQuery, [postId, userId]))[0];
-			myStatus = myOwnStatus ? (myOwnStatus.myStatus as LikeStatusEnum) : LikeStatusEnum.None
+			const userLike = (await this.dataSource.query(LikesQuery, [postId, userId]))[0];
+			
+console.log("userLike: ", userLike)
+			myStatus = userLike ? (userLike.myStatus as LikeStatusEnum) : LikeStatusEnum.None
 		}
 		// console.log(postId, "userId: ", userId)
 		// console.log("userId: ", userId)
