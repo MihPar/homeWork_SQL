@@ -31,7 +31,7 @@ export class PostsQueryRepository {
 			WHERE "id" = $1
 	  `;
     const post: PostClass | null = (await this.dataSource.query(queryPost, [postId]))[0]
-	console.log("post: ", post)
+	// console.log("post: ", post)
 
     const newestLikesQuery = `
 			select *
@@ -63,8 +63,6 @@ export class PostsQueryRepository {
 		// console.log("userId: ", userId)
 		if(userId) {
 			const userLike = (await this.dataSource.query(LikesQuery, [postId, userId]))[0];
-			
-// console.log("userLike: ", userLike)
 			myStatus = userLike ? (userLike.myStatus as LikeStatusEnum) : LikeStatusEnum.None
 		}
 		// console.log("myStatus: ", myStatus)
@@ -146,6 +144,7 @@ export class PostsQueryRepository {
     sortBy: string,
     sortDirection: string,
     blogId: string,
+	userId: string | null
   ): Promise<PaginationType<Posts>> {
     const getPostsQuery = `
 		SELECT *
@@ -180,7 +179,7 @@ export class PostsQueryRepository {
 	const LikesQuery = `
 			select *
 				from public."PostLikes" 
-					where "postId" = $1
+					where "postId" = $1 and "userId" = $2
 		`;
 
     // const query2 = `
@@ -197,8 +196,8 @@ export class PostsQueryRepository {
       items: await Promise.all (findPostsByBlogId.map(async (post: PostClass)  => {
         // const newestLike = (await this.dataSource.query(query2, [post.id]))[0];
 		let myStatus: LikeStatusEnum = LikeStatusEnum.None;
-		if(blogId) {
-			const userLike = (await this.dataSource.query(LikesQuery, [post.id]))[0];
+		if(userId) {
+			const userLike = (await this.dataSource.query(LikesQuery, [post.id, userId]))[0];
 			myStatus = userLike ? (userLike.myStatus as LikeStatusEnum) : LikeStatusEnum.None
 		}
 		const newestLikes = await this.dataSource.query(newestLikesQuery, [post.id])

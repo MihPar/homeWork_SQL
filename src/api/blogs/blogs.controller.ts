@@ -84,6 +84,7 @@ export class BlogsController {
         query.sortBy,
         query.sortDirection,
         dto.blogId,
+		userId
       );
     if (!getPosts) throw new NotFoundException('Blogs by id not found');
     return getPosts;

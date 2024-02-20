@@ -26,7 +26,7 @@ export class UpdateLikestatusForCommentUseCase implements ICommandHandler<Update
 		// console.log("userId: ", command.userId)
 		const findCommentById: CommentClass | null =
       await this.commentQueryRepository.findCommentByCommentId(command.id.commentId, command.userId);
-	  console.log("findCommentById: ", findCommentById)
+	//   console.log("findCommentById: ", findCommentById)
     if (!findCommentById) throw new NotFoundException('404');
 		const findLike = await this.likesRepository.findLikeByCommentIdBy(command.id.commentId, command.userId)
 	if(!findLike) {

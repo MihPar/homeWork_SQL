@@ -85,7 +85,7 @@ export class PostsRepository {
     if (likeStatus === LikeStatusEnum.None) {
 		return true
     } else if (likeStatus === "Dislike") {
-      let dislike = "Dislike";
+    //   let dislike = "Dislike";
       const updateLikesCountQuery = `
 			UPDATE public."Posts"
 				SET "dislikesCount" = "dislikesCount" + 1
@@ -101,7 +101,7 @@ export class PostsRepository {
 	  if(!updateLikeCount) return false
 	  return  true
     } else {
-      let like = "Like";
+    //   let like = "Like";
       const updateLikesCountQuery = `
 			UPDATE public."Posts"
 				SET "likesCount" = "likesCount" + 1
@@ -123,7 +123,7 @@ export class PostsRepository {
     if (likeStatus === LikeStatusEnum.None) {
       return true
     } else if (likeStatus === "Dislike") {
-      let dislike = "Dislike";
+    //   let dislike = "Dislike";
       const updateLikesCountQuery = `
 			UPDATE public."Posts"
 				SET "dislikesCount" = "dislikesCount" - 1
@@ -139,7 +139,7 @@ export class PostsRepository {
 	if(!updateLikeCount) return false
 	  return  true
     } else {
-      let like = "Like";
+    //   let like = "Like";
       const updateLikesCountQuery = `
 			UPDATE public."Posts"
 				SET "likesCount" = "likesCount" - 1
@@ -155,16 +155,6 @@ export class PostsRepository {
 	if(!updateLikeCount) return false
 	  return  true
     }
-
-    // return await this.postModel.updateOne(
-    //   { _id: new ObjectId(postId) },
-    //   {
-    //     $inc:
-    //       likeStatus === 'Dislike'
-    //         ? { 'extendedLikesInfo.dislikesCount': -1 }
-    //         : { 'extendedLikesInfo.likesCount': -1 },
-    //   },
-    // );
   }
 
   async findPostByBlogId(blogId: string) {
