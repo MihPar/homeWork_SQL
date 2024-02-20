@@ -77,7 +77,7 @@ export class PostController {
       sortDirection: string;
     },
   ) {
-    const isExistPots: PostsViewModel | null = await this.postsQueryRepository.findPostById(dto.postId);
+    const isExistPots: PostsViewModel | boolean= await this.postsQueryRepository.getPostById(dto.postId);
     if (!isExistPots) throw new NotFoundException('Blogs by id not found');
     const commentByPostsId: PaginationType<CommentViewType> | null =
       await this.commentQueryRepository.findCommentsByPostId(
@@ -101,7 +101,7 @@ export class PostController {
   	@UserDecorator() user: UserClass,
 	  @UserIdDecorator() userId: string | null
 	) {
-    const post = await this.postsQueryRepository.getPostById(dto.postId, userId)
+    const post: PostsViewModel | boolean = await this.postsQueryRepository.getPostById(dto.postId, userId)
     if (!post) throw new NotFoundException('Blogs by id not found 404')
 	const command = new CreateNewCommentByPostIdCommnad(dto.postId, inputModelContent, user)
 	const createNewCommentByPostId: CommentViewModel | null = await this.commandBus.execute(command)
