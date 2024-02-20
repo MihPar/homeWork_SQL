@@ -98,8 +98,8 @@ export class PostClass extends Posts {
 			  myStatus: myOwnStatus || LikeStatusEnum.None,
 			  newestLikes: newestLikes ? newestLikes.map(l => ({
 				  addedAt: l.addedAt,
+				  userId: l.userId, 
 				  login: userLogin,
-				  userId: l.userId
 			  })) : []},
 		  };
 	  }
