@@ -29,7 +29,7 @@ import { InputModelLikeStatusClass } from '../comment/dto/comment.class-pipe';
 import { CheckRefreshTokenForGet } from './guards/bearer.authGetComment';
 import { CommentViewModel } from '../comment/comment.type';
 import { CommentQueryRepository } from '../comment/comment.queryRepository';
-import { Posts } from './post.class';
+import { PostClass, Posts } from './post.class';
 import { PostsViewModel } from './posts.type';
 import { CreateNewCommentByPostIdCommnad } from '../comment/use-case/createNewCommentByPotsId-use-case';
 import { SkipThrottle } from '@nestjs/throttler';
@@ -97,15 +97,14 @@ export class PostController {
   @UseGuards(CheckRefreshTokenForPost)
   async createNewCommentByPostId(
 	@Param() dto: InputModelClassPostId, 
-	@Body(new ValidationPipe({ validateCustomDecorators: true })) inputModelContent: InputModelContentePostClass,
+	@Body() inputModelContent: InputModelContentePostClass,
   	@UserDecorator() user: UserClass,
+	  @UserIdDecorator() userId: string | null
 	) {
-    const post: PostsViewModel | null = await this.postsQueryRepository.findPostById(dto.postId)
-	// console.log("post: ", post)
+    const post = await this.postsQueryRepository.getPostById(dto.postId, userId)
     if (!post) throw new NotFoundException('Blogs by id not found 404')
 	const command = new CreateNewCommentByPostIdCommnad(dto.postId, inputModelContent, user)
 	const createNewCommentByPostId: CommentViewModel | null = await this.commandBus.execute(command)
-	// console.log("createNewCommentByPostId: ", createNewCommentByPostId)
 	return createNewCommentByPostId
   }
 

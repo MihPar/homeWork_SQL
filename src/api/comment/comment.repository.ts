@@ -130,6 +130,7 @@ export class CommentRepository {
 		  newComment.dislikesCount,
         ])
       )[0];
+	//   console.log("createComments: ", createComments)
 	//   console.log('createComments: ', createComments)
 	//   const query2 = `
 	// 	select *

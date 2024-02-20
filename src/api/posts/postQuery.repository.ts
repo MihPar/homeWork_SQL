@@ -31,7 +31,7 @@ export class PostsQueryRepository {
 			WHERE "id" = $1
 	  `;
     const post: PostClass | null = (await this.dataSource.query(queryPost, [postId]))[0]
-	// console.log("post: ", post)
+	console.log("post: ", post)
 
     const newestLikesQuery = `
 			select *
@@ -172,7 +172,7 @@ export class PostsQueryRepository {
 			FROM public."Posts"
 			WHERE "id" = $1
 	  `;
-    const post: PostClass | null = (await this.dataSource.query(queryPost, [postId]))[0]
+    const post: PostClass | null = await this.dataSource.query(queryPost, [postId])
 	if(!post) return false
 	return true
   }
