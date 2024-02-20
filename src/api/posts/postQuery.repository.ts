@@ -172,7 +172,7 @@ export class PostsQueryRepository {
 			FROM public."Posts"
 			WHERE "id" = $1
 	  `;
-    const post: PostClass | null = await this.dataSource.query(queryPost, [postId])
+    const post: PostClass | null = (await this.dataSource.query(queryPost, [postId]))[0]
 	if(!post) return false
 	return true
   }

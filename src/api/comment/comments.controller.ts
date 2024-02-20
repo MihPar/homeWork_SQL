@@ -74,7 +74,7 @@ export class CommentsController {
 	@UserDecorator() user: UserClass,
 	@UserIdDecorator() userId: string
 	) {
-    	const isExistComment = await this.commentQueryRepository.findCommentByCommentId(dto.commentId);
+    const isExistComment = await this.commentQueryRepository.findCommentByCommentId(dto.commentId);
     if (!isExistComment) throw new NotFoundException("404")
     if (userId !== isExistComment.commentatorInfo.userId) { throw new ForbiddenException("403")}
     const deleteCommentById: boolean =
