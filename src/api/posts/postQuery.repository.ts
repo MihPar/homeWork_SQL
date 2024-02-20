@@ -12,7 +12,7 @@ import { UserClass } from "../users/user.class";
 export class PostsQueryRepository {
   constructor(@InjectDataSource() protected dataSource: DataSource) {}
 
-  async findPostById(
+  async findPostsById(
     postId: string,
     userId?: string | null,
   ): Promise<PostsViewModel | null> {
@@ -168,7 +168,6 @@ export class PostsQueryRepository {
     const totalCount = (await this.dataSource.query(countQuery, [blogId]))[0].count;
     const pagesCount: number = Math.ceil(+totalCount / +pageSize);
 
-
 	const newestLikesQuery = `
 			select *
 				from public."PostLikes"
@@ -193,7 +192,7 @@ export class PostsQueryRepository {
       page: +pageNumber,
       pageSize: +pageSize,
       totalCount: +totalCount,
-      items: findPostsByBlogId.map(async (post: PostClass)  => {
+      items: await Promise.all (findPostsByBlogId.map(async (post: PostClass)  => {
         // const newestLike = (await this.dataSource.query(query2, [post.id]))[0];
 		let myStatus: LikeStatusEnum = LikeStatusEnum.None;
 		if(blogId) {
@@ -203,8 +202,9 @@ export class PostsQueryRepository {
 		const newestLikes = await this.dataSource.query(newestLikesQuery, [post.id])
          return PostClass.getPostsViewModelSAMyOwnStatus(post, newestLikes, myStatus)
 		}
-      ),
+      ))
     };
+	console.log("result: ", result)
     return result;
   }
 

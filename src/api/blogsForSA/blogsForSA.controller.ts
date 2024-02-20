@@ -161,7 +161,7 @@ export class BlogsControllerForSA {
 
 	const blog = await this.blogsQueryRepositoryForSA.findBlogById(dto.blogId);
 	if(!blog) throw new NotFoundException("404")
-	const findPost = await this.postsQueryRepository.findPostById(dto.postId)
+	const findPost = await this.postsQueryRepository.findPostsById(dto.postId)
 	if(!findPost) throw new NotFoundException("404")
 	if(userId !== blog.userId) throw new ForbiddenException("This user does not have access in blog, 403")
 
@@ -179,7 +179,7 @@ export class BlogsControllerForSA {
 	) {
 	const blog = await this.blogsQueryRepositoryForSA.findBlogById(dto.blogId);
 	if(!blog) throw new NotFoundException("404")
-	const findPost = await this.postsQueryRepository.findPostById(dto.postId)
+	const findPost = await this.postsQueryRepository.findPostsById(dto.postId)
 	if(!findPost) throw new NotFoundException("404")
 	if(userId !== blog.userId) throw new ForbiddenException("This user does not have access in blog, 403")
 	const command = new DeletePostByIdCommand(dto)
