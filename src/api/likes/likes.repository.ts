@@ -30,7 +30,6 @@ export class LikesRepository {
 				from public."PostLikes"
 				where "postId" = $1 and "userId" = $2
 		`
-		// console.log("(this.dataSource.query(query, [postId]))[0]: ", (await this.dataSource.query(query, [postId]))[0])
 		const findLike = (await this.dataSource.query(query, [postId, userId]))[0]
 		if(!findLike) return null
 		return findLike
@@ -47,14 +46,14 @@ export class LikesRepository {
 		return saveLikeForPost.id
 	}
 
-	async updateLikeStatusForPost(postId: string, likeStatus: string) {
+	async updateLikeStatusForPost(postId: string, likeStatus: string, userId: string) {
 		const addedAt = new Date().toISOString()
 		const query1 = `
 			UPDATE public."PostLikes"
 				SET "myStatus"=$1, "addedAt"=$2
-				WHERE "postId" = $3
+				WHERE "postId" = $3 AND "userId" = $4
 		`
-		const updateLikeStatus = (await this.dataSource.query(query1, [likeStatus, addedAt, postId]))[0]
+		const updateLikeStatus = (await this.dataSource.query(query1, [likeStatus, addedAt, postId, userId]))[0]
 		return updateLikeStatus
 	}
 
