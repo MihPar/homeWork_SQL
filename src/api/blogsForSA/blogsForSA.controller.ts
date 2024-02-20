@@ -146,6 +146,7 @@ export class BlogsControllerForSA {
         query.sortBy || 'createdAt',
         query.sortDirection || 'desc',
         dto.blogId,
+		userId
       );
     if (!getPosts) throw new NotFoundException('Blogs by id not found');
     return getPosts;
