@@ -96,13 +96,29 @@ export class PostsQueryRepository {
 	`;
     const totalCount = (await this.dataSource.query(countQuery))[0].count;
     const pagesCount: number = Math.ceil(+totalCount / +pageSize);
-    const NewestLikesQuery = `
-		select *
-			from "PostLikes"
-			where "postId" = $1
-			order by "addedAt" desc
-			limit 3 offset 0
-	`;
+
+	const newestLikesQuery = `
+			select *
+				from public."PostLikes" as pl
+				left join public."Users" as u
+				on pl."userId" = u."id"
+					where "postId" = $1 and "myStatus" = 'Like'
+					order by "addedAt" desc
+					limit 3 
+		`;
+	const LikesQuery = `
+			select *
+				from public."PostLikes" 
+					where "postId" = $1 and "userId" = $2
+		`;
+
+    // const NewestLikesQuery = `
+	// 	select *
+	// 		from "PostLikes"
+	// 		where "postId" = $1
+	// 		order by "addedAt" desc
+	// 		limit 3 offset 0
+	// `;
     let result: PaginationType<Posts> = {
       pagesCount: pagesCount,
       page: +pageNumber,
@@ -110,8 +126,14 @@ export class PostsQueryRepository {
       totalCount: +totalCount,
       items: await Promise.all(
         allPosts.map(async (post) => {
-          const newestLikes = await this.dataSource.query(NewestLikesQuery, [post.id]);
-          return PostClass.getPostsViewModelForSA(post, newestLikes);
+        //   const newestLikes = await this.dataSource.query(NewestLikesQuery, [post.id]);
+		let myStatus: LikeStatusEnum = LikeStatusEnum.None;
+		if(userId) {
+			const userLike = (await this.dataSource.query(LikesQuery, [post.id, userId]))[0];
+			myStatus = userLike ? (userLike.myStatus as LikeStatusEnum) : LikeStatusEnum.None
+		}
+		const newestLikes = await this.dataSource.query(newestLikesQuery, [post.id])
+          return PostClass.getPostsViewModelSAMyOwnStatus(post, newestLikes, myStatus);
         })
       ),
     };
