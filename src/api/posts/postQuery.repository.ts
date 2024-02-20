@@ -17,13 +17,13 @@ export class PostsQueryRepository {
     userId?: string | null,
   ): Promise<PostsViewModel | null> {
 	
-	const getUserNameQuery = `
-		select u."userName"
-			from public."Users" as u
-			where "id"=$1
-	`
-	const getUserName = (await this.dataSource.query(getUserNameQuery, [userId]))[0]
-	const userLogin = getUserName.userName
+	// const getUserNameQuery = `
+	// 	select u."userName"
+	// 		from public."Users" as u
+	// 		where "id"=$1
+	// `
+	// const getUserName = (await this.dataSource.query(getUserNameQuery, [userId]))[0]
+	// const userLogin = getUserName.userName
 
     const queryPost = `
 		SELECT *
@@ -35,7 +35,9 @@ export class PostsQueryRepository {
 
     const newestLikesQuery = `
 			select *
-				from public."PostLikes" 
+				from public."PostLikes" as pl
+				left join public."Users" as u
+				on pl."userId" = u."id"
 					where "postId" = $1 and "myStatus" = 'Like'
 					order by "addedAt" desc
 					limit 3 
@@ -67,7 +69,7 @@ export class PostsQueryRepository {
 		}
 		// console.log("myStatus: ", myStatus)
 		// console.log("userId: ", userId)
-    return post ? PostClass.getPostsViewModelSAMyOwnStatus(post, newestLikes, myStatus, userLogin) : null;
+    return post ? PostClass.getPostsViewModelSAMyOwnStatus(post, newestLikes, myStatus) : null;
   }
 
   async findAllPosts(
