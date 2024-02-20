@@ -170,10 +170,12 @@ export class PostsQueryRepository {
 
 	const newestLikesQuery = `
 			select *
-				from public."PostLikes"
-					where "postId" = $1 and "myStatus" = 'Like'
-					order by "addedAt" desc
-					limit 3 
+			from public."PostLikes" as pl
+			left join public."Users" as u
+			on pl."userId" = u."id"
+				where "postId" = $1 and "myStatus" = 'Like'
+				order by "addedAt" desc
+				limit 3 
 		`;
 	const LikesQuery = `
 			select *
