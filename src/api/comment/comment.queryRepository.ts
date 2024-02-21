@@ -25,6 +25,7 @@ export class CommentQueryRepository {
 				where "id" = $1
 		`
    const findCommentById = (await this.dataSource.query(query, [commentId]))[0]
+   console.log("findCommentById: ", findCommentById)
    const commentsLikeQuery = `
 		select *
 			from "CommentLikes"
@@ -37,6 +38,7 @@ export class CommentQueryRepository {
 		}
 
 	const viewModelComment = {...findCommentById, commentatorInfo: {userId: findCommentById.userId, userLogin: findCommentById.userLogin}}
+	console.log("myStatus: ", myStatus)
       return commentDBToView(viewModelComment, myStatus);
     } catch (e) {
       return null;
