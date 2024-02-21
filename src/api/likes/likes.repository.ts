@@ -74,8 +74,9 @@ export class LikesRepository {
 			INSERT INTO public."CommentLikes"("myStatus", "addedAt", "commentId", "userId")
 				VALUES ($1, $2, $3, $4)
 				RETURNING *
-		`
-		const saveResult = (await this.dataSource.query(query, [likeStatus, createAddedAt, commentId, userId]))[0]
+		`;
+		const createLikeStatus = (await this.dataSource.query(query, [likeStatus, createAddedAt, commentId, userId]))[0]
+		return createLikeStatus
 	}
 
 	async updateLikeStatusForComment(commentId: string, userId: string, likeStatus: string){
@@ -84,9 +85,9 @@ export class LikesRepository {
 			UPDATE public."CommentLikes"
 				SET "myStatus"=$1, "addedAt"=$2
 				WHERE "id" = $3 AND "userId" = $4
-		`
-		const saveResult = (await this.dataSource.query(query, [likeStatus, createAddedAt, commentId, userId]))[0]
-		return saveResult
+		`;
+		const updateLikeStatus = (await this.dataSource.query(query, [likeStatus, createAddedAt, commentId, userId]))[0]
+		return updateLikeStatus
 	}
 
 	async getNewLike(postId: string, blogId: string) {
