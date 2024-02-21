@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CommentViewModel } from './comment.type';
-import { Like } from '../likes/likes.class';
+import { LikePost } from '../likes/likes.class';
 import { PaginationType } from '../../types/pagination.types';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource, ObjectId } from 'typeorm';
@@ -25,7 +25,7 @@ export class CommentQueryRepository {
 				where "id" = $1
 		`
    const findCommentById = (await this.dataSource.query(query, [commentId]))[0]
-   console.log("findCommentById: ", findCommentById)
+//    console.log("findCommentById: ", findCommentById)
    const commentsLikeQuery = `
 		select *
 			from "CommentLikes"
@@ -38,7 +38,7 @@ export class CommentQueryRepository {
 		}
 
 	const viewModelComment = {...findCommentById, commentatorInfo: {userId: findCommentById.userId, userLogin: findCommentById.userLogin}}
-	console.log("myStatus: ", myStatus)
+	// console.log("myStatus: ", myStatus)
       return commentDBToView(viewModelComment, myStatus);
     } catch (e) {
       return null;

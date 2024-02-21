@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Like } from "./likes.class";
+import { LikeComment, LikePost } from "./likes.class";
 import { LikeStatusEnum } from "./likes.emun";
 import { InjectDataSource } from "@nestjs/typeorm";
 import { DataSource } from "typeorm";
@@ -24,7 +24,7 @@ export class LikesRepository {
     	return true
 	}
 
-	async findLikeByPostId(postId: string, userId: string): Promise<Like | null> {
+	async findLikeByPostId(postId: string, userId: string): Promise<LikePost | null> {
 		const query = `
 			select *
 				from public."PostLikes"
@@ -57,14 +57,14 @@ export class LikesRepository {
 		return updateLikeStatus
 	}
 
-	async findLikeByCommentIdBy(commentId: string, userId: string) {
+	async findLikeByCommentIdBy(commentId: string, userId: string): Promise<LikeComment | null>  {
 		const query = `
 			SELECT *
 				FROM public."CommentLikes"
 				WHERE "id" = $1 AND "userId" = $2
 		`
-		const findLike = await (this.dataSource.query(query, [commentId, userId]))[0]
-		if(!findLike) return false
+		const findLike = (await this.dataSource.query(query, [commentId, userId]))[0]
+		if(!findLike) return null
 		return findLike
 	}
 
@@ -76,7 +76,7 @@ export class LikesRepository {
 				RETURNING *
 		`;
 		const createLikeStatus = (await this.dataSource.query(query, [likeStatus, createAddedAt, commentId, userId]))[0]
-		return createLikeStatus
+		return createLikeStatus.id
 	}
 
 	async updateLikeStatusForComment(commentId: string, userId: string, likeStatus: string){
