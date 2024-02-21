@@ -60,7 +60,7 @@ export class BlogsControllerForSA {
   @Post()
   @HttpCode(201)
   async createBlog(
-	@Body(new ValidationPipe({ validateCustomDecorators: true })) inputDateModel: bodyBlogsModel,
+	@Body() inputDateModel: bodyBlogsModel,
 	@UserDecorator() user: UserClass,
 	@UserIdDecorator() userId: string,
 	) {
@@ -112,7 +112,8 @@ export class BlogsControllerForSA {
     @Body(new ValidationPipe({ validateCustomDecorators: true })) inputDataModel: bodyPostsModelClass,
 	@UserIdDecorator() userId: string,
   ) {
-    const findBlog: BlogsViewTypeWithUserId | null = await this.blogsQueryRepositoryForSA.findBlogById(dto.blogId);
+    const findBlog: BlogsViewTypeWithUserId | null = await this.blogsQueryRepositoryForSA.findBlogById(dto.blogId)
+	// console.log("findBlog: ", findBlog)
     if(!findBlog) throw new NotFoundException("404")
 	if(userId !== findBlog.userId) throw new ForbiddenException("This user does not have access in blog, 403")
 	const command = new CreateNewPostForBlogCommand( dto.blogId, inputDataModel, findBlog.name, userId)
