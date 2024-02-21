@@ -23,12 +23,12 @@ export class CommentRepository {
 					WHERE "id" = $1
 			`
 		const updateLikecount = (await this.dataSource.query(updateLikeCountQuery, [commentId]))[0]
-		// const updateLikeStatus = `
-		// 	update public."CommentLikes"
-		// 		set "myStatus"=$1
-		// 		where "commentId"=$2 and "userId"=$3
-		// `
-		// const updateLikes = await this.dataSource.query(updateLikeStatus, [likeStatus, commentId, userId])
+		const updateLikeStatus = `
+			update public."CommentLikes"
+				set "myStatus"=$1
+				where "commentId"=$2 and "userId"=$3
+		`
+		const updateLikes = await this.dataSource.query(updateLikeStatus, [likeStatus, commentId, userId])
 		if(!updateLikecount) return false
 		return true
 		} else if(likeStatus === "Like") {
@@ -38,12 +38,12 @@ export class CommentRepository {
 					WHERE "id" = $1
 			`
 			const updatelikeCount = (await this.dataSource.query(updatelikeCountQuery, [commentId]))[0]
-			// const updateLikeStatus = `
-			// 	update public."CommentLikes"
-			// 		set "myStatus"=$1
-			// 		where "commentId"=$2 and "userId"=$3
-			// `
-			// const updateLikes = await this.dataSource.query(updateLikeStatus, [likeStatus, commentId, userId])
+			const updateLikeStatus = `
+				update public."CommentLikes"
+					set "myStatus"=$1
+					where "commentId"=$2 and "userId"=$3
+			`
+			const updateLikes = await this.dataSource.query(updateLikeStatus, [likeStatus, commentId, userId])
 		if(!updatelikeCount) return false
 			return true
 		} 
@@ -59,12 +59,12 @@ export class CommentRepository {
 					WHERE "id" = $1
 			`
 			const updateLikeCount = (await this.dataSource.query(updateLikeCountQuery, [commentId]))[0]
-			// const updateLikesQuery = `
-			// 	UPDATE public."CommentLikes"
-			// 		SET "myStatus"=$1
-			// 		WHERE "commentId" = $1 AND "userId'=$3
-			// `
-			// const updateLike = await this.dataSource.query(updateLikesQuery, [likeStatus, commentId, userId])
+			const updateLikesQuery = `
+				UPDATE public."CommentLikes"
+					SET "myStatus"=$1
+					WHERE "commentId" = $1 AND "userId'=$3
+			`
+			const updateLike = await this.dataSource.query(updateLikesQuery, [likeStatus, commentId, userId])
 			if(!updateLikeCount) return false
 				return true
 		} else if(likeStatus === "Like") {
@@ -74,12 +74,12 @@ export class CommentRepository {
 					WHERE "id" = $1
 			`
 			const updateLikeCount = (await this.dataSource.query(updateLikeCountQuery, [commentId]))[0]
-			// const updateLikesQuery = `
-			// 	update public."CommentLikes"
-			// 		set "myStatus"=$1
-			// 		where "commentId"=$2 and "userId"=$3
-			// `
-			// const updateLike = await this.dataSource.query(updateLikesQuery, [likeStatus, commentId, userId])
+			const updateLikesQuery = `
+				update public."CommentLikes"
+					set "myStatus"=$1
+					where "commentId"=$2 and "userId"=$3
+			`
+			const updateLike = await this.dataSource.query(updateLikesQuery, [likeStatus, commentId, userId])
 			if(!updateLikeCount) return false
 				return true
 		} 
