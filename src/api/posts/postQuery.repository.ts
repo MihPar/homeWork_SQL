@@ -17,21 +17,12 @@ export class PostsQueryRepository {
     userId?: string | null,
   ): Promise<PostsViewModel | null> {
 	
-	// const getUserNameQuery = `
-	// 	select u."userName"
-	// 		from public."Users" as u
-	// 		where "id"=$1
-	// `
-	// const getUserName = (await this.dataSource.query(getUserNameQuery, [userId]))[0]
-	// const userLogin = getUserName.userName
-
     const queryPost = `
 		SELECT *
 			FROM public."Posts"
 			WHERE "id" = $1
 	  `;
     const post: PostClass | null = (await this.dataSource.query(queryPost, [postId]))[0]
-	// console.log("post: ", post)
 
     const newestLikesQuery = `
 			select *

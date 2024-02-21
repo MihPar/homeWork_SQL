@@ -6,6 +6,7 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource, ObjectId } from 'typeorm';
 import { CommentClass } from './comment.class';
 import { commentByPostView, commentDBToView } from '../../helpers';
+import { LikeStatusEnum } from '../likes/likes.emun';
 
 @Injectable()
 export class CommentQueryRepository {
@@ -23,16 +24,20 @@ export class CommentQueryRepository {
 				from public."Comments"
 				where "id" = $1
 		`
-      const findCommentById = (await this.dataSource.query(query, [commentId]))[0]
-      if (!findCommentById) {
-        return null;
-      }
-    //   const findLike: Like | null = await this.findLikeCommentByUser(
-    //     commentId,
-    //     userId,
-    //   );
+   const findCommentById = (await this.dataSource.query(query, [commentId]))[0]
+   const commentsLikeQuery = `
+		select *
+			from "CommentLikes"
+			where "commentId" = $1 and "userId" = $2
+   `
+   let myStatus: LikeStatusEnum = LikeStatusEnum.None;
+		if(userId) {
+			const commentLikeStatus = (await this.dataSource.query(commentsLikeQuery, [commentId, userId]))[0]
+			myStatus = commentLikeStatus ? (commentLikeStatus.myStatus as LikeStatusEnum) : LikeStatusEnum.None
+		}
+
 	const viewModelComment = {...findCommentById, commentatorInfo: {userId: findCommentById.userId, userLogin: findCommentById.userLogin}}
-      return commentByPostView(viewModelComment);
+      return commentDBToView(viewModelComment, myStatus);
     } catch (e) {
       return null;
     }
