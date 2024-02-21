@@ -118,7 +118,7 @@ export class PostsRepository {
     }
   }
 
-  async decrease(postId: string, likeStatus: string, userId) {
+  async decrease(postId: string, likeStatus: string, userId: string) {
     if (likeStatus === LikeStatusEnum.None) {
       return true
     } else if (likeStatus === "Dislike") {

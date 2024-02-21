@@ -102,6 +102,7 @@ export class PostController {
 	  @UserIdDecorator() userId: string | null
 	) {
     const post: PostsViewModel | boolean = await this.postsQueryRepository.getPostById(dto.postId, userId)
+	// console.log("post: ", post)
     if (!post) throw new NotFoundException('Blogs by id not found 404')
 	const command = new CreateNewCommentByPostIdCommnad(dto.postId, inputModelContent, user)
 	const createNewCommentByPostId: CommentViewModel | null = await this.commandBus.execute(command)

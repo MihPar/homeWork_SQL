@@ -1,6 +1,7 @@
 import { InjectDataSource } from "@nestjs/typeorm";
 import { DataSource } from "typeorm";
 import { CommentClass } from "./comment.class";
+import { LikeStatusEnum } from "../likes/likes.emun";
 
 export class CommentRepository {
 	constructor(
@@ -14,8 +15,8 @@ export class CommentRepository {
 
 
 	async increase(commentId: string, likeStatus: string, userId: string){
-		if(likeStatus !== 'Dislike' && likeStatus !== 'Like') {
-			return
+		if(likeStatus === LikeStatusEnum.None) {
+			return true
 		} else if(likeStatus === "Dislike") {
 			const updateLikeCountQuery = `
 				UPDATE public."Comments"
@@ -23,35 +24,35 @@ export class CommentRepository {
 					WHERE "id" = $1
 			`
 		const updateLikecount = (await this.dataSource.query(updateLikeCountQuery, [commentId]))[0]
-		const updateLikeStatus = `
-			update public."CommentLikes"
-				set "myStatus"=$1
-				where "commentId"=$2 and "userId"=$3
-		`
-		const updateLikes = await this.dataSource.query(updateLikeStatus, [likeStatus, commentId, userId])
+		// const updateLikeStatus = `
+		// 	update public."CommentLikes"
+		// 		set "myStatus"=$1
+		// 		where "commentId"=$2 and "userId"=$3
+		// `
+		// const updateLikes = await this.dataSource.query(updateLikeStatus, [likeStatus, commentId, userId])
 		if(!updateLikecount) return false
 		return true
-		} else if(likeStatus === "Like") {
+		} else {
 			const updatelikeCountQuery = `
 				UPDATE public."Comments"
 					SET "likesCount"="likesCount" + 1
 					WHERE "id" = $1
 			`
 			const updatelikeCount = (await this.dataSource.query(updatelikeCountQuery, [commentId]))[0]
-			const updateLikeStatus = `
-				update public."CommentLikes"
-					set "myStatus"=$1
-					where "commentId"=$2 and "userId"=$3
-			`
-			const updateLikes = await this.dataSource.query(updateLikeStatus, [likeStatus, commentId, userId])
+			// const updateLikeStatus = `
+			// 	update public."CommentLikes"
+			// 		set "myStatus"=$1
+			// 		where "commentId"=$2 and "userId"=$3
+			// `
+			// const updateLikes = await this.dataSource.query(updateLikeStatus, [likeStatus, commentId, userId])
 		if(!updatelikeCount) return false
 			return true
 		} 
 	}
 
 	async decrease(commentId: string, likeStatus: string, userId: string){
-		if(likeStatus !== 'Dislike' && likeStatus !== 'Like') {
-			return
+		if(likeStatus === LikeStatusEnum.None) {
+			return true
 		} else if(likeStatus === 'Dislike') {
 			const updateLikeCountQuery = `
 				UPDATE public."Comments"
@@ -59,27 +60,27 @@ export class CommentRepository {
 					WHERE "id" = $1
 			`
 			const updateLikeCount = (await this.dataSource.query(updateLikeCountQuery, [commentId]))[0]
-			const updateLikesQuery = `
-				UPDATE public."CommentLikes"
-					SET "myStatus"=$1
-					WHERE "commentId" = $1 AND "userId'=$3
-			`
-			const updateLike = await this.dataSource.query(updateLikesQuery, [likeStatus, commentId, userId])
+			// const updateLikesQuery = `
+			// 	UPDATE public."CommentLikes"
+			// 		SET "myStatus"=$1
+			// 		WHERE "commentId" = $1 AND "userId'=$3
+			// `
+			// const updateLike = await this.dataSource.query(updateLikesQuery, [likeStatus, commentId, userId])
 			if(!updateLikeCount) return false
 				return true
-		} else if(likeStatus === "Like") {
+		} else {
 			const updateLikeCountQuery = `
 				UPDATE public."Comments"
 					SET "likesCount"="likesCount" - 1
 					WHERE "id" = $1
 			`
 			const updateLikeCount = (await this.dataSource.query(updateLikeCountQuery, [commentId]))[0]
-			const updateLikesQuery = `
-				update public."CommentLikes"
-					set "myStatus"=$1
-					where "commentId"=$2 and "userId"=$3
-			`
-			const updateLike = await this.dataSource.query(updateLikesQuery, [likeStatus, commentId, userId])
+			// const updateLikesQuery = `
+			// 	update public."CommentLikes"
+			// 		set "myStatus"=$1
+			// 		where "commentId"=$2 and "userId"=$3
+			// `
+			// const updateLike = await this.dataSource.query(updateLikesQuery, [likeStatus, commentId, userId])
 			if(!updateLikeCount) return false
 				return true
 		} 
