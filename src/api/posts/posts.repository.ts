@@ -40,8 +40,8 @@ export class PostsRepository {
   async updatePost(newPost: PostClass, id: string): Promise<PostClass> {
     const query = `
 		UPDATE public."Posts"
-			SET "blogId"=$1, "title"=$2, "shortDescription"=$3, "content"=$4, "blogName"=$5, "createdAt"=$6, "likesCount"=$7, "dislikesCount"=$8, "myStatus"=$9
-			WHERE "id" = $10
+			SET "blogId"=$1, "title"=$2, "shortDescription"=$3, "content"=$4, "blogName"=$5, "createdAt"=$6, "likesCount"=$7, "dislikesCount"=$8
+			WHERE "id" = $9
 			returning *
 	`;
     const result = (
@@ -54,7 +54,6 @@ export class PostsRepository {
 		newPost.createdAt,
 		newPost.likesCount,
 		newPost.dislikesCount,
-		newPost.myStatus,
         id,
       ])
     )[0];
