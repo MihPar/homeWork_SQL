@@ -94,7 +94,7 @@ const items: CommentViewModel[] = await Promise.all(
 	const query = `
 		SELECT *
 			FROM public."Comments"
-			WHERE "id" = $1 AND "userId" = $2
+			WHERE "id" = $1
 	`
     const commentById = (await this.dataSource.query(query, [commentId]))[0]
     if (!commentById) {
