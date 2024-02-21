@@ -23,13 +23,10 @@ export class UpdateLikestatusForCommentUseCase implements ICommandHandler<Update
 
 	) {}
 	async execute(command: UpdateLikestatusCommand): Promise<boolean> {
-		// console.log("userId: ", command.userId)
 		const findCommentById: CommentClass | null =
       await this.commentQueryRepository.findCommentByCommentId(command.id.commentId, command.userId);
-	//   console.log("findCommentById: ", findCommentById)
     if (!findCommentById) throw new NotFoundException('404');
 		const findLike = await this.likesRepository.findLikeByCommentIdBy(command.id.commentId, command.userId)
-		// console.log("findLike: ", findLike)
 	if(!findLike) {
 		await this.likesRepository.saveLikeForComment(command.id.commentId, command.userId, command.status.likeStatus)
 		const resultCheckLikeOrDislike = await this.commentRepositoriy.increase(command.id.commentId, command.status.likeStatus, command.userId)
