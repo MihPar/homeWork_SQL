@@ -38,14 +38,12 @@ export class UpdateLikeStatusForPostUseCase implements ICommandHandler<UpdateLik
 	} 
 	
 	if((findLike.myStatus === 'Dislike' || findLike.myStatus === 'Like') && command.status.likeStatus === 'None'){
-		// console.log("try")
 		await this.likesRepository.updateLikeStatusForPost(command.postId, command.status.likeStatus, userId)
 		const resultCheckListOrDislike = await this.postsRepository.decrease(command.postId, findLike.myStatus, userId)
 		return true
 	}
 
 	if(findLike.myStatus === 'None' && (command.status.likeStatus === 'Dislike' || command.status.likeStatus === 'Like')) {
-		// console.log("try")
 		await this.likesRepository.updateLikeStatusForPost(command.postId, command.status.likeStatus, userId)
 		const resultCheckListOrDislike = await this.postsRepository.increase(command.postId, command.status.likeStatus, userId)
 		return true
