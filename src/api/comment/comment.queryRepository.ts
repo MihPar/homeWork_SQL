@@ -52,7 +52,6 @@ export class CommentQueryRepository {
     sortDirection: string,
     userId: string | null,
   ): Promise<PaginationType<CommentViewModel> | null> {
-
 	const queryFindComment = `
 		select *
 			from public."Comments"
@@ -65,9 +64,6 @@ const commentsByPostId = await this.dataSource.query(queryFindComment, [
     +pageSize,
     (+pageNumber - 1) * +pageSize,
   ])
-
-// console.log("commentsByPostId: ", commentsByPostId)
-// console.log("commentsByPostId[0].id: ", commentsByPostId[0].id)
   const queryCount = `
   	select count(*)
   		from public."Comments"
@@ -78,22 +74,7 @@ const commentsByPostId = await this.dataSource.query(queryFindComment, [
 			from public."CommentLikes"
 			where "commentId" = $1 and "userId" = $2
 	`
-	// console.log("userId2: ", userId)
-let myStatus: LikeStatusEnum = LikeStatusEnum.None;
-  if (userId) {
-    const commentLikeStatus = (
-      await this.dataSource.query(commentsLikeQuery, [
-        commentsByPostId[0].id,
-        userId,
-      ])
-    )[0];
-	// console.log("commentLikeStatus: ", commentLikeStatus)
-    myStatus = commentLikeStatus
-      ? (commentLikeStatus.myStatus as LikeStatusEnum)
-      : LikeStatusEnum.None;
-  }
 
-//   console.log("myStatus: ", myStatus)
 
 //   const viewModelComment = {
 //     ...commentByPostId,
@@ -107,11 +88,24 @@ let myStatus: LikeStatusEnum = LikeStatusEnum.None;
   const pagesCount: number = Math.ceil(+totalCount / +pageSize);
   const items: CommentViewModel[] = await Promise.all(
     commentsByPostId.map(async (item) => {
-      const distracrure = {...item, commentatorInfo: { userId: item.userId, userLogin: item.userLogin }}
+		let myStatus: LikeStatusEnum = LikeStatusEnum.None;
+    if (userId) {
+      const commentLikeStatus = (
+        await this.dataSource.query(commentsLikeQuery, [
+         item.id, userId,
+        ])
+      )[0];
+      myStatus = commentLikeStatus
+        ? (commentLikeStatus.myStatus as LikeStatusEnum)
+        : LikeStatusEnum.None;
+    }
+    const distracrure = {
+      ...item,
+      commentatorInfo: { userId: item.userId, userLogin: item.userLogin },
+    };
       return commentDBToView(distracrure, myStatus);
     })
   );
-
     return {
       pagesCount: pagesCount,
       page: +pageNumber,

@@ -77,13 +77,8 @@ export class PostController {
       sortDirection: string;
     }
   ) {
-	// console.log("userId0: ", userId)
-
     const isExistPots: PostsViewModel | boolean= await this.postsQueryRepository.getPostById(dto.postId);
     if (!isExistPots) throw new NotFoundException('Blogs by id not found');
-	// console.log("userId1: ", userId)
-	// console.log("dto.postId: ", dto.postId)
-	
     const commentByPostsId: PaginationType<CommentViewType> | null =
       await this.commentQueryRepository.findCommentsByPostId(
         dto.postId,
