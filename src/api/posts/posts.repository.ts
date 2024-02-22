@@ -91,7 +91,7 @@ export class PostsRepository {
 				WHERE "id" = $1
 		`;
       const updateLikeCount = (await this.dataSource.query(updateLikesCountQuery, [postId]))[0]
-	  console.log('updateLikeCount: ', updateLikeCount)
+	//   console.log('updateLikeCount: ', updateLikeCount)
 	//   const updateMyStatusQuery = `
 	// 		update public."PostLikes"
 	// 			set "myStatus" = $1

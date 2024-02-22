@@ -13,7 +13,7 @@ export class DeviceQueryRepository {
 				FROM public."Devices"
 				WHERE "userId" = $1
 	`
-		const getDevice = await this.dataSource.query(query, [userId])[0]
+		const getDevice = (await this.dataSource.query(query, [userId]))[0]
 		return getDevice
 	}
 

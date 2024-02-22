@@ -28,7 +28,7 @@ export class CommentQueryRepository {
 //    console.log("findCommentById: ", findCommentById)
    const commentsLikeQuery = `
 		select *
-			from "CommentLikes"
+			from public."CommentLikes"
 			where "commentId" = $1 and "userId" = $2
    `
    let myStatus: LikeStatusEnum = LikeStatusEnum.None;

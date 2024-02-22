@@ -155,13 +155,11 @@ export class PostController {
 	@UserIdDecorator() userId: string | null,
 	@UserDecorator() user: UserClass
   ) {
-	// console.log("userId: ", userId)
     const getPostById: PostsViewModel | null =
       await this.postsQueryRepository.findPostsById(dto.postId, userId);
     if (!getPostById) {
       throw new NotFoundException('Post by id not found');
     }
-	// console.log("getPostById: ", getPostById)
     return getPostById;
   }
 

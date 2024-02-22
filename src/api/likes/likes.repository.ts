@@ -58,12 +58,14 @@ export class LikesRepository {
 	}
 
 	async findLikeByCommentIdBy(commentId: string, userId: string): Promise<LikeComment | null>  {
-		const query = `
+		console.log("commentId: ", commentId)
+		console.log("userId: ", userId)
+		const commentLikesQuery = `
 			SELECT *
 				FROM public."CommentLikes"
-				WHERE "id" = $1 AND "userId" = $2
+					WHERE "commentId" = $1 AND "userId" = $2
 		`
-		const findLike = (await this.dataSource.query(query, [commentId, userId]))[0]
+		const findLike = (await this.dataSource.query(commentLikesQuery, [commentId, userId]))[0]
 		if(!findLike) return null
 		return findLike
 	}
@@ -84,7 +86,7 @@ export class LikesRepository {
 		const query = `
 			UPDATE public."CommentLikes"
 				SET "myStatus"=$1, "addedAt"=$2
-				WHERE "id" = $3 AND "userId" = $4
+				WHERE "commentId" = $3 AND "userId" = $4
 		`;
 		const updateLikeStatus = (await this.dataSource.query(query, [likeStatus, createAddedAt, commentId, userId]))[0]
 		return updateLikeStatus
