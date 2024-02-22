@@ -38,19 +38,11 @@ export class CommentQueryRepository {
 		}
 
 	const viewModelComment = {...findCommentById, commentatorInfo: {userId: findCommentById.userId, userLogin: findCommentById.userLogin}}
-	// console.log("myStatus: ", myStatus)
       return commentDBToView(viewModelComment, myStatus);
     } catch (e) {
       return null;
     }
   }
-
-//   async findLikeCommentByUser(commentId: string, userId: string | null) {
-//     const likeModel: Like | null = await this.likeModel.findOne({
-//       $and: [{ userId: userId }, { commentId: commentId }],
-//     });
-//     return likeModel;
-//   }
 
   async findCommentsByPostId(
     postId: string,
@@ -72,21 +64,48 @@ const commentByPostId = await this.dataSource.query(queryFindComment, [
     +pageSize,
     (+pageNumber - 1) * +pageSize,
   ])
-//   console.log("commentByPostId: ", commentByPostId)
   const queryCount = `
   	select count(*)
   		from public."Comments"
 		where "postId" = $1
   `
-const totalCount = (await this.dataSource.query(queryCount, [postId]))[0].count
-const pagesCount: number = Math.ceil(+totalCount / +pageSize);
+  const commentsLikeQuery = `
+		select *
+			from public."CommentLikes"
+			where "commentId" = $1 and "userId" = $2
+	`
+let myStatus: LikeStatusEnum = LikeStatusEnum.None;
+  if (userId) {
+    const commentLikeStatus = (
+      await this.dataSource.query(commentsLikeQuery, [
+        commentByPostId.id,
+        userId,
+      ])
+    )[0];
+    myStatus = commentLikeStatus
+      ? (commentLikeStatus.myStatus as LikeStatusEnum)
+      : LikeStatusEnum.None;
+  }
 
-const items: CommentViewModel[] = await Promise.all(
-      commentByPostId.map(async (item) => {
-		const distracrure = {...item, commentatorInfo: {userId: item.userId, userLogin: item.userLogin}}
-		return commentByPostView(distracrure)
-	})
-    );
+//   const viewModelComment = {
+//     ...commentByPostId,
+//     commentatorInfo: {
+//       userId: commentByPostId.userId,
+//       userLogin: commentByPostId.userLogin,
+//     },
+//   };
+
+  const totalCount = (await this.dataSource.query(queryCount, [postId]))[0].count;
+  const pagesCount: number = Math.ceil(+totalCount / +pageSize);
+  const items: CommentViewModel[] = await Promise.all(
+    commentByPostId.map(async (item) => {
+      const distracrure = {
+        ...item,
+        commentatorInfo: { userId: item.userId, userLogin: item.userLogin },
+      };
+      return commentDBToView(distracrure, myStatus);
+    })
+  );
 
     return {
       pagesCount: pagesCount,
