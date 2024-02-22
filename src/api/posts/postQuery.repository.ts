@@ -202,7 +202,6 @@ export class PostsQueryRepository {
 
   async getPostById(
     postId: string,
-    userId?: string | null
   ): Promise<PostsViewModel | boolean> {
     const queryPost = `
 		SELECT *

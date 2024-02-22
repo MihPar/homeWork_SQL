@@ -58,8 +58,8 @@ export class LikesRepository {
 	}
 
 	async findLikeByCommentIdBy(commentId: string, userId: string): Promise<LikeComment | null>  {
-		console.log("commentId: ", commentId)
-		console.log("userId: ", userId)
+		// console.log("commentId: ", commentId)
+		// console.log("userId: ", userId)
 		const commentLikesQuery = `
 			SELECT *
 				FROM public."CommentLikes"

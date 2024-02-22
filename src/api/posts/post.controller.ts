@@ -67,18 +67,23 @@ export class PostController {
   @UseGuards(CheckRefreshTokenForGet)
   async getCommentByPostId(
     @Param() dto: InputModelClassPostId, 
-    @UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string | null,
+    @UserDecorator() user: UserClass,
     @Query()
     query: {
       pageNumber: string;
       pageSize: string;
       sortBy: string;
       sortDirection: string;
-    },
+    }
   ) {
+	// console.log("userId0: ", userId)
+
     const isExistPots: PostsViewModel | boolean= await this.postsQueryRepository.getPostById(dto.postId);
     if (!isExistPots) throw new NotFoundException('Blogs by id not found');
+	// console.log("userId1: ", userId)
+	// console.log("dto.postId: ", dto.postId)
+	
     const commentByPostsId: PaginationType<CommentViewType> | null =
       await this.commentQueryRepository.findCommentsByPostId(
         dto.postId,
@@ -99,9 +104,9 @@ export class PostController {
 	@Param() dto: InputModelClassPostId, 
 	@Body() inputModelContent: InputModelContentePostClass,
   	@UserDecorator() user: UserClass,
-	  @UserIdDecorator() userId: string | null
+	@UserIdDecorator() userId: string | null
 	) {
-    const post: PostsViewModel | boolean = await this.postsQueryRepository.getPostById(dto.postId, userId)
+    const post: PostsViewModel | boolean = await this.postsQueryRepository.getPostById(dto.postId)
 	// console.log("post: ", post)
     if (!post) throw new NotFoundException('Blogs by id not found 404')
 	const command = new CreateNewCommentByPostIdCommnad(dto.postId, inputModelContent, user)
@@ -155,6 +160,8 @@ export class PostController {
 	@UserIdDecorator() userId: string | null,
 	@UserDecorator() user: UserClass
   ) {
+	// console.log("userId: ", userId)
+	
     const getPostById: PostsViewModel | null =
       await this.postsQueryRepository.findPostsById(dto.postId, userId);
     if (!getPostById) {

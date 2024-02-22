@@ -25,7 +25,7 @@ export class UpdateLikeStatusForPostUseCase implements ICommandHandler<UpdateLik
 	async execute(command: UpdateLikeStatusCommand): Promise<boolean | void | null> {
 	if(!command.userId) return null
 
-		const findPost = await this.postsQueryRepository.getPostById(command.postId, command.userId);
+		const findPost = await this.postsQueryRepository.getPostById(command.postId);
     if (!findPost) throw new NotFoundException('404')
 		const userLogin = command.user.userName
 		if(!command.userId) return null
