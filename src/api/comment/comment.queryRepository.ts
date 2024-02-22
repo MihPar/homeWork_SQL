@@ -59,7 +59,7 @@ export class CommentQueryRepository {
 			order by "${sortBy}" ${sortDirection}
 			limit $2 offset $3
 	`
-const commentByPostId = await this.dataSource.query(queryFindComment, [
+const commentsByPostId = await this.dataSource.query(queryFindComment, [
     postId,
     +pageSize,
     (+pageNumber - 1) * +pageSize,
@@ -78,7 +78,7 @@ let myStatus: LikeStatusEnum = LikeStatusEnum.None;
   if (userId) {
     const commentLikeStatus = (
       await this.dataSource.query(commentsLikeQuery, [
-        commentByPostId.id,
+        commentsByPostId[0].id,
         userId,
       ])
     )[0];
@@ -98,11 +98,8 @@ let myStatus: LikeStatusEnum = LikeStatusEnum.None;
   const totalCount = (await this.dataSource.query(queryCount, [postId]))[0].count;
   const pagesCount: number = Math.ceil(+totalCount / +pageSize);
   const items: CommentViewModel[] = await Promise.all(
-    commentByPostId.map(async (item) => {
-      const distracrure = {
-        ...item,
-        commentatorInfo: { userId: item.userId, userLogin: item.userLogin },
-      };
+    commentsByPostId.map(async (item) => {
+      const distracrure = {...item, commentatorInfo: { userId: item.userId, userLogin: item.userLogin }}
       return commentDBToView(distracrure, myStatus);
     })
   );
