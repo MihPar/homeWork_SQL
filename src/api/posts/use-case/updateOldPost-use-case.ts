@@ -18,7 +18,6 @@ export class UpdateOldPostUseCase implements ICommandHandler<UpdateOldPostComman
 		protected readonly postsRepository: PostsRepository
 	) {}
 	async execute(command: UpdateOldPostCommand): Promise<PostsViewModel | null> {
-		// if(!ObjectId.isValid(command.postId)) return false;
 		const findPostById: PostClass = await this.postsRepository.findPostById(command.postId)
 		if(!findPostById) return null
 		const findNewestLike = await this.postsRepository.findNewestLike(command.postId)

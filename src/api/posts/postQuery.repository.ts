@@ -1,12 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { PaginationType } from "../../types/pagination.types";
 import { PostsViewModel } from "./posts.type";
-import { DataSource, ObjectId } from "typeorm";
+import { DataSource } from "typeorm";
 import { InjectDataSource } from "@nestjs/typeorm";
 import { PostClass, Posts } from "./post.class";
 import { LikeStatusEnum } from "../likes/likes.emun";
-import { query } from "express";
-import { UserClass } from "../users/user.class";
 
 @Injectable()
 export class PostsQueryRepository {
@@ -34,30 +32,16 @@ export class PostsQueryRepository {
 					limit 3 
 		`;
     const newestLikes = await this.dataSource.query(newestLikesQuery, [postId])
-	// console.log("newestLikes: ", newestLikes)
-
-	// const likeCount = (await this.dataSource.query(
-    // `
-	// 	select count(*) 
-	// 		from public."PostLikes" 
-	// 		where "postId" = $1 and "myStatus" = 'Like'
-	// 		`,
-	// 		[postId]
-  	// ))[0].count
-
 	const LikesQuery = `
 			select *
 				from public."PostLikes" 
 					where "postId" = $1 and "userId" = $2
 		`;
 		let myStatus: LikeStatusEnum = LikeStatusEnum.None;
-		// console.log("userId: ", userId)
 		if(userId) {
 			const userLike = (await this.dataSource.query(LikesQuery, [postId, userId]))[0];
 			myStatus = userLike ? (userLike.myStatus as LikeStatusEnum) : LikeStatusEnum.None
 		}
-		// console.log("myStatus: ", myStatus)
-		// console.log("userId: ", userId)
     return post ? PostClass.getPostsViewModelSAMyOwnStatus(post, newestLikes, myStatus) : null;
   }
 
@@ -100,14 +84,6 @@ export class PostsQueryRepository {
 				from public."PostLikes" 
 					where "postId" = $1 and "userId" = $2
 		`;
-
-    // const NewestLikesQuery = `
-	// 	select *
-	// 		from "PostLikes"
-	// 		where "postId" = $1
-	// 		order by "addedAt" desc
-	// 		limit 3 offset 0
-	// `;
     let result: PaginationType<Posts> = {
       pagesCount: pagesCount,
       page: +pageNumber,
@@ -115,7 +91,6 @@ export class PostsQueryRepository {
       totalCount: +totalCount,
       items: await Promise.all(
         allPosts.map(async (post) => {
-        //   const newestLikes = await this.dataSource.query(NewestLikesQuery, [post.id]);
 		let myStatus: LikeStatusEnum = LikeStatusEnum.None;
 		if(userId) {
 			const userLike = (await this.dataSource.query(LikesQuery, [post.id, userId]))[0];
@@ -173,19 +148,12 @@ export class PostsQueryRepository {
 					where "postId" = $1 and "userId" = $2
 		`;
 
-    // const query2 = `
-	// 		select *
-	// 			from "NewestLikes"
-	// 			where "postId" = $1
-	// 	`;
-
     const result: PaginationType<Posts> = {
       pagesCount: pagesCount,
       page: +pageNumber,
       pageSize: +pageSize,
       totalCount: +totalCount,
       items: await Promise.all (findPostsByBlogId.map(async (post: PostClass)  => {
-        // const newestLike = (await this.dataSource.query(query2, [post.id]))[0];
 		let myStatus: LikeStatusEnum = LikeStatusEnum.None;
 		if(userId) {
 			const userLike = (await this.dataSource.query(LikesQuery, [post.id, userId]))[0];

@@ -7,10 +7,8 @@ import { PaginationType } from "../../types/pagination.types";
 import { UpdateBlogForSACommand } from './use-case/updateBlog-use-case';
 import { CreateNewPostForBlogCommand } from './use-case/createNewPostForBlog-use-case';
 import { AuthBasic } from '../users/gards/basic.auth';
-import { CheckRefreshTokenForGet } from '../blogs/use-case/bearer.authGetComment';
 import { UserDecorator, UserIdDecorator } from '../../infrastructura/decorators/decorator.user';
 import { UserClass } from '../users/user.class';
-import { ForbiddenCalss } from '../security-devices/gards/forbidden';
 import { Posts } from '../posts/post.class';
 import { bodyPostsModelClass } from '../posts/dto/posts.class.pipe';
 import { BlogsQueryRepositoryForSA } from './blogsForSA.queryReposity';
@@ -113,7 +111,6 @@ export class BlogsControllerForSA {
 	@UserIdDecorator() userId: string,
   ) {
     const findBlog: BlogsViewTypeWithUserId | null = await this.blogsQueryRepositoryForSA.findBlogById(dto.blogId)
-	// console.log("findBlog: ", findBlog)
     if(!findBlog) throw new NotFoundException("404")
 	if(userId !== findBlog.userId) throw new ForbiddenException("This user does not have access in blog, 403")
 	const command = new CreateNewPostForBlogCommand( dto.blogId, inputDataModel, findBlog.name, userId)
@@ -162,17 +159,14 @@ export class BlogsControllerForSA {
 	@UserIdDecorator() userId: string | null) {
 
 	const blog = await this.blogsQueryRepositoryForSA.findBlogById(dto.blogId);
-	// console.log("blog: ", blog)
 	if(!blog) throw new NotFoundException("404")
 	const findPost = await this.postsQueryRepository.findPostsById(dto.postId)
-// console.log("findPost: ", findPost)
 	if(!findPost) throw new NotFoundException("404")
 	if(userId !== blog.userId) throw new ForbiddenException("This user does not have access in blog, 403")
 
     const command = new UpdateExistingPostByIdWithBlogIdCommand(dto, inputModel)
 	const updateExistingPost = await this.commandBus.execute(command)
 	if(!updateExistingPost) throw new NotFoundException("Post not find")
-	// console.log("updateExistingPost: ", updateExistingPost)
 	return 
   }
 

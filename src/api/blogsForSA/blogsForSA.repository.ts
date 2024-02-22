@@ -48,7 +48,6 @@ export class BlogsRepositoryForSA {
 			returning *
 		`
     const result = (await this.dataSource.query(query, [name, description, websiteUrl, blogId]))[0]
-	// console.log("result: ", result)
 	if(!result) return false
     return true
   }

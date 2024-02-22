@@ -1,9 +1,7 @@
 import { CommentViewType } from './../comment/comment.type';
 import {
-	BadRequestException,
   Body,
   Controller,
-  Delete,
   Get,
   HttpCode,
   NotFoundException,
@@ -12,16 +10,13 @@ import {
   Put,
   Query,
   UseGuards,
-  ValidationPipe,
 } from '@nestjs/common';
 import { PaginationType } from '../../types/pagination.types';
-import { InputModelClassPostId, InputModelContentePostClass, inputModelPostClass } from './dto/posts.class.pipe';
+import { InputModelClassPostId, InputModelContentePostClass } from './dto/posts.class.pipe';
 import { PostsService } from './posts.service';
 import { PostsQueryRepository } from './postQuery.repository';
 import { BlogsQueryRepository } from '../blogs/blogs.queryReposity';
 import { CommandBus } from '@nestjs/cqrs';
-import { CreatePostCommand } from './use-case/createPost-use-case';
-import { UpdateOldPostCommand } from './use-case/updateOldPost-use-case';
 import { UserDecorator, UserIdDecorator } from '../../infrastructura/decorators/decorator.user';
 import { UserClass } from '../users/user.class';
 import { CheckRefreshTokenForPost } from './guards/bearer.authForPost';
@@ -29,12 +24,10 @@ import { InputModelLikeStatusClass } from '../comment/dto/comment.class-pipe';
 import { CheckRefreshTokenForGet } from './guards/bearer.authGetComment';
 import { CommentViewModel } from '../comment/comment.type';
 import { CommentQueryRepository } from '../comment/comment.queryRepository';
-import { PostClass, Posts } from './post.class';
+import { Posts } from './post.class';
 import { PostsViewModel } from './posts.type';
 import { CreateNewCommentByPostIdCommnad } from '../comment/use-case/createNewCommentByPotsId-use-case';
-import { SkipThrottle } from '@nestjs/throttler';
 import { UpdateLikeStatusCommand } from './use-case/updateLikeStatus-use-case';
-import { CommentClass } from '../comment/comment.class';
 
 // @SkipThrottle()
 @Controller('posts')
@@ -102,7 +95,6 @@ export class PostController {
 	@UserIdDecorator() userId: string | null
 	) {
     const post: PostsViewModel | boolean = await this.postsQueryRepository.getPostById(dto.postId)
-	// console.log("post: ", post)
     if (!post) throw new NotFoundException('Blogs by id not found 404')
 	const command = new CreateNewCommentByPostIdCommnad(dto.postId, inputModelContent, user)
 	const createNewCommentByPostId: CommentViewModel | null = await this.commandBus.execute(command)
@@ -155,8 +147,6 @@ export class PostController {
 	@UserIdDecorator() userId: string | null,
 	@UserDecorator() user: UserClass
   ) {
-	// console.log("userId: ", userId)
-	
     const getPostById: PostsViewModel | null =
       await this.postsQueryRepository.findPostsById(dto.postId, userId);
     if (!getPostById) {

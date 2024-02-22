@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { PaginationType } from "../../types/pagination.types";
 import { InjectDataSource } from "@nestjs/typeorm";
 import { DataSource } from "typeorm";
-import { BlogClass, Blogs } from "../blogs/blogs.class";
+import { BlogClass } from "../blogs/blogs.class";
 import { BlogsViewType, BlogsViewTypeWithUserId } from "../blogs/blogs.type";
 
 @Injectable()
@@ -47,16 +47,6 @@ export class BlogsQueryRepositoryForSA {
     };
     return result;
   }
-
-//   async findRawBlogById(
-//     blogId: string,
-//     userId?: string
-//   ): Promise<BlogClass | null> {
-//     const blog: BlogClass | null = await this.blogModel
-//       .findOne({ _id: new ObjectId(blogId) }, { __v: 0 })
-//       .lean();
-//     return blog;
-//   }
 
   async findBlogById(
     blogId: string,

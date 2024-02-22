@@ -58,8 +58,6 @@ export class LikesRepository {
 	}
 
 	async findLikeByCommentIdBy(commentId: string, userId: string): Promise<LikeComment | null>  {
-		// console.log("commentId: ", commentId)
-		// console.log("userId: ", userId)
 		const commentLikesQuery = `
 			SELECT *
 				FROM public."CommentLikes"
@@ -101,22 +99,6 @@ export class LikesRepository {
 				limit 3 offset 0
 		`
 		const newestLike = (await this.dataSource.query(NewestLikesQuery, [postId]))[0]
-		// const newestLikes = await this.likeModel
-		// 	  .find({ postId }) //
-		// 	  .sort({ addedAt: -1 })
-		// 	  .limit(3)
-		// 	  .skip(0)
-		// 	  .lean();
-		// 	let myStatus: LikeStatusEnum = LikeStatusEnum.None;
-		// 	if (blogId) {
-		// 	  const reaction = await this.likeModel.findOne({ blogId: new ObjectId(blogId) }, { __v: 0 }); //
-		// 	  myStatus = reaction
-		// 		? (reaction.myStatus as unknown as LikeStatusEnum)
-		// 		: LikeStatusEnum.None;
-		// 	}
-		// 	const result = {
-		// 		newestLikes, myStatus
-		// 	}
-			return newestLike
+		return newestLike
 	}
 }

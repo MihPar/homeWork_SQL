@@ -4,14 +4,11 @@ import { CommentViewModel } from './comment.type';
 import { InputModelContent, InputModelLikeStatusClass, inputModelCommentId, inputModelId } from './dto/comment.class-pipe';
 import { CommentRepository } from './comment.repository';
 import { CommandBus } from '@nestjs/cqrs';
-import { SkipThrottle } from '@nestjs/throttler';
 import { UserDecorator, UserIdDecorator } from '../../infrastructura/decorators/decorator.user';
 import { UserClass } from '../users/user.class';
 import { CommentClass } from './comment.class';
 import { CheckRefreshTokenForGet } from '../blogs/use-case/bearer.authGetComment';
-import { commentDBToView } from '../../helpers';
 import { UpdateLikestatusCommand } from './use-case/updateLikeStatus-use-case';
-import { CheckRefreshToken } from '../auth/guards/checkRefreshToken';
 import { CheckRefreshTokenForComments } from './use-case/bearer.authForComments';
 import { UpdateCommentByCommentIdCommand } from './use-case/updateCommentByCommentId-use-case';
 
@@ -33,15 +30,6 @@ export class CommentsController {
     @UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string,
   ) {
-    // const findLike = await this.commentQueryRepository.findLikeCommentByUser(
-    //   id.commentId,
-    //   userId,
-    // );
-    // const commentDBBiew = commentDBToView(
-    //   findCommentById,
-	//   findCommentById?.myStatus ?? null
-    // );
-
 	const command = new UpdateLikestatusCommand(status, id, userId)
 	const updateLikeStatus = await this.commandBus.execute(command)
 	if (!updateLikeStatus) throw new NotFoundException('404')

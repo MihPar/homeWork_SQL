@@ -2,7 +2,6 @@ import { DataSource } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DeviceClass } from './dto/device.class';
-import { CollectionIP } from '../CollectionIP/collection.class';
 
 @Injectable()
 export class DeviceRepository {
