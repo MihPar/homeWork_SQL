@@ -150,27 +150,27 @@ const repositories = [AuthRepository, DeviceRepository, DeviceQueryRepository, U
 	// 	ttl: 10000,
 	// 	limit: 5,
 	//   }]),
-    TypeOrmModule.forRoot({
-      type: "postgres",
-      host: "ep-weathered-mouse-a5h47925.us-east-2.aws.neon.tech",
-      port: 5432,
-      username: process.env.NAMENEON,
-      password: process.env.PASSWORDNEON,
-      database: "neondb",
-      autoLoadEntities: false,
-      synchronize: true,
-	  ssl: true
-    }),
-	// TypeOrmModule.forRoot({
+    // TypeOrmModule.forRoot({
     //   type: "postgres",
-    //   host: "localhost",
+    //   host: "ep-weathered-mouse-a5h47925.us-east-2.aws.neon.tech",
     //   port: 5432,
-    //   username: process.env.USERNAME,
-    //   password: process.env.PASSWORD,
-    //   database: "BankSystem",
+    //   username: process.env.NAMENEON,
+    //   password: process.env.PASSWORDNEON,
+    //   database: "neondb",
     //   autoLoadEntities: false,
     //   synchronize: true,
+	//   ssl: true
     // }),
+	TypeOrmModule.forRoot({
+      type: "postgres",
+      host: "localhost",
+      port: 5432,
+      username: process.env.USERNAME,
+      password: process.env.PASSWORD,
+      database: "BankSystem",
+      autoLoadEntities: true,
+      synchronize: true,
+    }),
   ],
   controllers: [AuthController, DeleteAllDataController, UsersController, SecurityDeviceController, BlogsController, BlogsControllerForSA, PostController, CommentsController],
 

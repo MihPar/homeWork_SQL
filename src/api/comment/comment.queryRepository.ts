@@ -71,6 +71,18 @@ const commentsByPostId = await this.dataSource.query(queryFindComment, [
 			from public."CommentLikes"
 			where "commentId" = $1 and "userId" = $2
 	`
+
+	// const query = `
+	// 	select *
+	// 		from "Posts" as p left join "Comments" as c
+	// 		on p."id" = c."postId"
+	// 		left join "CommentLikes" as cl
+	// 		on c."id" = cl."commentId"
+	// 		where p."id" = $1
+	// `
+	// const jointSchets = (await this.dataSource.query(query, [postId]))[0]
+	// console.log("jointSchets: ", jointSchets)
+
   const totalCount = (await this.dataSource.query(queryCount, [postId]))[0].count;
   const pagesCount: number = Math.ceil(+totalCount / +pageSize);
   const items: CommentViewModel[] = await Promise.all(
