@@ -2,10 +2,10 @@ import request from "supertest";
 import dotenv from "dotenv";
 import { INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
-import { AppModule } from "../../../src/app.module";
-import { appSettings } from "../../../src/setting";
-import { HTTP_STATUS } from "../../../src/utils/utils";
-import { UserViewType } from "../../../src/api/users/user.type";
+import { AppModule } from "../../../../src/app.module";
+import { appSettings } from "../../../../src/setting";
+import { HTTP_STATUS } from "../../../../src/utils/utils";
+import { UserViewType } from "../../../../src/api/users/user.type";
 dotenv.config();
 
 const mongoURI = process.env.MONGO_URL || "mongodb://0.0.0.0:27017";
