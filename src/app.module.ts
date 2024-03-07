@@ -137,19 +137,34 @@ const adapter = [GenerateHashAdapter, PayloadAdapter, EmailAdapter]
 const services = [JwtService, ApiJwtService, PostsService]
 const configs = [ApiConfigService]
 
-const repositories = [AuthRepository, DeviceRepository, DeviceQueryRepository, UsersRepository, UsersQueryRepository, BlogsQueryRepository, PostsQueryRepository, BlogsQueryRepositoryForSA, BlogsRepositoryForSA, BlogsRepository, PostsRepository, LikesRepository, CommentQueryRepository, CommentRepository];
+const repositories = [
+  AuthRepository,
+  DeviceRepository,
+  DeviceQueryRepository,
+  UsersRepository,
+  UsersQueryRepository,
+  BlogsQueryRepository,
+  PostsQueryRepository,
+  BlogsQueryRepositoryForSA,
+  BlogsRepositoryForSA,
+  BlogsRepository,
+  PostsRepository,
+  LikesRepository,
+  CommentQueryRepository,
+  CommentRepository,
+];
 
 @Module({
   imports: [
-	CqrsModule,
+    CqrsModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ".env",
     }),
-	// ThrottlerModule.forRoot([{
-	// 	ttl: 10000,
-	// 	limit: 5,
-	//   }]),
+    // ThrottlerModule.forRoot([{
+    // 	ttl: 10000,
+    // 	limit: 5,
+    //   }]),
     // TypeOrmModule.forRoot({
     //   type: "postgres",
     //   host: "ep-weathered-mouse-a5h47925.us-east-2.aws.neon.tech",
@@ -159,9 +174,9 @@ const repositories = [AuthRepository, DeviceRepository, DeviceQueryRepository, U
     //   database: "neondb",
     //   autoLoadEntities: false,
     //   synchronize: true,
-	//   ssl: true
+    //   ssl: true
     // }),
-	TypeOrmModule.forRoot({
+    TypeOrmModule.forRoot({
       type: "postgres",
       host: "localhost",
       port: 5432,
@@ -172,18 +187,27 @@ const repositories = [AuthRepository, DeviceRepository, DeviceQueryRepository, U
       synchronize: true,
     }),
   ],
-  controllers: [AuthController, DeleteAllDataController, UsersController, SecurityDeviceController, BlogsController, BlogsControllerForSA, PostController, CommentsController],
+  controllers: [
+    AuthController,
+    DeleteAllDataController,
+    UsersController,
+    SecurityDeviceController,
+    BlogsController,
+    BlogsControllerForSA,
+    PostController,
+    CommentsController,
+  ],
 
   providers: [
     ...repositories,
     ...useCases,
-	...gards,
-	...repositories,
-	...manager,
-	...adapter,
-	...services,
-	...configs,
-	...validation
+    ...gards,
+    ...repositories,
+    ...manager,
+    ...adapter,
+    ...services,
+    ...configs,
+    ...validation,
   ],
 })
 export class AppModule {}
