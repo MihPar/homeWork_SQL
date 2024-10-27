@@ -42,8 +42,4 @@ export class BlogsRepository {
 //     return result.matchedCount === 1
 //   }
 
-//   async deletedBlog(id: string) {
-//     const result = await this.blogModel.deleteOne({ _id: new ObjectId(id) });
-//     return result.deletedCount === 1;
-//   }
 }
