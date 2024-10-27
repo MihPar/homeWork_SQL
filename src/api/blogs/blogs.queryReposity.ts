@@ -48,11 +48,6 @@ export class BlogsQueryRepository {
     return result;
   }
 
-  // async findRawBlogById(blogId: string, userId?: string): Promise<BlogClass | null> {
-  // 	const blog: BlogClass | null =  await this.blogModel.findOne({ _id: new ObjectId(blogId) }, {__v: 0}).lean();
-  // 	return blog
-  //   }
-
   async findBlogById(blogId: string): Promise<BlogsViewType | null> {
 	const query = `
 		SELECT *
