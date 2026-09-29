@@ -1,5 +1,4 @@
 import { LikeStatusEnum } from "../likes/likes.emun";
-import { likeInfoType } from "../likes/likes.type";
 import { CommentViewModel, CommentatorInfoType } from "./comment.type";
 
 export class Comment {
